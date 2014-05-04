@@ -21,8 +21,8 @@ public class Level extends Screen {
 		super(game);
 		this.game = game;
 		
-		setBackgroundImage("Background/lvl1");
-		setSpeed(20);
+		//setBackgroundImage("Background/lvl1");
+		//setSpeed(20);
 		loadFromProperties(properties);
 	}
 	
