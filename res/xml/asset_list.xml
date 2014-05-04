@@ -7,4 +7,6 @@
     <music key="blue" path="Music/blue.mp3" />
 	<image key="Background/Sky" path="Backgrounds/sky.png" />
 	<image key="Background/lvl1" path="Backgrounds/level1.png" />
+	<image key="Menu/Button/lvl1" path="Menu/Buttons/lvl1.png" />
+	<image key="Menu/splash_logo" path="Menu/new_logo_big.png" />
 </assets>
