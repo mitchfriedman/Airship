@@ -6,6 +6,7 @@ import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
+import com.mitch.framework.implementation.AndroidGame;
 
 
 public class Level extends Screen {
@@ -16,13 +17,13 @@ public class Level extends Screen {
 	double speed;
 	Image backgroundImage;
 	
-	public Level(Game game, LevelProperties properties) 
+	public Level(AndroidGame game, LevelProperties properties) 
 	{
 		super(game);
 		this.game = game;
 		
-		setBackgroundImage("Background/lvl1");
-		setSpeed(20);
+		//setBackgroundImage("Background/lvl1");
+		//setSpeed(20);
 		loadFromProperties(properties);
 	}
 	

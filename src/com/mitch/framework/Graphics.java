@@ -28,7 +28,7 @@ public interface Graphics {
 	
 	public void drawImage(Image Image, Vector2d pos);
 
-	Vector2d drawString(String text, int x, int y, Paint paint);
+	public void drawString(String text, int x, int y, Paint paint);
 	
 	public void drawImage2(Image Image, float x, float y);
 	public int getWidth();

@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import com.mitch.framework.Graphics;
@@ -106,12 +105,8 @@ public class AndroidGraphics implements Graphics {
     }
     
     @Override
-    public Vector2d drawString(String text, int x, int y, Paint paint) {
-    	canvas.drawText(text, x, y, paint);	
-    	
-    	Rect textBounds = new Rect(0,0,0,0);
-    	paint.getTextBounds(text, 0, text.length(), textBounds);
-    	return new Vector2d(textBounds.left, textBounds.top);
+    public void drawString(String text, int x, int y, Paint paint) {
+    	canvas.drawText(text, x, y, paint);
     }
     
 
@@ -139,8 +134,8 @@ public class AndroidGraphics implements Graphics {
     
     @Override
     public void drawImage(Image image, double x, double y) {
-    	float width    = image.getWidth()  * scale;
-    	float height   = image.getHeight() * scale;
+    	float width    = image.getWidth(); // * scale;
+    	float height   = image.getHeight(); //* scale;
     	drawImage(image, x,y, width,height);
     }
     

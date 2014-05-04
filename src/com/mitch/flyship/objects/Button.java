@@ -1,35 +1,54 @@
 package com.mitch.flyship.objects;
 
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.util.Log;
 
+import com.mitch.flyship.Assets;
+import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
+import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
 
 public class Button extends GameBody {
 	boolean lastTouched = false;
-	String text;
+	boolean down = false;
+	Image image;
+	Align align = Align.LEFT;
+	Vector2d offset = Vector2d.ZERO;
+	ButtonClickListener listener;
 	
-	public Button(Game game, Vector2d position, String text)
+	public Button(Game game, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
 	{
 		super(game, position);
-		this.text = text;
+		image = Assets.getImage(imageID);
+		setSize(image.getSize().scaleX(height));
+		this.listener = listener;
+		
+		switch(align) {
+		case LEFT:
+			break;
+		case CENTER:
+			offset.x = -getSize().x/2;
+			break;
+		case RIGHT:
+			offset.x = -getSize().x;
+			break;
+		}
 	}
 	
 	@Override
 	public void onUpdate(float deltaTime) 
 	{
-		boolean touched = isTouched();
+		boolean touched = isTouched(offset);
 		if (touched && !lastTouched) {
 			onDown();
+			down = true;
 			lastTouched = true;
 		}
 		else if (lastTouched && !touched) {
 			onUp();
+			down = false;
 			lastTouched = false;
 		}
 	}
@@ -37,25 +56,18 @@ public class Button extends GameBody {
 	@Override
 	public void onPaint(float deltaTime) 
 	{
-		Paint paint = new Paint();
-		paint.setTextSize(36);
-		paint.setTextAlign(Align.CENTER);
-		paint.setColor(Color.WHITE);
-		
 		Graphics g = game.getGraphics();
-		Vector2d size = g.drawString(text, (int) getPos().x, (int) getPos().y, paint);
-		size.y = 36;
-		setSize(size);
+		g.drawImage(image, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
 	}
 	
 	void onDown()
 	{
-		Log.d("BUTTON", "UP");
+		listener.onDown();
 	}
 	
 	void onUp()
 	{
-		Log.d("BUTTON", "DOWN");
+		listener.onUp();
 	}
 
 	@Override

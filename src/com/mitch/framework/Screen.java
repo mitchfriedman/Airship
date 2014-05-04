@@ -1,11 +1,12 @@
 package com.mitch.framework;
 
 import com.mitch.framework.Input.TouchEvent;
+import com.mitch.framework.implementation.AndroidGame;
 
 public abstract class Screen {
-    protected final Game game;
+    protected final AndroidGame game;
 
-    public Screen(Game game) {
+    public Screen(AndroidGame game) {
         this.game = game;
     }
 

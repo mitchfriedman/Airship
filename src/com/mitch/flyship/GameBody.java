@@ -46,16 +46,18 @@ public abstract class GameBody {
 		return bounds.getRealSize();
 	}
 	
-	public boolean isTouched()
+	public boolean isTouched(Vector2d offset)
 	{
 		Input input = game.getInput();
 		if (input.isTouchDown(0)) {
 			Vector2d touchPos = new Vector2d(input.getTouchX(0), input.getTouchY(0));
-			return Rect.vectorWithinRect(touchPos, bounds);
+			Rect touchBox = new Rect(bounds);
+			touchBox.x += offset.x;
+			touchBox.y += offset.y;
+			return Rect.vectorWithinRect(touchPos, touchBox);
 		} else {
 			return false;
 		}
-		
 	}
 	
 	public abstract void onUpdate(float deltaTime);

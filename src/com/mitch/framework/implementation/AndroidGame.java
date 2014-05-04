@@ -3,7 +3,6 @@ package com.mitch.framework.implementation;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import android.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
