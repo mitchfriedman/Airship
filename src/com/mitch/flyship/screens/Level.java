@@ -1,88 +1,80 @@
 package com.mitch.flyship.screens;
 
-import android.util.Log;
-
 import com.mitch.flyship.Assets;
+import com.mitch.flyship.LevelProperties;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 
+
 public class Level extends Screen {
 	
 	Game game;
-	public int background1Y, background2Y;
-	private int backgroundSpeed;
-	public Image backgroundImage;
+	int backgroundHeight = 0;
+	int backgroundPos = 0;
+	double speed;
+	Image backgroundImage;
 	
-	final int IMAGE_HEIGHT = 2336;
-	
-	public Level(Game game) {
+	public Level(Game game, LevelProperties properties) 
+	{
 		super(game);
 		this.game = game;
-		background1Y = 0;
-		background2Y = -IMAGE_HEIGHT;
 		
-		setBackgroundImage();
+		setBackgroundImage("Background/lvl1");
+		setSpeed(20);
+		loadFromProperties(properties);
 	}
 	
-	public void loadXML(String file) {
-		
-	}
-	public void setBackgroundImage() {
-		/* parse XML and load background image */
-		Graphics g = game.getGraphics();
-		Assets.loadImage("background", "Backgrounds/sky.png", null, g);
-		backgroundImage = Assets.getImage("background");
-		setSpeed(1);
+	public void loadFromProperties(LevelProperties properties) 
+	{
+		setBackgroundImage(properties.background);
+		setSpeed(properties.speed);
 	}
 	
-	public void setSpeed(int speed) {
-		backgroundSpeed = speed;
-	}
-	public int getSpeed() {
-		return backgroundSpeed;
-	}
-	
-	public void update(float deltaTime) {
-		background1Y += backgroundSpeed;
-		background2Y += backgroundSpeed;
-		
-		if(background1Y >= IMAGE_HEIGHT) {
-			background1Y -= 2 * IMAGE_HEIGHT;
-		}
-		if(background2Y >= IMAGE_HEIGHT) {
-			background2Y -= 2 * IMAGE_HEIGHT;
-		}
-		
-		
+	public void setBackgroundImage(String image) 
+	{
+		backgroundImage = Assets.getImage(image);
+		double width  = backgroundImage.getWidth();
+		double height = backgroundImage.getHeight();
+		backgroundHeight = (int) (height * (game.getGraphics().getWidth() / width));
 	}
 	
-	public void paint(float deltaTime) {
+	public void setSpeed(double speed) 
+	{
+		this.speed = speed;
+	}
+	
+	public double getSpeed() 
+	{
+		return speed;
+	}
+	
+	public void update(float deltaTime) 
+	{
+		backgroundPos += getSpeed();
+		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
+	}
+	
+	public void paint(float deltaTime) 
+	{
 		Graphics g = game.getGraphics();
 		g.drawARGB( 255, 0, 0, 0);
-		g.drawImage(backgroundImage, 0, background1Y);
-		g.drawImage(backgroundImage, 0, background2Y);
+		g.drawImage(backgroundImage, 0, backgroundPos, g.getWidth(), backgroundHeight);
+		g.drawImage(backgroundImage, 0, backgroundPos-backgroundHeight, g.getWidth(), backgroundHeight);
 	}
+	
+	
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void pause() {}
+	
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void resume() {}
+	
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void dispose() {}
+	
 	@Override
-	public void backButton() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void backButton() {}
 
 }

@@ -5,5 +5,6 @@
 <!-- <music key="" path="" /> -->
 <assets>
     <music key="blue" path="Music/blue.mp3" />
-	
+	<image key="Background/Sky" path="Backgrounds/sky.png" />
+	<image key="Background/lvl1" path="Backgrounds/level1.png" />
 </assets>

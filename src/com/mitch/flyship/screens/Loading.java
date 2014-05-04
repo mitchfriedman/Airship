@@ -1,6 +1,7 @@
 package com.mitch.flyship.screens;
 
 import com.mitch.flyship.Assets;
+import com.mitch.flyship.LevelProperties;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -32,7 +33,7 @@ public class Loading extends Screen {
 		opacity = 255 * percentage;
 		
 		if (Assets.isLoaded() && elapsedTime > splashDisplayTime) {
-			game.setScreen(new Menu(game));
+			game.setScreen(new Level(game, new LevelProperties()));
 		}
 	}
 

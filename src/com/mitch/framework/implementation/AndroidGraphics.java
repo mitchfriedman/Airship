@@ -111,7 +111,7 @@ public class AndroidGraphics implements Graphics {
     	
     	Rect textBounds = new Rect(0,0,0,0);
     	paint.getTextBounds(text, 0, text.length(), textBounds);
-    	return new Vector2d(textBounds.right, textBounds.top);
+    	return new Vector2d(textBounds.left, textBounds.top);
     }
     
 
@@ -141,12 +141,19 @@ public class AndroidGraphics implements Graphics {
     public void drawImage(Image image, double x, double y) {
     	float width    = image.getWidth()  * scale;
     	float height   = image.getHeight() * scale;
+    	drawImage(image, x,y, width,height);
+    }
+    
+    @Override
+    public void drawImage(Image image, double x, double y, double width, double height) {
     	dstRect.left   = (float) x;
         dstRect.top    = (float) y;
         dstRect.right  = (float) (x + width);
         dstRect.bottom = (float) (y + height);
         canvas.drawBitmap(((AndroidImage)image).bitmap, null, dstRect, null);
     }
+    
+    
     public void drawImage2(Image Image, float x, float y) {
     	float width    = Image.getWidth()  * scale;
     	float height   = Image.getHeight() * scale;
