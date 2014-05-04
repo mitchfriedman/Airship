@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <image key="" path="" /> -->
+<!-- <sound key="" path="" /> -->
+<!-- <music key="" path="" /> -->
+<assets>
+    <music key="blue" path="Music/blue.mp3" />
+	
+</assets>
