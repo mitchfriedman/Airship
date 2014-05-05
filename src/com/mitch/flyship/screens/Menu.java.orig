@@ -1,6 +1,9 @@
 package com.mitch.flyship.screens;
 
+<<<<<<< HEAD
+=======
 import android.content.res.XmlResourceParser;
+>>>>>>> feature/objectbody
 import android.graphics.Paint.Align;
 
 import com.mitch.flyship.Assets;
@@ -8,8 +11,10 @@ import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.LevelProperties;
 import com.mitch.flyship.R;
 import com.mitch.flyship.objects.Button;
-import com.mitch.framework.Graphics;
-import com.mitch.framework.Image;
+<<<<<<< HEAD
+import com.mitch.framework.Game;
+=======
+>>>>>>> feature/objectbody
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
@@ -20,6 +25,10 @@ public class Menu extends Screen {
 	
 	Button button;
 	Image splashLogo;
+<<<<<<< HEAD
+	
+=======
+>>>>>>> feature/objectbody
 	
 	ButtonClickListener levelOneClick = new ButtonClickListener() {
 		
@@ -38,7 +47,11 @@ public class Menu extends Screen {
 	{
 		super(game);
 		Graphics g = game.getGraphics();
+<<<<<<< HEAD
+		button = new Button(game, new Vector2d(g.getWidth()/2, 375), "Menu/Button/lvl1", 50, Align.CENTER);
+=======
 		button = new Button(game, new Vector2d(g.getWidth()/2, 375), "Menu/Button/lvl1", 50, Align.CENTER, levelOneClick);
+>>>>>>> feature/objectbody
 		Assets.getMusic("blue").setLooping(true);
 		splashLogo = Assets.getImage("Menu/splash_logo");
 	}

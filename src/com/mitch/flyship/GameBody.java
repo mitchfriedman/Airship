@@ -58,7 +58,6 @@ public abstract class GameBody {
 		} else {
 			return false;
 		}
-		
 	}
 	
 	public abstract void onUpdate(float deltaTime);

@@ -3,7 +3,10 @@ package com.mitch.flyship.objects;
 import android.graphics.Paint.Align;
 
 import com.mitch.flyship.Assets;
+<<<<<<< HEAD
+=======
 import com.mitch.flyship.ButtonClickListener;
+>>>>>>> feature/objectbody
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
@@ -16,14 +19,22 @@ public class Button extends GameBody {
 	Image image;
 	Align align = Align.LEFT;
 	Vector2d offset = Vector2d.ZERO;
+<<<<<<< HEAD
+	
+	public Button(Game game, Vector2d position, String imageID, int height, Align align)
+=======
 	ButtonClickListener listener;
 	
 	public Button(Game game, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
+>>>>>>> feature/objectbody
 	{
 		super(game, position);
 		image = Assets.getImage(imageID);
 		setSize(image.getSize().scaleX(height));
+<<<<<<< HEAD
+=======
 		this.listener = listener;
+>>>>>>> feature/objectbody
 		
 		switch(align) {
 		case LEFT:
@@ -62,14 +73,22 @@ public class Button extends GameBody {
 	
 	void onDown()
 	{
-		listener.onDown();
+<<<<<<< HEAD
+		Log.d("BUTTON", "UP");
 		
+=======
+		listener.onDown();
+>>>>>>> feature/objectbody
 	}
 	
 	void onUp()
 	{
-		listener.onUp();
+<<<<<<< HEAD
+		Log.d("BUTTON", "DOWN");
 		
+=======
+		listener.onUp();
+>>>>>>> feature/objectbody
 	}
 
 	@Override
