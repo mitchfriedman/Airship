@@ -3,19 +3,14 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.res.XmlResourceParser;
-
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
-import com.mitch.flyship.ButtonClickListener;
-import com.mitch.flyship.LevelProperties;
-import com.mitch.flyship.R;
 import com.mitch.flyship.objects.Cloud;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidGame;
 
 public class Menu extends Screen {
 	
@@ -28,13 +23,20 @@ public class Menu extends Screen {
 	Rect gearBounds;
 	
 	List<Cloud> clouds;
+	int cloudSpawnRate = 250;
+	double cloudMinSpeed = 1;
+	double cloudMaxSpeed = 4;
+	double cloudSpeed;
+	int cloudMinY;
+	int cloudMaxY;
+	
 	
 	double swayLength = 30;
 	double sway = 0;
 	double swayDirection = 1;
 	double swayTime = 1500;
 	
-	public Menu(AndroidGame game)
+	public Menu(AirshipGame game)
 	{
 		super(game);
 		
@@ -56,6 +58,9 @@ public class Menu extends Screen {
 		gearBounds.setPosition(new Vector2d(g.getWidth()-gearBounds.width-12, 12));
 		
 		clouds = new ArrayList<Cloud>();
+		cloudMinY = 5;
+		cloudMaxY = platformBounds.getIntPosition().y;
+		cloudSpeed = cloudMinSpeed + (Math.random() * (cloudMaxSpeed-cloudMinSpeed));
 	}
 	
 	@Override
@@ -64,6 +69,9 @@ public class Menu extends Screen {
 		calculateTerrainSway(deltaTime);
 		spawnClouds();
 		
+		for (Cloud cloud : clouds) {
+			cloud.onUpdate(deltaTime);
+		}
 	}
 
 	@Override
@@ -71,8 +79,15 @@ public class Menu extends Screen {
 	{
 		Graphics g = game.getGraphics();
 		g.drawImage(terrain, terrainBounds.getRealPosition().add(new Vector2d(sway, 0)), terrainBounds.getRealSize());
+		
+		for (Cloud cloud : clouds) {
+			cloud.onPaint(deltaTime);
+		}
+		
 		g.drawImage(platform, platformBounds.getRealPosition(), platformBounds.getRealSize());
 		g.drawImage(gear, gearBounds.getRealPosition(), gearBounds.getRealSize());
+		
+		
 	}
 	
 	void calculateTerrainSway(float deltaTime)
@@ -87,7 +102,16 @@ public class Menu extends Screen {
 	
 	void spawnClouds()
 	{
-		
+		boolean spawnCloud = (int) (Math.random() * cloudSpawnRate) == 0;
+		if (spawnCloud) {
+			
+			int cloudY = (int) (cloudMinY + (Math.random() * (cloudMaxY - cloudMinY)));
+			Vector2d pos = new Vector2d(-5, cloudY);
+			Vector2d vel = new Vector2d(cloudSpeed, 0);
+			Cloud cloud = new Cloud(game, pos, vel);
+			cloud.setPos(cloud.getPos().subtract(cloud.getSize()));
+			clouds.add(cloud);
+		}
 	}
 	
 	@Override
@@ -110,18 +134,5 @@ public class Menu extends Screen {
 	public void backButton() {
 		
 	}
-	
-	ButtonClickListener levelOneClick = new ButtonClickListener() {
-		
-		@Override
-		public void onUp() {
-			XmlResourceParser xrp = game.getResources().getXml(R.xml.level1);
-			LevelProperties properties = new LevelProperties(xrp);
-			game.setScreen(new Level(game, properties));
-		}
-		
-		@Override
-		public void onDown() {}
-	};
 
 }

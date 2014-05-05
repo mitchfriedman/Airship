@@ -1,11 +1,11 @@
 package com.mitch.flyship.screens;
 
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidGame;
 
 public class Loading extends Screen {
 	
@@ -15,7 +15,7 @@ public class Loading extends Screen {
 	Image splash;
 	Vector2d size;
 	
-	public Loading(AndroidGame game) {
+	public Loading(AirshipGame game) {
 		super(game);
 		
 		Graphics g = game.getGraphics();

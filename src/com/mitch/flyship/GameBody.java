@@ -7,6 +7,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public abstract class GameBody {
 	protected Game game;
+	protected Vector2d velocity;
 	Rect bounds;
 	String name;
 	
@@ -14,6 +15,8 @@ public abstract class GameBody {
 	{
 		this.game = game;
 		this.name = name;
+		this.velocity = Vector2d.ZERO;
+		this.bounds = new Rect(0,0,0,0);
 	}
 	
 	public GameBody(Game game, String name, Rect bounds)
@@ -51,6 +54,11 @@ public abstract class GameBody {
 	public Vector2d getSize()
 	{
 		return bounds.getRealSize();
+	}
+	
+	public Vector2d getVelocity()
+	{
+		return velocity;
 	}
 	
 	public boolean isTouched(Vector2d offset)
