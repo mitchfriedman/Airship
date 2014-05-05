@@ -10,8 +10,6 @@ import com.mitch.flyship.R;
 import com.mitch.flyship.objects.Button;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
-import com.mitch.framework.Graphics;
-import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
@@ -38,7 +36,7 @@ public class Menu extends Screen {
 	{
 		super(game);
 		Graphics g = game.getGraphics();
-		button = new Button(game, new Vector2d(g.getWidth()/2, 375), "Menu/Button/lvl1", 50, Align.CENTER, levelOneClick);
+		button = new Button(game, "BUTTON", new Vector2d(g.getWidth()/2, 375), "Menu/Button/lvl1", 50, Align.CENTER, levelOneClick);
 		Assets.getMusic("blue").setLooping(true);
 		splashLogo = Assets.getImage("Menu/splash_logo");
 	}

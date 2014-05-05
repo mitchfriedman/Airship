@@ -8,22 +8,29 @@ import com.mitch.framework.containers.Vector2d;
 public abstract class GameBody {
 	protected Game game;
 	Rect bounds;
+	String name;
 	
-	public GameBody(Game game)
+	public GameBody(Game game, String name)
 	{
 		this.game = game;
+		this.name = name;
 	}
 	
-	public GameBody(Game game, Rect bounds)
+	public GameBody(Game game, String name, Rect bounds)
 	{
-		this(game);
+		this(game, name);
 		this.bounds = bounds;
 	}
 	
-	public GameBody(Game game, Vector2d position)
+	public GameBody(Game game, String name, Vector2d position)
 	{
-		this(game);
+		this(game, name);
 		this.bounds = new Rect(position, Vector2d.ZERO);
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public void setPos(Vector2d position)

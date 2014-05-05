@@ -2,6 +2,7 @@ package com.mitch.flyship.screens;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.LevelProperties;
+import com.mitch.framework.BodyManager;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -11,19 +12,20 @@ import com.mitch.framework.implementation.AndroidGame;
 
 public class Level extends Screen {
 	
+	public BodyManager bm;
+	
 	Game game;
-	int backgroundHeight = 0;
-	int backgroundPos = 0;
 	double speed;
 	Image backgroundImage;
+	int backgroundPos = 0;
+	int backgroundHeight = 0;
 	
 	public Level(AndroidGame game, LevelProperties properties) 
 	{
 		super(game);
 		this.game = game;
 		
-		//setBackgroundImage("Background/lvl1");
-		//setSpeed(20);
+		bm = new BodyManager();
 		loadFromProperties(properties);
 	}
 	

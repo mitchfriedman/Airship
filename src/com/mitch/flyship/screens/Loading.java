@@ -12,7 +12,6 @@ public class Loading extends Screen {
 	double splashDisplayTime = 200.000;
 	double elapsedTime = 0;
 	double opacity = 0;
-	//AndroidGame game;
 	Image splash;
 	Vector2d size;
 	

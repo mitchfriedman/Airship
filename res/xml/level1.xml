@@ -2,9 +2,6 @@
 
 <level>
     <speed value="1" />
-<<<<<<< HEAD
     <background value="level1.png" />
-=======
     <background value="Background/lvl1" />
->>>>>>> feature/objectbody
 </level>

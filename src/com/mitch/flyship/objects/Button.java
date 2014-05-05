@@ -18,9 +18,9 @@ public class Button extends GameBody {
 	Vector2d offset = Vector2d.ZERO;
 	ButtonClickListener listener;
 	
-	public Button(Game game, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
+	public Button(Game game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
 	{
-		super(game, position);
+		super(game, name, position);
 		image = Assets.getImage(imageID);
 		setSize(image.getSize().scaleX(height));
 		this.listener = listener;

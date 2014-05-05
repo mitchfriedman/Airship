@@ -19,5 +19,36 @@ public class BodyManager {
 		return bodies;
 	}
 	
+	public void addBody(GameBody body)
+	{
+		bodies.add(body);
+	}
+	
+	public void removeBody(GameBody body)
+	{
+		bodies.remove(body);
+	}
+	
+	public GameBody findFirstBody(String name)
+	{
+		for (GameBody body : bodies) {
+			if (body.getName() == name) {
+				return body;
+			}
+		}
+		return null;
+	}
+	
+	public List<GameBody> findAllBodies(String name)
+	{
+		List<GameBody> foundBodies = new ArrayList<GameBody>();
+		for (GameBody body : bodies) {
+			if (body.getName() == name) {
+				foundBodies.add(body);
+			}
+		}
+		return foundBodies;
+	}
+	
 	
 }
