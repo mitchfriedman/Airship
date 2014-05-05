@@ -74,7 +74,7 @@ public class Assets {
 	public static boolean loadImage(String key, String path, String locale, Graphics g)
 	{
 		if ( (locale == null && !images.containsKey(key)) ||  getLocale().equals(locale) ) {
-			Image image = g.newImage(path, ImageFormat.ARGB4444);
+			Image image = g.newImage(path, ImageFormat.RGB565);
 			images.put(key, image);
 			return image != null;
 		}
