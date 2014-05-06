@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- spawn_rate is per 100 seconds -->
+<levels>
+    <level name="endless">
+	    <speed value="1" />
+	    <background value="level1.png" />
+	    <background value="Background/lvl1" />
+	    <enemy type="bird" spawn_interval="10" spawn_chance="80" />
+	</level>
+</levels>

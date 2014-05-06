@@ -4,13 +4,18 @@
 <!-- <sound key="" path="" /> -->
 <!-- <music key="" path="" /> -->
 <assets>
+    <!-- Music -->
     <music key="blue" path="Music/blue.mp3" />
-	<image key="Background/lvl1" path="Backgrounds/level1.png" />
+    
+    <!--  -->
+	<image key="Endless/background" path="Backgrounds/level1.png" />
 	
+	<!-- Menu -->
 	<image key="Menu/platform" path="Menu/platform1.png" />
 	<image key="Menu/terrain" path="Menu/riverterrain.png" />
 	<image key="Menu/settingsgear" path="Menu/settingsgear.png" />
 	
+	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />
 	<image key="Clouds/cloud 1" path="Clouds/cloud 1.png" />
 	<image key="Clouds/cloud 2" path="Clouds/cloud 2.png" />
