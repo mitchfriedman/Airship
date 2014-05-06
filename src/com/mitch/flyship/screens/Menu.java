@@ -23,10 +23,8 @@ public class Menu extends Screen {
 	Rect gearBounds;
 	
 	List<Cloud> clouds;
-	int cloudSpawnRate = 250;
-	double cloudMinSpeed = 1;
-	double cloudMaxSpeed = 4;
-	double cloudSpeed;
+	int cloudSpawnRate = 300;
+	double cloudSpeed = 0.6;
 	int cloudMinY;
 	int cloudMaxY;
 	
@@ -58,9 +56,8 @@ public class Menu extends Screen {
 		gearBounds.setPosition(new Vector2d(g.getWidth()-gearBounds.width-12, 12));
 		
 		clouds = new ArrayList<Cloud>();
-		cloudMinY = 5;
+		cloudMinY = -5;
 		cloudMaxY = platformBounds.getIntPosition().y;
-		cloudSpeed = cloudMinSpeed + (Math.random() * (cloudMaxSpeed-cloudMinSpeed));
 	}
 	
 	@Override
@@ -68,6 +65,17 @@ public class Menu extends Screen {
 	{
 		calculateTerrainSway(deltaTime);
 		spawnClouds();
+		
+		List<Cloud> removeClouds = new ArrayList<Cloud>();
+		for (Cloud cloud : clouds) {
+			if (cloud.getPos().x > game.getGraphics().getWidth()) {
+				removeClouds.add(cloud);
+			}
+		}
+		
+		for (Cloud cloud : removeClouds) {
+			clouds.remove(cloud);
+		}
 		
 		for (Cloud cloud : clouds) {
 			cloud.onUpdate(deltaTime);
@@ -106,7 +114,7 @@ public class Menu extends Screen {
 		if (spawnCloud) {
 			
 			int cloudY = (int) (cloudMinY + (Math.random() * (cloudMaxY - cloudMinY)));
-			Vector2d pos = new Vector2d(-5, cloudY);
+			Vector2d pos = new Vector2d(0, cloudY);
 			Vector2d vel = new Vector2d(cloudSpeed, 0);
 			Cloud cloud = new Cloud(game, pos, vel);
 			cloud.setPos(cloud.getPos().subtract(cloud.getSize()));
