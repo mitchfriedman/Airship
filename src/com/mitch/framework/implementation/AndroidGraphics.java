@@ -133,6 +133,12 @@ public class AndroidGraphics implements Graphics {
     }
     
     @Override
+    public void drawImage(Image image, Vector2d pos, Vector2d size) {
+    	drawImage(image, pos.x, pos.y, size.x, size.y);
+    	
+    }
+    
+    @Override
     public void drawImage(Image image, double x, double y) {
     	float width    = image.getWidth(); // * scale;
     	float height   = image.getHeight(); //* scale;

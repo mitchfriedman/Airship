@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<level>
-    <speed value="1" />
-    <background value="level1.png" />
-    <background value="Background/lvl1" />
-</level>

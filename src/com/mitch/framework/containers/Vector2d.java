@@ -23,6 +23,11 @@ public class Vector2d {
 		return new Vector2d(x+vec.x, y+vec.y);
 	}
 	
+	public Vector2d subtract(Vector2d vec)
+	{
+		return new Vector2d(x-vec.x, y-vec.y);
+	}
+	
 	public Vector2d scale(double scale)
 	{
 		return new Vector2d(x*scale, y*scale);
