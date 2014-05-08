@@ -1,5 +1,7 @@
 package com.mitch.flyship.screens;
 
+import android.graphics.Color;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.framework.Graphics;
@@ -9,7 +11,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Loading extends Screen {
 	
-	double splashDisplayTime = 200.000;
+	double splashDisplayTime = 600.000;
 	double elapsedTime = 0;
 	double opacity = 0;
 	Image splash;
@@ -19,11 +21,11 @@ public class Loading extends Screen {
 		super(game);
 		
 		Graphics g = game.getGraphics();
-		Assets.loadImage("WIG_Splash", "WIG/WIG_splash.png", null, g);
+		Assets.loadImage("WIG_Splash", "WIG_splash1.png", null, g);
 		splash = Assets.getImage("WIG_Splash");
 		
 		size = splash.getSize();
-		size = size.scaleY(350);
+		size = size.scaleY(400);
 	}
 
 	@Override
@@ -43,10 +45,11 @@ public class Loading extends Screen {
 	@Override
 	public void paint(float deltaTime) {
 		Graphics g = game.getGraphics();
+		// draws image at center.
 		g.drawARGB( 255, 0, 0, 0);
-		g.drawImage(splash, g.getWidth()/2-size.x/2, 250, size.x, size.y);
+		g.drawImage(splash, g.getWidth()/2-size.x/2, g.getHeight()/2-size.y/2, size.x, size.y);
 		g.drawARGB( (int) opacity, 0, 0, 0);
-	}
+	} 
 
 	@Override
 	public void pause() {}

@@ -28,7 +28,7 @@ public class AndroidInput implements Input {
 			@Override  
 			public void onSensorChanged(SensorEvent event) {  
 				tiltX = event.values[0];
-				tiltY = event.values[1];
+				tiltY = event.values[1]; 
 			}
     		@Override  
     		public void onAccuracyChanged(Sensor sensor, int accuracy) { } //ignore this event
