@@ -22,6 +22,11 @@ public abstract class Screen {
     
 	public abstract void backButton();
 	
+	public AirshipGame getAirshipGame()
+	{
+		return game;
+	}
+	
 	public boolean inBounds(TouchEvent event, int x, int y, int width,
 			int height) {
 		if (event.x > x && event.x < x + width - 1 && event.y > y

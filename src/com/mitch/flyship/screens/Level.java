@@ -3,7 +3,7 @@ package com.mitch.flyship.screens;
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.LevelProperties;
-import com.mitch.framework.BodyManager;
+import com.mitch.framework.LevelBodyManager;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -12,7 +12,7 @@ import com.mitch.framework.Screen;
 
 public class Level extends Screen {
 	
-	public BodyManager bm;
+	public LevelBodyManager bm;
 	
 	Game game;
 	double speed;
@@ -25,7 +25,7 @@ public class Level extends Screen {
 		super(game);
 		this.game = game;
 		
-		bm = new BodyManager();
+		bm = new LevelBodyManager();
 		loadFromProperties(properties);
 	}
 	

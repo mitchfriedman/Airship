@@ -1,7 +1,5 @@
 package com.mitch.flyship.screens;
 
-import android.graphics.Color;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.framework.Graphics;
@@ -11,13 +9,14 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Loading extends Screen {
 	
-	double splashDisplayTime = 600.000;
+	double splashDisplayTime = 180.000;
 	double elapsedTime = 0;
 	double opacity = 0;
 	Image splash;
 	Vector2d size;
 	
-	public Loading(AirshipGame game) {
+	public Loading(AirshipGame game) 
+	{
 		super(game);
 		
 		Graphics g = game.getGraphics();
@@ -43,13 +42,14 @@ public class Loading extends Screen {
 	}
 
 	@Override
-	public void paint(float deltaTime) {
+	public void paint(float deltaTime) 
+	{
 		Graphics g = game.getGraphics();
 		// draws image at center.
 		g.drawARGB( 255, 0, 0, 0);
 		g.drawImage(splash, g.getWidth()/2-size.x/2, g.getHeight()/2-size.y/2, size.x, size.y);
 		g.drawARGB( (int) opacity, 0, 0, 0);
-	} 
+	}
 
 	@Override
 	public void pause() {}

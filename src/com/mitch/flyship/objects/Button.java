@@ -2,10 +2,10 @@ package com.mitch.flyship.objects;
 
 import android.graphics.Paint.Align;
 
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
-import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
@@ -18,7 +18,7 @@ public class Button extends GameBody {
 	Vector2d offset = Vector2d.ZERO;
 	ButtonClickListener listener;
 	
-	public Button(Game game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
+	public Button(AirshipGame game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
 	{
 		super(game, name, position);
 		image = Assets.getImage(imageID);
