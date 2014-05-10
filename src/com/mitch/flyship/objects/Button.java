@@ -13,16 +13,37 @@ import com.mitch.framework.containers.Vector2d;
 public class Button extends GameBody {
 	boolean lastTouched = false;
 	boolean down = false;
-	Image image;
 	Align align = Align.LEFT;
 	Vector2d offset = Vector2d.ZERO;
 	ButtonClickListener listener;
+	float timeTouchUp = 0;
+	
+	Image pressedImage;
+	Image depressedImage;
+	Image activeImage;
+	Image currentImage;
+	boolean justTouched = false;
+	
+	enum state {
+		pressed,
+		depressed,
+		active
+	}
+	state CURRENT = state.active;
 	
 	public Button(AirshipGame game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
 	{
 		super(game, name, position);
-		image = Assets.getImage(imageID);
-		setSize(image.getSize().scaleX(height));
+		
+		activeImage = Assets.getImage(imageID);
+		pressedImage = Assets.getImage(imageID+" Pressed");
+		depressedImage = Assets.getImage(imageID+" Depressed");
+		setSize(activeImage.getSize().scaleX(height));
+		setSize(pressedImage.getSize().scaleX(height));
+		setSize(depressedImage.getSize().scaleX(height));
+		
+		currentImage = activeImage;
+
 		this.listener = listener;
 		
 		switch(align) {
@@ -41,6 +62,20 @@ public class Button extends GameBody {
 	public void onUpdate(float deltaTime) 
 	{
 		boolean touched = isTouched(offset);
+		
+		if(justTouched) {
+			if(timeTouchUp < 40 && timeTouchUp > 0) {
+				currentImage = depressedImage;
+				timeTouchUp += deltaTime;	
+			}
+			
+			else if(timeTouchUp >= 40) {
+				currentImage = activeImage;
+				timeTouchUp = 0;
+				justTouched = false;
+			}
+		}
+		
 		if (touched && !lastTouched) {
 			onDown();
 			down = true;
@@ -48,6 +83,7 @@ public class Button extends GameBody {
 		}
 		else if (lastTouched && !touched) {
 			onUp();
+			
 			down = false;
 			lastTouched = false;
 		}
@@ -57,19 +93,20 @@ public class Button extends GameBody {
 	public void onPaint(float deltaTime) 
 	{
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
+		g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
 	}
 	
 	void onDown()
 	{
 		listener.onDown();
-		
+		currentImage = pressedImage;
 	}
 	
 	void onUp()
 	{
 		listener.onUp();
-		
+		justTouched = true;
+		timeTouchUp = 1;
 	}
 
 	@Override

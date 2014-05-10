@@ -3,6 +3,7 @@ package com.mitch.flyship.screens;
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.LevelProperties;
+import com.mitch.flyship.Ship;
 import com.mitch.framework.LevelBodyManager;
 import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
@@ -19,14 +20,23 @@ public class Level extends Screen {
 	Image backgroundImage;
 	int backgroundPos = 0;
 	int backgroundHeight = 0;
+	private Ship ship;
 	
 	public Level(AirshipGame game, LevelProperties properties) 
 	{
 		super(game);
 		this.game = game;
 		
-		bm = new LevelBodyManager();
+		bm = new LevelBodyManager(ship);
 		loadFromProperties(properties);
+	}
+	
+	public void setShip(Ship ship) {
+		this.ship = ship;
+	}
+	
+	public Ship getShip() {
+		return ship;
 	}
 	
 	public void loadFromProperties(LevelProperties properties) 

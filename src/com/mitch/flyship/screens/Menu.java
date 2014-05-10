@@ -3,9 +3,13 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Paint.Align;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
+import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.objects.Cloud;
+import com.mitch.flyship.objects.Button;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
@@ -17,6 +21,14 @@ public class Menu extends Screen {
 	Image platform;
 	Image terrain;
 	Image gear;
+	Image buttonImage;
+	
+	Button endlessMode;
+	Button missionsMode;
+	Button shopMode;
+	ButtonClickListener endlessListener;
+	ButtonClickListener missionsListener;
+	ButtonClickListener shopListener;
 	
 	Rect platformBounds;
 	Rect terrainBounds;
@@ -42,6 +54,44 @@ public class Menu extends Screen {
 		platform = Assets.getImage("Menu/platform");
 		terrain = Assets.getImage("Menu/terrain");
 		gear = Assets.getImage("Menu/settingsgear");
+		
+		buttonImage = Assets.getImage("Menu/Buttons/Endless Button");
+		
+		endlessListener = new ButtonClickListener() {
+			@Override
+			public void onUp() { }
+			@Override
+			public void onDown() { }
+			@Override
+			public void onDepressed() { }
+			@Override
+			public void onCancel() { }
+		};
+		missionsListener = new ButtonClickListener () {
+			@Override
+			public void onUp() { }
+			@Override
+			public void onDown() { }
+			@Override
+			public void onDepressed() { }
+			@Override
+			public void onCancel() { }
+		};
+		shopListener = new ButtonClickListener() {
+			@Override
+			public void onUp() { }
+			@Override
+			public void onDown() { }
+			@Override
+			public void onDepressed() { }
+			@Override
+			public void onCancel() { }
+		};
+		
+		endlessMode = new Button(game, "endless", new Vector2d(350,660), "Menu/Buttons/Endless Button", buttonImage.getWidth(), Align.CENTER, endlessListener);
+		missionsMode = new Button(game, "missions", new Vector2d(200,780), "Menu/Buttons/Missions Button", buttonImage.getWidth(), Align.RIGHT, missionsListener);
+		shopMode = new Button(game, "shop", new Vector2d(520,780), "Menu/Buttons/Shop Button", buttonImage.getWidth(), Align.RIGHT, shopListener);
+		
 		Graphics g = game.getGraphics();
 		
 		platformBounds = new Rect(0,0,0,0);
@@ -80,6 +130,8 @@ public class Menu extends Screen {
 		for (Cloud cloud : clouds) {
 			cloud.onUpdate(deltaTime);
 		}
+		endlessMode.onUpdate(deltaTime);
+		missionsMode.onUpdate(deltaTime);
 	}
 
 	@Override
@@ -95,7 +147,9 @@ public class Menu extends Screen {
 		g.drawImage(platform, platformBounds.getRealPosition(), platformBounds.getRealSize());
 		g.drawImage(gear, gearBounds.getRealPosition(), gearBounds.getRealSize());
 		
-		
+		endlessMode.onPaint(deltaTime);
+		missionsMode.onPaint(deltaTime);
+		shopMode.onPaint(deltaTime);
 	}
 	
 	void calculateTerrainSway(float deltaTime)
