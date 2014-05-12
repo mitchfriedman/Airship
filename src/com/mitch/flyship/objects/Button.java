@@ -16,31 +16,43 @@ public class Button extends GameBody {
 	Align align = Align.LEFT;
 	Vector2d offset = Vector2d.ZERO;
 	ButtonClickListener listener;
-	float timeTouchUp = 0;
 	
+	
+	
+	//Image depressedImage;
 	Image pressedImage;
-	Image depressedImage;
 	Image activeImage;
 	Image currentImage;
-	boolean justTouched = false;
 	
+	//boolean justTouched = false;
+	//float timeTouchUp = 0;
+	/*
 	enum state {
 		pressed,
-		depressed,
+		//depressed,
 		active
 	}
-	state CURRENT = state.active;
+	state CURRENT;*/
 	
 	public Button(AirshipGame game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
 	{
 		super(game, name, position);
+		//CURRENT = state.active;
 		
-		activeImage = Assets.getImage(imageID);
-		pressedImage = Assets.getImage(imageID+" Pressed");
-		depressedImage = Assets.getImage(imageID+" Depressed");
+		
+		try {
+			activeImage = Assets.getImage(imageID);
+			pressedImage = Assets.getImage(imageID+" Pressed");
+			
+			//depressedImage = Assets.getImage(imageID+" Depressed");
+		}
+		catch (Exception e){
+			
+		}
+		
 		setSize(activeImage.getSize().scaleX(height));
 		setSize(pressedImage.getSize().scaleX(height));
-		setSize(depressedImage.getSize().scaleX(height));
+		//setSize(depressedImage.getSize().scaleX(height));
 		
 		currentImage = activeImage;
 
@@ -57,13 +69,23 @@ public class Button extends GameBody {
 			break;
 		}
 	}
-	
+	public Image getImage() {
+		return currentImage;
+	}
+	/* FUNCTION LIMITATION:
+	 *  - function only sets the current image which is useless, 
+	 *    need a function for active and pressed images if it is to be used properly
+	*/
+	public void setImage(String image) {
+		
+		currentImage = Assets.getImage(image);
+	}
 	@Override
 	public void onUpdate(float deltaTime) 
 	{
 		boolean touched = isTouched(offset);
 		
-		if(justTouched) {
+		/*if(justTouched) {
 			if(timeTouchUp < 40 && timeTouchUp > 0) {
 				currentImage = depressedImage;
 				timeTouchUp += deltaTime;	
@@ -75,6 +97,7 @@ public class Button extends GameBody {
 				justTouched = false;
 			}
 		}
+		*/
 		
 		if (touched && !lastTouched) {
 			onDown();
@@ -105,8 +128,9 @@ public class Button extends GameBody {
 	void onUp()
 	{
 		listener.onUp();
-		justTouched = true;
-		timeTouchUp = 1;
+		currentImage = activeImage;
+		//justTouched = true;
+		//timeTouchUp = 1;
 	}
 
 	@Override

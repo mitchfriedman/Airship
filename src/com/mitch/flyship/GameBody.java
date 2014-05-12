@@ -30,7 +30,12 @@ public abstract class GameBody {
 		this(game, name);
 		this.bounds = new Rect(position, Vector2d.ZERO);
 	}
-	
+	public void setBounds(Rect bounds) {
+		this.bounds = bounds;
+	}
+	public Rect getBounds() {
+		return bounds;
+	}
 	public String getName()
 	{
 		return name;
