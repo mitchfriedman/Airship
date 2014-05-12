@@ -1,14 +1,9 @@
 package com.mitch.flyship.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.graphics.Paint.Align;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
-import com.mitch.flyship.objects.Cloud;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
@@ -28,13 +23,6 @@ public class Menu extends Screen {
 	ButtonClickListener endlessListener;
 	ButtonClickListener missionsListener;
 	ButtonClickListener shopListener;
-	
-	List<Cloud> clouds;
-	int cloudSpawnRate = 300;
-	double cloudSpeed = 0.6;
-	int cloudMinY;
-	int cloudMaxY;
-	double scale;
 	
 	Platform platform;
 	Terrain terrain;
@@ -98,38 +86,17 @@ public class Menu extends Screen {
 		shopMode = new Button(game, "shop", new Vector2d(520,780), "Menu/Buttons/Shop Button", 100, Align.RIGHT, shopListener);
 		
 		Graphics g = game.getGraphics();
-		//scale = platform.getImage().getSize().scaleY(g.getWidth();
 		platform.setSize(platform.getImage().getSize().scaleY(g.getWidth()));
 		terrain.setSize(terrain.getImage().getSize().scaleY(g.getWidth()+terrain.getSwayLength()));
 
 		platform.setPos(new Vector2d(0, g.getHeight()-platform.getBounds().height));
-		
-		clouds = new ArrayList<Cloud>();
-		cloudMinY = -5;
-		cloudMaxY = platform.getBounds().getIntPosition().y;
+
 	}
 	
 	@Override
 	public void update(float deltaTime) 
-	{
-		
-		spawnClouds();
-		terrain.onUpdate(deltaTime);
-		
-		List<Cloud> removeClouds = new ArrayList<Cloud>();
-		for (Cloud cloud : clouds) {
-			if (cloud.getPos().x > game.getGraphics().getWidth()) {
-				removeClouds.add(cloud);
-			}
-		}
-		
-		for (Cloud cloud : removeClouds) {
-			clouds.remove(cloud);
-		}
-		
-		for (Cloud cloud : clouds) {
-			cloud.onUpdate(deltaTime);
-		}
+	{	
+		terrain.onUpdate(deltaTime);	
 		endlessMode.onUpdate(deltaTime);
 		missionsMode.onUpdate(deltaTime);
 		shopMode.onUpdate(deltaTime);
@@ -138,34 +105,13 @@ public class Menu extends Screen {
 
 	@Override
 	public void paint(float deltaTime)
-	{
-		Graphics g = game.getGraphics();
-		
-		for (Cloud cloud : clouds) {
-			cloud.onPaint(deltaTime);
-		}
-		
+	{	
 		terrain.onPaint(deltaTime);
 		platform.onPaint(deltaTime);		
-		
 		endlessMode.onPaint(deltaTime);
 		missionsMode.onPaint(deltaTime);
 		shopMode.onPaint(deltaTime);
 		gear.onPaint(deltaTime);
-	}
-	
-	void spawnClouds()
-	{
-		boolean spawnCloud = (int) (Math.random() * cloudSpawnRate) == 0;
-		if (spawnCloud) {
-			
-			int cloudY = (int) (cloudMinY + (Math.random() * (cloudMaxY - cloudMinY)));
-			Vector2d pos = new Vector2d(0, cloudY);
-			Vector2d vel = new Vector2d(cloudSpeed, 0);
-			Cloud cloud = new Cloud(game, pos, vel);
-			cloud.setPos(cloud.getPos().subtract(cloud.getSize()));
-			clouds.add(cloud);
-		}
 	}
 	
 	@Override

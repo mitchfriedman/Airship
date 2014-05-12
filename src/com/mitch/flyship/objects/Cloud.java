@@ -9,7 +9,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Cloud extends GameBody {
 	
-	final int nClouds = 4;;
+	final int nClouds = 4;
 	
 	int cloudType;
 	Image image;

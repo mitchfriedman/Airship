@@ -5,7 +5,6 @@ public class Vector2d {
 	public static final Vector2d ZERO = new Vector2d(0,0);
 	
 	public double x, y;
-	double scale;
 	
 	public Vector2d(double x, double y)
 	{
@@ -45,11 +44,4 @@ public class Vector2d {
 		double scaledX = scaledY * (x/y);
 		return new Vector2d(scaledX, scaledY);
 	}
-	public double getScale() {
-		return scale;
-	}
-	public void setScale(double scale) {
-		this.scale = scale;
-	}
-	
 }

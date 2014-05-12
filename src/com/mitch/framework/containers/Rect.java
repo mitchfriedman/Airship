@@ -44,7 +44,12 @@ public class Rect {
 		this.x = position.x;
 		this.y = position.y;
 	}
-	
+	public double getHeight() {
+		return height;
+	}
+	public double getWidth() {
+		return width;
+	}
 	
 	public Vector2d getRealSize()
 	{

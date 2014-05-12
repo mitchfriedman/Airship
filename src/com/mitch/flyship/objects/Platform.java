@@ -1,17 +1,17 @@
 package com.mitch.flyship.objects;
 
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Rect;
-import com.mitch.framework.implementation.AndroidGame;
 
 public class Platform extends GameBody {
 	
 	Image image;
 
-	public Platform(AndroidGame game, String name, Rect bounds) {
+	public Platform(AirshipGame game, String name, Rect bounds) {
 		super(game, name, bounds);
 		this.image = Assets.getImage(name);
 	}
