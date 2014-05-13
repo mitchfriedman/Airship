@@ -4,6 +4,7 @@ package com.mitch.framework;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public interface Graphics {
@@ -19,20 +20,28 @@ public interface Graphics {
 
 	public void drawRect(int x, int y, int width, int height, int color);
 
-	public void drawImage(Image image, int x, int y, int srcX, int srcY,
-			int srcWidth, int srcHeight);
+	public void drawImage(Image image, int x, int y, Rect src);
+	
+	public void drawImage(Image image, Vector2d dest, Rect src);
 
-	public void drawImage(Image Image, double x, double y);
+	public void drawImage(Image image, double x, double y);
+	
+	public void drawImage(Image image, Vector2d pos, double scale);
+	
+	public void drawImage(Image image, int x, int y, double scale);
 	
 	public void drawImage(Image image, double x, double y, double width, double height);
 	
-	public void drawImage(Image Image, Vector2d pos);
+	public void drawImage(Image image, Vector2d pos);
 	
-	public void drawImage(Image Image, Vector2d pos, Vector2d size);
+	public void drawImage(Image image, Vector2d pos, Vector2d size);
+	
+	public void drawImage(Image image, Rect dest);
+	
+	public void drawImage(Image image, Rect dest, Rect src);
 
 	public void drawString(String text, int x, int y, Paint paint);
 	
-	public void drawImage2(Image Image, float x, float y);
 	public int getWidth();
 
 	public int getHeight();
@@ -40,7 +49,4 @@ public interface Graphics {
 	public void drawARGB(int i, int j, int k, int l);
 
 	public Canvas getCanvas();
-
-	public void drawScaledImage(Image currentSprite, int x, int y, float f,
-			float g);
 }

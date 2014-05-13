@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
+import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -21,6 +22,7 @@ import com.mitch.framework.Game;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Input;
 import com.mitch.framework.Screen;
+import com.mitch.framework.containers.Vector2d;
 
 public abstract class AndroidGame extends Activity implements Game {
     AndroidFastRenderView renderView;
@@ -30,10 +32,11 @@ public abstract class AndroidGame extends Activity implements Game {
     FileIO fileIO;
     Screen screen;
     WakeLock wakeLock;
-	private static final String PREFS_NAME = "AirshipHighScores";
-	private ArrayList<String> highScores  = new ArrayList<String>();
+    
+    // keep these for reference
+	/*private ArrayList<String> highScores  = new ArrayList<String>();
 	private SharedPreferences prefs;
-	private SharedPreferences.Editor editor;
+	private SharedPreferences.Editor editor;*/
 	
     @SuppressWarnings("deprecation")
 	@Override
@@ -44,11 +47,11 @@ public abstract class AndroidGame extends Activity implements Game {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        //boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        //int frameBufferWidth = isPortrait ? 480: 800;
-        //int frameBufferHeight = isPortrait ? 800: 480;
-        int frameBufferWidth  = 520;
-        int frameBufferHeight = 880;
+        Display display = getWindowManager().getDefaultDisplay();
+        Vector2d screenSize = new Vector2d(display.getWidth(), display.getHeight());
+        
+        int frameBufferWidth  = 201;
+        int frameBufferHeight = (int)((screenSize.y/screenSize.x)*frameBufferWidth);
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth,
                 frameBufferHeight, Config.RGB_565);
         
@@ -68,10 +71,10 @@ public abstract class AndroidGame extends Activity implements Game {
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MyGame");
         
-        prefs  = getPreferences(MODE_PRIVATE); 
-        editor = getPreferences(MODE_PRIVATE).edit();
+        /*prefs  = getPreferences(MODE_PRIVATE); 
+        editor = getPreferences(MODE_PRIVATE).edit();*/
     }
-    //public void 
+    
     @Override
     public void onResume() {
         super.onResume();
@@ -80,7 +83,60 @@ public abstract class AndroidGame extends Activity implements Game {
         renderView.resume();
     }
     
-    @SuppressWarnings("rawtypes")
+    @Override
+    public void onPause() {
+        super.onPause();
+        wakeLock.release();
+        renderView.pause();
+        screen.pause();
+        
+        if (isFinishing())
+            screen.dispose();
+    }
+
+    @Override
+    public Input getInput() {
+        return input;
+    }
+    public void Vibrate(int time) {
+    	Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    	v.vibrate(time);
+    }
+    @Override
+    public FileIO getFileIO() {
+        return fileIO;
+    }
+
+    @Override
+    public Graphics getGraphics() {
+        return graphics;
+    }
+
+    @Override
+    public Audio getAudio() {
+    	
+        return audio;
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        if (screen == null)
+            throw new IllegalArgumentException("Screen must not be null");
+
+        this.screen.pause();
+        this.screen.dispose();
+        screen.resume();
+        screen.update(0);
+        this.screen = screen;
+    }
+    
+    public Screen getCurrentScreen() {
+    	return screen;
+    }
+    
+// keep these methods for reference
+    
+    /*@SuppressWarnings("rawtypes")
 	public ArrayList GetHighScores() {
     	if(highScores.size()==0) {	
 	    	String Score1 = prefs.getString("score1",null);
@@ -197,56 +253,5 @@ public abstract class AndroidGame extends Activity implements Game {
 		editor.putString("score4","0_00:00");
 		editor.putString("score5","0_00:00");
 		editor.commit();
-	}
-    
-    @Override
-    public void onPause() {
-        super.onPause();
-        wakeLock.release();
-        renderView.pause();
-        screen.pause();
-        
-        if (isFinishing())
-            screen.dispose();
-    }
-
-    @Override
-    public Input getInput() {
-        return input;
-    }
-    public void Vibrate(int time) {
-    	Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    	v.vibrate(time);
-    }
-    @Override
-    public FileIO getFileIO() {
-        return fileIO;
-    }
-
-    @Override
-    public Graphics getGraphics() {
-        return graphics;
-    }
-
-    @Override
-    public Audio getAudio() {
-    	
-        return audio;
-    }
-
-    @Override
-    public void setScreen(Screen screen) {
-        if (screen == null)
-            throw new IllegalArgumentException("Screen must not be null");
-
-        this.screen.pause();
-        this.screen.dispose();
-        screen.resume();
-        screen.update(0);
-        this.screen = screen;
-    }
-    
-    public Screen getCurrentScreen() {
-    	return screen;
-    }
+	}*/
 }

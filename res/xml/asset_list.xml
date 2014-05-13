@@ -27,7 +27,7 @@
 	<image key="Menu/Buttons/Shop Button Pressed" path="Menu/Buttons/Shop Button Pressed.png" />
 	<image key="Menu/Buttons/Shop Button Depressed" path="Menu/Buttons/Shop Button Depressed.png"/>
 	
-	<image key="Menu/Gear Button" path="Menu/Gear Button.png" />
+	<image key="Menu/Gear Button" path="Menu/Gear button.png" />
 	<image key="Menu/Gear Button Pressed" path="Menu/Gear Button Pressed.png" />
 	
 	<!-- Clouds -->

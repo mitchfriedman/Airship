@@ -11,10 +11,10 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.RectF;
 
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
+import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public class AndroidGraphics implements Graphics {
@@ -22,12 +22,9 @@ public class AndroidGraphics implements Graphics {
     Bitmap frameBuffer;
     Canvas canvas;
     Paint paint;
-    RectF srcRect = new RectF();
-    RectF dstRect = new RectF();
-    float scale = 2.807f;
-    //float scale2 = scale * 2;
 
-    public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) {
+    public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) 
+    {
         this.assets = assets;
         this.frameBuffer = frameBuffer;
         this.canvas = new Canvas(frameBuffer);
@@ -35,7 +32,8 @@ public class AndroidGraphics implements Graphics {
     }
     
     @Override
-    public Image newImage(String fileName, ImageFormat format) {
+    public Image newImage(String fileName, ImageFormat format) 
+    {
         Config config = null;
         if (format == ImageFormat.RGB565)
             config = Config.RGB_565;
@@ -109,107 +107,84 @@ public class AndroidGraphics implements Graphics {
     	canvas.drawText(text, x, y, paint);
     }
     
-
-    public void drawImage(Image Image, int x, int y, int srcX, int srcY,
-            int srcWidth, int srcHeight) {
-        srcRect.left = srcX;
-        srcRect.top = srcY;
-        srcRect.right = srcX + srcWidth;
-        srcRect.bottom = srcY + srcHeight;
-        
-        
-        dstRect.left = x;
-        dstRect.top = y;
-        dstRect.right = x + srcWidth;
-        dstRect.bottom = y + srcHeight;
-
-        canvas.drawBitmap(((AndroidImage) Image).bitmap, null, dstRect,
-                null);
+    @Override
+    public void drawImage(Image image, double x, double y) 
+    {
+    	drawImage(image, new Vector2d(x,y));
     }
     
     @Override
-    public void drawImage(Image image, Vector2d pos) {
-    	drawImage(image, pos.x, pos.y);
+    public void drawImage(Image image, Vector2d pos, Vector2d size) 
+    {
+    	Rect dst = new Rect(pos, size);
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
     }
     
     @Override
-    public void drawImage(Image image, Vector2d pos, Vector2d size) {
-    	drawImage(image, pos.x, pos.y, size.x, size.y);
-    	
+    public void drawImage(Image image, double x, double y, double width,
+    		double height) 
+    {
+    	drawImage(image, new Vector2d(x,y), new Vector2d(width, height));
     }
     
     @Override
-    public void drawImage(Image image, double x, double y) {
-    	float width    = image.getWidth(); // * scale;
-    	float height   = image.getHeight(); //* scale;
-    	drawImage(image, x,y, width,height);
+    public void drawImage(Image image, int x, int y, double scale) 
+    {
+    	drawImage(image, new Vector2d(x,y), scale);
     }
     
     @Override
-    public void drawImage(Image image, double x, double y, double width, double height) {
-    	dstRect.left   = (float) x;
-        dstRect.top    = (float) y;
-        dstRect.right  = (float) (x + width);
-        dstRect.bottom = (float) (y + height);
-        canvas.drawBitmap(((AndroidImage)image).bitmap, null, dstRect, null);
+    public void drawImage(Image image, int x, int y, Rect src) 
+    {
+    	drawImage(image, new Vector2d(x,y), src);
     }
     
-    
-    public void drawImage2(Image Image, float x, float y) {
-    	float width    = Image.getWidth()  * scale;
-    	float height   = Image.getHeight() * scale;
-    	dstRect.left   = x;
-        dstRect.top    = y;
-        dstRect.right  = (x + width);
-        dstRect.bottom =  (y + height);
-        canvas.drawBitmap(((AndroidImage)Image).bitmap, null, dstRect, null);
-        
-        
+    @Override
+    public void drawImage(Image image, Rect dst) 
+    {
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
     }
     
-    /*public void drawScaledImage(Image Image, int x, int y, int width, int height, int srcX, int srcY, int srcWidth, int srcHeight) {
-   		srcRect.left = srcX;
-        srcRect.top = srcY;
-        srcRect.right = srcX + srcWidth;
-        srcRect.bottom = srcY + srcHeight;
-        
-        dstRect.left = x;
-        dstRect.top = y;
-        dstRect.right = x + width;
-        dstRect.bottom = y + height;
-        
-        canvas.drawBitmap(((AndroidImage) Image).bitmap, srcRect, dstRect, null);
-        
+    @Override
+    public void drawImage(Image image, Rect dst, Rect src) 
+    {
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, src.getAndroidRect(), dst.getAndroidRectF(), null);
     }
-    */
-    public void drawScaledImage(Image Image, int x, int y, int width, int height) {
-    	dstRect.left = x;
-        dstRect.top = y;
-        dstRect.right = x + width;
-        dstRect.bottom = y + height;
-    	canvas.drawBitmap(((AndroidImage) Image).bitmap, null, dstRect, null);
+    
+    @Override
+    public void drawImage(Image image, Vector2d pos) 
+    {
+    	Rect dst = new Rect(pos, image.getSize());
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
+    }
+    
+    @Override
+    public void drawImage(Image image, Vector2d pos, double scale)
+    {
+    	Rect dst = new Rect(pos, image.getSize().scale(scale));
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
+    }
+    
+    @Override
+    public void drawImage(Image image, Vector2d dest, Rect src) 
+    {
+    	Rect dst = new Rect(dest, image.getSize());
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, src.getAndroidRect(), dst.getAndroidRectF(), null);
     }
    
     @Override
-    public int getWidth() {
+    public int getWidth() 
+    {
         return frameBuffer.getWidth();
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight()
+    {
         return frameBuffer.getHeight();
     }
-    public Canvas getCanvas() {
+    public Canvas getCanvas() 
+    {
     	return canvas;
     }
-
-	@Override
-	public void drawScaledImage(Image Image, int x, int y, float width,
-			float height) {
-		dstRect.left = x;
-        dstRect.top = y;
-        dstRect.right = (int) (x + width);
-        dstRect.bottom = (int) (y + height);
-		 canvas.drawBitmap(((AndroidImage)Image).bitmap, null, dstRect, null);
-	}
 }

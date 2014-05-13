@@ -44,9 +44,11 @@ public class Rect {
 		this.x = position.x;
 		this.y = position.y;
 	}
+	
 	public double getHeight() {
 		return height;
 	}
+	
 	public double getWidth() {
 		return width;
 	}
@@ -67,6 +69,15 @@ public class Rect {
 		this.height = size.y;
 	}
 	
+	public android.graphics.RectF getAndroidRectF()
+	{
+		return new android.graphics.RectF( (float)x, (float)y, (float)width, (float)height);
+	}
+	
+	public android.graphics.Rect getAndroidRect()
+	{
+		return new android.graphics.Rect( (int)x, (int)y, (int)width, (int)height);
+	}
 	
 	public static boolean rectCollides(Rect a, Rect b)
 	{

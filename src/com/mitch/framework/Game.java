@@ -1,6 +1,5 @@
 package com.mitch.framework;
 
-import java.util.ArrayList;
 
 public interface Game {
 
@@ -19,11 +18,4 @@ public interface Game {
     public Screen getInitScreen();
 
 	public void Vibrate(int i);
-	
-	public void SaveTop5(ArrayList<Integer> gearScores, ArrayList<String> times);
-    public void SetHighScoresZero();
-	public ArrayList GetHighScores();
-	public void SaveHighScore(int i, String string);
-	public ArrayList GetGearHighScores();
-	public ArrayList GetTimeHighScores();
 }
