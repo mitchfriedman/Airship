@@ -5,21 +5,50 @@ import java.util.List;
 
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Ship;
+import com.mitch.flyship.objects.Enemy;
 
 public class LevelBodyManager {
 	
-	private final Ship ship;
-	private final List<GameBody> enemies;
-	private final List<GameBody> items;
+	Ship ship;
+	final List<Enemy> enemies;
+	final List<GameBody> items;
 	
-	public LevelBodyManager(Ship ship)
+	public LevelBodyManager()
 	{
-		this.ship = ship;
-		this.enemies = new ArrayList<GameBody>();
+		this.ship = null;
+		this.enemies = new ArrayList<Enemy>();
 		this.items = new ArrayList<GameBody>();
 	}
 	
-	public List<GameBody> getEnemies()
+	public void onUpdate(float deltaTime)
+	{
+		ship.onUpdate(deltaTime);
+		for (Enemy enemy : enemies) {
+			enemy.onUpdate(deltaTime);
+		}
+		for (GameBody body : items) {
+			body.onUpdate(deltaTime);
+		}
+	}
+	
+	public void onPaint(float deltaTime)
+	{
+		ship.onPaint(deltaTime);
+		for (Enemy enemy : enemies) {
+			enemy.onPaint(deltaTime);
+		}
+		for (GameBody body : items) {
+			body.onPaint(deltaTime);
+		}
+	}
+	
+	
+	public void setShip(Ship ship)
+	{
+		this.ship = ship;
+	}
+	
+	public List<Enemy> getEnemies()
 	{
 		return enemies;
 	}
@@ -29,7 +58,7 @@ public class LevelBodyManager {
 		return items;
 	}
 	
-	public void addBodyToEnemies(GameBody body)
+	public void addBodyToEnemies(Enemy body)
 	{
 		enemies.add(body);
 	}
@@ -39,7 +68,7 @@ public class LevelBodyManager {
 		items.add(body);
 	}
 	
-	public void removeBodyFromEnemies(GameBody body)
+	public void removeBodyFromEnemies(Enemy body)
 	{
 		enemies.remove(body);
 	}
@@ -48,6 +77,5 @@ public class LevelBodyManager {
 	{
 		items.remove(body);
 	}
-	
 	
 }

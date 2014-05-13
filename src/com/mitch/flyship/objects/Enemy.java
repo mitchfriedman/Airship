@@ -9,7 +9,7 @@ import com.mitch.framework.containers.Vector2d;
 public abstract class Enemy extends GameBody {
 	
 	Image image;
-	private int damage;
+	int damage;
 
 	public Enemy(AirshipGame game, Vector2d pos, Vector2d vel) {
 		super(game, "Cloud", pos);
@@ -27,7 +27,7 @@ public abstract class Enemy extends GameBody {
 	public abstract void onHit();
 
 	@Override
-	public void onUpdate(float deltaTime) { 
+	public void onUpdate(float deltaTime) {
 		setPos(getPos().add(velocity));
 	}
 

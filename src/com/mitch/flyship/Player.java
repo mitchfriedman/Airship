@@ -26,7 +26,7 @@ public class Player {
 	int collectedGears; // value might not be needed. We'll keep it for now.
 	
 	
-	public Player(AndroidGame game)
+	public Player(AirshipGame game)
 	{
 		this.game = game;
 		health = MAX_HEALTH;
