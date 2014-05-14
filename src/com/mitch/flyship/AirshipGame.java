@@ -22,5 +22,10 @@ public class AirshipGame extends AndroidGame {
 	{
 		getCurrentScreen().backButton();
 	}
+	
+	public ShipParams loadMerchantShip()
+	{
+		return null;
+	}
 
 }

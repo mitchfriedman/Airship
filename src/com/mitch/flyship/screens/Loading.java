@@ -5,15 +5,13 @@ import com.mitch.flyship.Assets;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
-import com.mitch.framework.containers.Vector2d;
 
 public class Loading extends Screen {
 	
-	double splashDisplayTime = 180.000;
+	double splashDisplayTime = 180.000; //180 works best
 	double elapsedTime = 0;
 	double opacity = 0;
 	Image splash;
-	Vector2d size;
 	
 	public Loading(AirshipGame game) 
 	{
@@ -22,9 +20,6 @@ public class Loading extends Screen {
 		Graphics g = game.getGraphics();
 		Assets.loadImage("WIG_Splash", "WIG_splash1.png", null, g);
 		splash = Assets.getImage("WIG_Splash");
-		
-		size = splash.getSize();
-		size = size.scaleY(400);
 	}
 
 	@Override
@@ -47,7 +42,7 @@ public class Loading extends Screen {
 		Graphics g = game.getGraphics();
 		// draws image at center.
 		g.drawARGB( 255, 0, 0, 0);
-		g.drawImage(splash, g.getWidth()/2-size.x/2, g.getHeight()/2-size.y/2, size.x, size.y);
+		g.drawImage(splash, g.getWidth()/2-splash.getWidth()/2, g.getHeight()/2-splash.getHeight()/2);
 		g.drawARGB( (int) opacity, 0, 0, 0);
 	}
 

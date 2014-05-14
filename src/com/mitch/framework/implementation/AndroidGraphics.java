@@ -116,7 +116,7 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void drawImage(Image image, Vector2d pos, Vector2d size) 
     {
-    	Rect dst = new Rect(pos, size);
+    	Rect dst = new Rect(pos, pos.add(size));
     	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
     }
     
@@ -154,21 +154,21 @@ public class AndroidGraphics implements Graphics {
     @Override
     public void drawImage(Image image, Vector2d pos) 
     {
-    	Rect dst = new Rect(pos, image.getSize());
+    	Rect dst = new Rect(pos, pos.add(image.getSize()));
     	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
     }
     
     @Override
     public void drawImage(Image image, Vector2d pos, double scale)
     {
-    	Rect dst = new Rect(pos, image.getSize().scale(scale));
+    	Rect dst = new Rect(pos, pos.add(image.getSize().scale(scale)));
     	canvas.drawBitmap(((AndroidImage)image).bitmap, null, dst.getAndroidRectF(), null);
     }
     
     @Override
-    public void drawImage(Image image, Vector2d dest, Rect src) 
+    public void drawImage(Image image, Vector2d pos, Rect src) 
     {
-    	Rect dst = new Rect(dest, image.getSize());
+    	Rect dst = new Rect(pos, pos.add(image.getSize()));
     	canvas.drawBitmap(((AndroidImage)image).bitmap, src.getAndroidRect(), dst.getAndroidRectF(), null);
     }
    

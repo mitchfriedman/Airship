@@ -36,7 +36,9 @@
 	<image key="Clouds/cloud 2" path="Clouds/cloud 2.png" />
 	<image key="Clouds/cloud 3" path="Clouds/cloud 3.png" />
 	
-	
-	
+	<!-- Ships -->
+	<image key="ship/dirigible-left" path="Ships/dirigible/left.png" />
+	<image key="ship/dirigible-normal" path="Ships/dirigible/normal.png" />
+	<image key="ship/dirigible-right" path="Ships/dirigible/right.png" />
 	
 </assets>

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mitch.flyship.GameBody;
-import com.mitch.flyship.Ship;
 import com.mitch.flyship.objects.Enemy;
+import com.mitch.flyship.objects.Ship;
 
 public class LevelBodyManager {
 	

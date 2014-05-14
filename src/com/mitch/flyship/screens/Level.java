@@ -4,9 +4,8 @@ import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.LevelProperties;
 import com.mitch.flyship.Player;
-import com.mitch.flyship.Ship;
 import com.mitch.flyship.ShipParams;
-import com.mitch.framework.Game;
+import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.LevelBodyManager;
@@ -21,6 +20,16 @@ public class Level extends Screen {
 	int backgroundPos = 0;
 	int backgroundHeight = 0;
 	LevelBodyManager bm;
+	
+	// Creates endless level
+	public Level(AirshipGame game)
+	{
+		super(game);
+		
+		bm = new LevelBodyManager();
+		ShipParams ship = game.loadMerchantShip();
+		
+	}
 	
 	public Level(AirshipGame game, LevelProperties properties) 
 	{

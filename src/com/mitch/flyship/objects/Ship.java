@@ -1,5 +1,8 @@
-package com.mitch.flyship;
+package com.mitch.flyship.objects;
 
+import com.mitch.flyship.GameBody;
+import com.mitch.flyship.Player;
+import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.containers.Vector2d;
 

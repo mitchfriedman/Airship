@@ -8,10 +8,10 @@ public class ShipParams {
 	public Image normal;
 	public Image right;
 	
-	public ShipParams(String name)
+	public ShipParams(String type)
 	{
-		this.left = Assets.getImage("ship/" + name + "/left");
-		this.normal = Assets.getImage("ship/" + name + "/normal");
-		this.right = Assets.getImage("ship/" + name + "/right");
+		this.left = Assets.getImage("ship/" + type + "-left");
+		this.normal = Assets.getImage("ship/" + type + "-normal");
+		this.right = Assets.getImage("ship/" + type + "-right");
 	}
 }

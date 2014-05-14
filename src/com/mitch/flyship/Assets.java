@@ -24,7 +24,6 @@ public class Assets {
 	
 	public static void loadFromXML(XmlResourceParser xrp, Graphics g, Audio a)
 	{
-		// TODO: Load assets from XML
 		while (true) {
 			try {
 				int eventType = xrp.next();
