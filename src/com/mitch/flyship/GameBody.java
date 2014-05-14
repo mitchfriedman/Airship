@@ -7,6 +7,7 @@ import com.mitch.framework.containers.Vector2d;
 public abstract class GameBody {
 	protected AirshipGame game;
 	protected Vector2d velocity;
+	protected Vector2d offset;
 	Rect bounds;
 	String name;
 	
@@ -48,6 +49,11 @@ public abstract class GameBody {
 	public Vector2d getPos()
 	{
 		return bounds.getRealPosition();
+	}
+	
+	public Vector2d getOffset()
+	{
+		return offset;
 	}
 	
 	public void setSize(Vector2d size)
