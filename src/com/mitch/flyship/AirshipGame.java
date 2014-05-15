@@ -1,5 +1,6 @@
 package com.mitch.flyship;
 
+import com.mitch.flyship.objects.Ship;
 import com.mitch.flyship.screens.Loading;
 import com.mitch.framework.Screen;
 import com.mitch.framework.implementation.AndroidGame;
@@ -23,8 +24,12 @@ public class AirshipGame extends AndroidGame {
 		getCurrentScreen().backButton();
 	}
 	
-	public ShipParams loadMerchantShip()
+	public Ship loadMerchantShip()
 	{
+		Player player = new Player(this);
+		ShipParams params = new ShipParams("")
+		Ship ship = new Ship(null, player, params, null);
+		
 		return null;
 	}
 

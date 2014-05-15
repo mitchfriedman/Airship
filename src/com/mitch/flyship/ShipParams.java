@@ -4,14 +4,14 @@ import com.mitch.framework.Image;
 
 public class ShipParams {
 	
-	public Image left;
-	public Image normal;
-	public Image right;
+	final public Image tilt0;
+	final public Image tilt1;
+	final public Image tilt2;
 	
 	public ShipParams(String type)
 	{
-		this.left = Assets.getImage("ship/" + type + "-left");
-		this.normal = Assets.getImage("ship/" + type + "-normal");
-		this.right = Assets.getImage("ship/" + type + "-right");
+		this.tilt0 = Assets.getImage("ship/" + type + "-normal");
+		this.tilt1 = Assets.getImage("ship/" + type + "-tilt1");
+		this.tilt2 = Assets.getImage("ship/" + type + "-tilt2");
 	}
 }

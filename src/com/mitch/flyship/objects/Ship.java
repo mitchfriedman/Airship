@@ -20,6 +20,11 @@ public class Ship extends GameBody {
 		this.params = params;
 	}
 	
+	public void setLevel(Level level)
+	{
+		this.level = level;
+	}
+	
 	@Override
 	public void onUpdate(float deltaTime) {
 		velocity = player.getInput_Speed();

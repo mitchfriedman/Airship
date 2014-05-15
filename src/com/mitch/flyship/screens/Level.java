@@ -27,8 +27,10 @@ public class Level extends Screen {
 		super(game);
 		
 		bm = new LevelBodyManager();
-		ShipParams ship = game.loadMerchantShip();
-		
+		Ship ship = game.loadMerchantShip();
+		bm.setShip(ship);
+		setBackgroundImage("Background/ocean");
+		setSpeed(1);
 	}
 	
 	public Level(AirshipGame game, LevelProperties properties) 
@@ -49,15 +51,13 @@ public class Level extends Screen {
 		ShipParams params = new ShipParams("dirigible");
 		Vector2d shipPos = new Vector2d(game.getGraphics().getWidth(), game.getGraphics().getHeight());
 		Ship ship = new Ship(this, player, params, shipPos);
-		bm.setShip(null);
+		bm.setShip(ship);
 	}
 	
 	public void setBackgroundImage(String image) 
 	{
 		backgroundImage = Assets.getImage(image);
-		double width  = backgroundImage.getWidth();
-		double height = backgroundImage.getHeight();
-		backgroundHeight = (int) (height * (game.getGraphics().getWidth() / width));
+		backgroundHeight = backgroundImage.getHeight();
 	}
 	
 	public void setSpeed(double speed) 
@@ -81,7 +81,7 @@ public class Level extends Screen {
 	
 	public void paint(float deltaTime) 
 	{
-		//paints all bodies in body manager
+		//paints all bodies in body manager (ship, enemies, items)
 		bm.onPaint(deltaTime);
 		
 		Graphics g = game.getGraphics();
