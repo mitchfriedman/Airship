@@ -183,6 +183,13 @@ public class AndroidGraphics implements Graphics {
     {
         return frameBuffer.getHeight();
     }
+    
+    @Override
+    public Vector2d getSize() 
+    {
+    	return new Vector2d(getWidth(), getHeight());
+    }
+    
     public Canvas getCanvas() 
     {
     	return canvas;

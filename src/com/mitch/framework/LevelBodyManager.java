@@ -48,6 +48,11 @@ public class LevelBodyManager {
 		this.ship = ship;
 	}
 	
+	public Ship getShip()
+	{
+		return ship;
+	}
+	
 	public List<Enemy> getEnemies()
 	{
 		return enemies;

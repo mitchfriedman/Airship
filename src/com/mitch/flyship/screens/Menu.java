@@ -1,17 +1,14 @@
 package com.mitch.flyship.screens;
 
-import android.graphics.Paint.Align;
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
-import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Rect;
-import com.mitch.framework.containers.Vector2d;
 
 public class Menu extends Screen {
 	
@@ -79,7 +76,7 @@ public class Menu extends Screen {
 			@Override
 			public void onCancel() { }
 		};
-		gear = new Button(game, "settings", new Vector2d(680,20), "Menu/Gear Button", 40, Align.RIGHT, gearListener);
+		/*gear = new Button(game, "settings", new Vector2d(680,20), "Menu/Gear Button", 40, Align.RIGHT, gearListener);
 
 		endlessMode = new Button(game, "endless", new Vector2d(350,660), "Menu/Buttons/Endless Button", 100, Align.CENTER, endlessListener);
 		missionsMode = new Button(game, "missions", new Vector2d(200,780), "Menu/Buttons/Missions Button", 100, Align.RIGHT, missionsListener);
@@ -89,29 +86,29 @@ public class Menu extends Screen {
 		platform.setSize(platform.getImage().getSize().scaleY(g.getWidth()));
 		terrain.setSize(terrain.getImage().getSize().scaleY(g.getWidth()+terrain.getSwayLength()));
 
-		platform.setPos(new Vector2d(0, g.getHeight()-platform.getBounds().height));
+		platform.setPos(new Vector2d(0, g.getHeight()-platform.getBounds().height));*/
 
 	}
 	
 	@Override
 	public void update(float deltaTime) 
 	{	
-		terrain.onUpdate(deltaTime);	
+		/*terrain.onUpdate(deltaTime);	
 		endlessMode.onUpdate(deltaTime);
 		missionsMode.onUpdate(deltaTime);
 		shopMode.onUpdate(deltaTime);
-		gear.onUpdate(deltaTime);
+		gear.onUpdate(deltaTime);*/
 	}
 
 	@Override
 	public void paint(float deltaTime)
 	{	
-		terrain.onPaint(deltaTime);
+		/*terrain.onPaint(deltaTime);
 		platform.onPaint(deltaTime);		
 		endlessMode.onPaint(deltaTime);
 		missionsMode.onPaint(deltaTime);
 		shopMode.onPaint(deltaTime);
-		gear.onPaint(deltaTime);
+		gear.onPaint(deltaTime);*/
 	}
 	
 	@Override

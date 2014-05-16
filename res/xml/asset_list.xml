@@ -7,7 +7,7 @@
     <!-- Music -->
     <music key="blue" path="Music/blue.mp3" />
     
-    <!--  -->
+    <!-- Backgrounds -->
 	<image key="Background/ocean" path="Backgrounds/ocean.png" />
 	
 	<!-- Menu -->
@@ -15,20 +15,18 @@
 	<image key="Menu/terrain" path="Menu/riverterrain.png" />
 	
 	<!-- Menu Buttons -->
-	<image key="Menu/Buttons/Endless Button" path="Menu/Buttons/Endless Button.png" />
-	<image key="Menu/Buttons/Endless Button Pressed" path="Menu/Buttons/Endless Button Pressed.png" />
-	<image key="Menu/Buttons/Endless Button Depressed" path="Menu/Buttons/Endless Button Depressed.png"/>
+	<image key="Menu/Buttons/Endless-hover" path="Menu/Buttons/endless-hover.png" />
+	<image key="Menu/Buttons/Endless-active" path="Menu/Buttons/endless-active.png"/>
 	
-	<image key="Menu/Buttons/Missions Button" path="Menu/Buttons/Missions Button.png" />
-	<image key="Menu/Buttons/Missions Button Pressed" path="Menu/Buttons/Missions Button Pressed.png" />
-	<image key="Menu/Buttons/Missions Button Depressed" path="Menu/Buttons/Missions Button Depressed.png"/>
+	<image key="Menu/Buttons/Missions-hover" path="Menu/Buttons/missions-hover.png" />
+	<image key="Menu/Buttons/Missions-active" path="Menu/Buttons/missions-active.png"/>
 	
-	<image key="Menu/Buttons/Shop Button" path="Menu/Buttons/Shop Button.png" />
-	<image key="Menu/Buttons/Shop Button Pressed" path="Menu/Buttons/Shop Button Pressed.png" />
-	<image key="Menu/Buttons/Shop Button Depressed" path="Menu/Buttons/Shop Button Depressed.png"/>
+	<image key="Menu/Buttons/Shop-hover" path="Menu/Buttons/shops-hover.png" />
+	<image key="Menu/Buttons/Shop-active" path="Menu/Buttons/shops-active.png"/>
 	
-	<image key="Menu/Gear Button" path="Menu/Gear button.png" />
-	<image key="Menu/Gear Button Pressed" path="Menu/Gear Button Pressed.png" />
+	<image key="GUI/Gear-hover" path="GUI/gear-hover.png" />
+	<image key="GUI/Gear-active" path="GUI/gear-active.png" />
+	
 	
 	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />
@@ -37,8 +35,8 @@
 	<image key="Clouds/cloud 3" path="Clouds/cloud 3.png" />
 	
 	<!-- Ships -->
-	<image key="ship/dirigible-left" path="Ships/dirigible/left.png" />
-	<image key="ship/dirigible-normal" path="Ships/dirigible/normal.png" />
-	<image key="ship/dirigible-right" path="Ships/dirigible/right.png" />
+	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />
+	<image key="ship/Interceptor-tilt1" path="Ships/Interceptor/tilt1.png" />
+	<image key="ship/Interceptor-tilt2" path="Ships/Interceptor/tilt2.png" />
 	
 </assets>

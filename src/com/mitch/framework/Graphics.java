@@ -45,6 +45,8 @@ public interface Graphics {
 	public int getWidth();
 
 	public int getHeight();
+	
+	public Vector2d getSize();
 
 	public void drawARGB(int i, int j, int k, int l);
 
