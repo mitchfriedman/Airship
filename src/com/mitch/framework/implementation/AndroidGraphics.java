@@ -9,6 +9,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 
@@ -98,7 +99,7 @@ public class AndroidGraphics implements Graphics {
     
     @Override
     public void drawARGB(int a, int r, int g, int b) {
-        paint.setStyle(Style.FILL);
+       paint.setStyle(Style.FILL);
        canvas.drawARGB(a, r, g, b);
     }
     
@@ -166,9 +167,20 @@ public class AndroidGraphics implements Graphics {
     }
     
     @Override
+    public void drawImage(Image image, Vector2d pos, boolean reverseX,
+    		boolean reverseY) 
+    {
+    	Matrix matrix = new Matrix();
+    	matrix.setScale(reverseX ? -1 : 1, reverseY ? -1 : 1);
+    	matrix.postTranslate( (float) pos.x + (reverseX ? image.getWidth() : 0), 
+    			(float) pos.y + (reverseY ? image.getHeight() : 0) );
+    	canvas.drawBitmap(((AndroidImage)image).bitmap, matrix, null);
+    }
+    
+    @Override
     public void drawImage(Image image, Vector2d pos, Rect src) 
     {
-    	Rect dst = new Rect(pos, pos.add(image.getSize()));
+    	Rect dst = new Rect(pos, pos.add(src.getRealSize()));
     	canvas.drawBitmap(((AndroidImage)image).bitmap, src.getAndroidRect(), dst.getAndroidRectF(), null);
     }
    

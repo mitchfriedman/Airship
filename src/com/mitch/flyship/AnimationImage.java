@@ -57,6 +57,11 @@ public class AnimationImage {
 		frames.add(frame);
 	}
 	
+	public void setFrames(List<Rect> frames)
+	{
+		this.frames = frames;
+	}
+	
 	public void addFrame(int index, Rect frame)
 	{
 		frames.add(index, frame);

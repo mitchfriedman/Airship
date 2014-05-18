@@ -85,11 +85,6 @@ public abstract class GameBody {
 		}
 	}
 	
-	public Rect getBoundingBox()
-	{
-		return bounds;
-	}
-	
 	public abstract void onUpdate(float deltaTime);
 	public abstract void onPaint(float deltaTime);
 	public abstract void onPause();

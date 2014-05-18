@@ -1,5 +1,7 @@
 package com.mitch.flyship;
 
+import android.util.Log;
+
 import com.mitch.framework.Input;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
@@ -13,35 +15,29 @@ public class Player {
 	final int MAX_WATER = 90;
 	
 	final double MAX_TILT_UP = 1;
-	final double MAX_TILT_DOWN = 1.5;
-	final double MAX_TILT_HORIZONTAL = 1;
+	final double MAX_TILT_DOWN = 2.3;
+	final double MAX_TILT_HORIZONTAL = 3;
 	
 	final double MAX_SPEED_UP = 1;
 	final double MAX_SPEED_DOWN = 1.5;
-	final double MAX_SPEED_HORIZONTAL = 0.8;
+	public final double MAX_SPEED_HORIZONTAL = 1.2;
 	
 	final double UP_TILT_LIMITER = 0.15;
 	final double DOWN_TILT_LIMITER = 0.15;
-	final double HORIZONTAL_TILT_LIMITER = 0.1;
+	final double HORIZONTAL_TILT_LIMITER = 0.3;
 	
 	AndroidGame game;
-	Vector2d orientationOffset = new Vector2d(0, 3.5);
-	boolean paused;
-	boolean lights;
-	int health;
-	int water;
-	int depositedGears;
-	int collectedGears; // value might not be needed. We'll keep it for now.
+	Vector2d orientationOffset = new Vector2d(0, 3);
+	int currency = 0;
+	boolean paused = false;
+	boolean lights = false;
+	int health = MAX_HEALTH;
+	int water = MAX_WATER;
 	
 	
 	public Player(AirshipGame game)
 	{
 		this.game = game;
-		health = MAX_HEALTH;
-		water = MAX_WATER;
-		paused = false;
-		lights = false;
-		depositedGears = 0; 
 	}
 	
 	public void centerOrientation()
@@ -52,7 +48,7 @@ public class Player {
 	public Vector2d getOrientation()
 	{
 		Input input = game.getInput();
-		return new Vector2d(input.GetTiltX(), input.GetTiltY());
+		return new Vector2d(-input.GetTiltX(), input.GetTiltY());
 	}
 	
 	public Vector2d getCenteredOrientation()
@@ -64,15 +60,16 @@ public class Player {
 	{
 		Vector2d orientation = getCenteredOrientation();
 		
-		if (orientation.x > MAX_TILT_HORIZONTAL) {
+		if (orientation.x < -MAX_TILT_HORIZONTAL) {
 			orientation.x = -MAX_SPEED_HORIZONTAL;
 		}
-		else if (orientation.x < -MAX_TILT_HORIZONTAL) {
+		else if (orientation.x > MAX_TILT_HORIZONTAL) {
 			orientation.x = MAX_SPEED_HORIZONTAL;
 		} 
-		else if(orientation.x > HORIZONTAL_TILT_LIMITER && orientation.x < -HORIZONTAL_TILT_LIMITER) {
+		else if(orientation.x > HORIZONTAL_TILT_LIMITER || orientation.x < -HORIZONTAL_TILT_LIMITER) {
 			orientation.x *= MAX_SPEED_HORIZONTAL / MAX_TILT_HORIZONTAL;
-		} else {
+		} 
+		else {
 			orientation.x = 0;
 		}
 		
@@ -139,14 +136,10 @@ public class Player {
 		health -= damage;
 	}
 	
-	public void addGears(int amount)
+	public void addCurrency(int amount)
 	{
-		depositedGears += amount;
-	}
-	
-	public void addGear()
-	{
-		addGears(1);
+		currency += amount;
+		Log.d("Currency changed", currency +"");
 	}
 	
 	public void pause()

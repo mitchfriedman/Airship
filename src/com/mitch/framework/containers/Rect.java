@@ -1,5 +1,7 @@
 package com.mitch.framework.containers;
 
+import android.util.Log;
+
 
 public class Rect {
 	public double x, y;
@@ -79,6 +81,14 @@ public class Rect {
 		return new android.graphics.Rect( (int)x, (int)y, (int)width, (int)height);
 	}
 	
+	public boolean isOutsideRect(Rect rect)
+	{
+		boolean isOutsideX = x < rect.x || x > rect.width-width;
+		boolean isOutsideY = y < rect.y || y > rect.height-height;
+		Log.d("Outside", isOutsideX + " " +  isOutsideY);
+		return isOutsideX || isOutsideY;
+	}
+	
 	public static boolean rectCollides(Rect a, Rect b)
 	{
 		double startX = a.x < b.x ? a.x : b.x;
@@ -100,4 +110,5 @@ public class Rect {
 		
 		return withinX && withinY;
 	}
+	
 }

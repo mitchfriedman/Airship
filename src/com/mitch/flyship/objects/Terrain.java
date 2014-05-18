@@ -93,16 +93,17 @@ public class Terrain extends GameBody {
 	
 	private void spawnClouds()
 	{
-		boolean spawnCloud = (int) (Math.random() * cloudSpawnRate) == 0;
-		if (spawnCloud) {
+		//boolean spawnCloud = (int) (Math.random() * cloudSpawnRate) == 0;
+		/*if (spawnCloud) {
 			
 			int cloudY = (int) (cloudMinY + (Math.random() * (cloudMaxY - cloudMinY)));
 			Vector2d pos = new Vector2d(0, cloudY);
 			Vector2d vel = new Vector2d(cloudSpeed, 0);
-			Cloud cloud = new Cloud(game, pos, vel);
+			//Cloud cloud = new Cloud(game, vel);
+			cloud.setPos(pos);
 			cloud.setPos(cloud.getPos().subtract(cloud.getSize()));
 			clouds.add(cloud);
-		}
+		}*/
 	}
 
 	@Override

@@ -33,10 +33,19 @@
 	<image key="Clouds/cloud 1" path="Clouds/cloud 1.png" />
 	<image key="Clouds/cloud 2" path="Clouds/cloud 2.png" />
 	<image key="Clouds/cloud 3" path="Clouds/cloud 3.png" />
+	<image key="Clouds/cloud 4" path="Clouds/cloud 4.png" />
+	<image key="Clouds/cloud 5" path="Clouds/cloud 5.png" />
+	<image key="Clouds/cloud 6" path="Clouds/cloud 6.png" />
+	<image key="Clouds/cloud 7" path="Clouds/cloud 7.png" />
 	
 	<!-- Ships -->
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />
 	<image key="ship/Interceptor-tilt1" path="Ships/Interceptor/tilt1.png" />
 	<image key="ship/Interceptor-tilt2" path="Ships/Interceptor/tilt2.png" />
+	<image key="ship/Interceptor-prop_anim" path="Ships/Interceptor/prop_anims.png" />
+	
+	<!-- Items -->
+	<image key="silver_coin" path="Items/Silver Coin.png" />
+	<image key="gold_coin" path="Items/Gold Coin.png" />
 	
 </assets>

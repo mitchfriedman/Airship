@@ -33,6 +33,11 @@ public class Vector2d {
 		return new Vector2d(x*scale, y*scale);
 	}
 	
+	public Vector2d divide(double numerator)
+	{
+		return new Vector2d(x/numerator, y/numerator);
+	}
+	
 	public Vector2d scaleY(double scaledX)
 	{
 		double scaledY = scaledX * (y/x);
@@ -43,5 +48,21 @@ public class Vector2d {
 	{
 		double scaledX = scaledY * (x/y);
 		return new Vector2d(scaledX, scaledY);
+	}
+	
+	public double getLength()
+	{
+		return Math.sqrt(x*x+y*y);
+	}
+	
+	public double getDistance(Vector2d b)
+	{
+		Vector2d displacement = this.subtract(b);
+		return Math.abs(displacement.getLength());
+	}
+	
+	public Vector2d normalize()
+	{
+		return this.divide(this.getLength());
 	}
 }

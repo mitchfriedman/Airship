@@ -32,6 +32,8 @@ public interface Graphics {
 	
 	public void drawImage(Image image, double x, double y, double width, double height);
 	
+	public void drawImage(Image image, Vector2d pos, boolean reverseX, boolean reverseY);
+	
 	public void drawImage(Image image, Vector2d pos);
 	
 	public void drawImage(Image image, Vector2d pos, Vector2d size);

@@ -1,32 +1,40 @@
 package com.mitch.flyship.objects;
 
-import com.mitch.flyship.AirshipGame;
+
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
+import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
 
 public class Cloud extends GameBody {
 	
-	final int nClouds = 4;
+	static final int N_CLOUDS = 8;
 	
-	int cloudType;
+	Level level;
 	Image image;
+	int cloudType;
 	
-	public Cloud(AirshipGame game, Vector2d pos, Vector2d vel)
+	public Cloud(Level level, Vector2d vel)
 	{
-		super(game, "Cloud", pos);
+		super(level.getAirshipGame(), "Cloud");
 		super.velocity = vel;
+		this.level = level;
 		
-		cloudType = (int) (Math.random() * nClouds);
+		cloudType = (int) (Math.random() * N_CLOUDS);
 		image = Assets.getImage("Clouds/cloud " + cloudType);
-		super.setSize(image.getSize().scale(3.5));
+		setSize(image.getSize());
 	}
 	
 	@Override
 	public void onUpdate(float deltaTime) {
 		setPos(getPos().add(velocity));
+		
+		Graphics g = game.getGraphics();
+		if (getPos().x > g.getWidth() || getPos().y > g.getHeight()) {
+			level.getBodyManager().removeBody(this);
+		}
 	}
 
 	@Override
