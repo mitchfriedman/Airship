@@ -116,7 +116,7 @@ public class Button extends GameBody {
 	public void onPaint(float deltaTime) 
 	{
 		Graphics g = game.getGraphics();
-		g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
+		//g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
 	}
 	
 	void onDown()

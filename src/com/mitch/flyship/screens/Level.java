@@ -2,6 +2,8 @@ package com.mitch.flyship.screens;
 
 import java.util.List;
 
+import android.util.Log;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
@@ -40,7 +42,7 @@ public class Level extends Screen {
 		Ship ship = new Ship(this, player, params, centerScreen);
 		bm.setShip(ship);
 		
-		setBackgroundImage("Background/ocean");
+		setBackgroundImage("Background/riverterrain");
 		setSpeed(1);
 	}
 	
@@ -69,6 +71,9 @@ public class Level extends Screen {
 	{
 		backgroundImage = Assets.getImage(image);
 		backgroundHeight = backgroundImage.getHeight();
+		Log.d("GAME WIDTH", ""+game.getGraphics().getWidth());
+		Log.d("BACK WIDTH", ""+backgroundImage.getWidth());
+		Log.d("BACK HEIGHT", ""+backgroundImage.getHeight());
 	}
 	
 	public void setSpeed(double speed) 
@@ -133,8 +138,10 @@ public class Level extends Screen {
 	{
 		Graphics g = game.getGraphics();
 		g.drawARGB( 255, 0, 0, 0);
-		g.drawImage(backgroundImage, 0, backgroundPos, g.getWidth(), backgroundHeight);
-		g.drawImage(backgroundImage, 0, backgroundPos-backgroundHeight, g.getWidth(), backgroundHeight);
+		if (backgroundPos < g.getHeight()) {
+			g.drawImage(backgroundImage, 0, backgroundPos);
+		}
+		g.drawImage(backgroundImage, 0, backgroundPos-backgroundHeight);
 		
 		//paints all bodies in body manager (ship, enemies, items)
 		bm.onPaint(deltaTime);

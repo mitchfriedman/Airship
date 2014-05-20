@@ -139,7 +139,7 @@ public class Player {
 	public void addCurrency(int amount)
 	{
 		currency += amount;
-		Log.d("Currency changed", currency +"");
+		//Log.d("Currency changed", currency +"");
 	}
 	
 	public void pause()

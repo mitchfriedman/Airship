@@ -2,16 +2,25 @@ package com.mitch.framework.implementation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class AndroidFastRenderView extends SurfaceView implements Runnable {
-    AndroidGame game;
-    Bitmap framebuffer;
-    Thread renderThread = null;
-    SurfaceHolder holder;
+    public AndroidGame game;
+    public Bitmap framebuffer;
+    public Thread renderThread = null;
+    public SurfaceHolder holder;
     volatile boolean running = false;
+    
+    final float FPS = 45.0f;
+    final float UPS = 45.0f;
+    
+    public long startTime;
+    public long lastUpdate;
+    public long lastRender;
+    
     
     public AndroidFastRenderView(AndroidGame game, Bitmap framebuffer) {
         super(game);
@@ -23,35 +32,66 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     public void resume() { 
         running = true;
         renderThread = new Thread(this);
-        renderThread.start();   
-
+        renderThread.start();  
     }      
     
     public void run() {
-        Rect dstRect = new Rect();
-        long startTime = System.nanoTime();
+    	long now = System.nanoTime();
+        startTime  = now;
+        lastUpdate = startTime;
+        lastRender = startTime;
         
+        int updateCount = 0;
+        int frameCount = 0;
+        long lastTime = now;
+        long time = 0;
+        int fps = 0;
+        int ups = 0;
         
         while(running) {  
             if(!holder.getSurface().isValid())
-                continue;           
+                continue;
             
-
-            float deltaTime = (System.nanoTime() - startTime) / 10000000.000f;
-            startTime = System.nanoTime();
+            now = System.nanoTime();
             
-            if (deltaTime > 3.15){
-            	deltaTime = (float) 3.15;
-           }
-     
-
-            game.getCurrentScreen().update(deltaTime);
-            game.getCurrentScreen().paint(deltaTime);
+            time += now-lastTime;
+            lastTime = now;
             
-            Canvas canvas = holder.lockCanvas();
-            canvas.getClipBounds(dstRect);
-            canvas.drawBitmap(framebuffer, null, dstRect, null);                           
-            holder.unlockCanvasAndPost(canvas); 
+            if (time > 1000000000) {
+    			time -= 1000000000;
+    			fps = frameCount;
+    			ups = updateCount;
+    			updateCount = 0;
+    			frameCount = 0;
+    			Log.d("FPS:UPS", fps + ":"+ups);
+    		}
+            
+            now = System.nanoTime();
+            if (now - lastUpdate > 1000000000/UPS) {
+            	game.getCurrentScreen().update(System.nanoTime() - lastUpdate);
+            	
+        		updateCount++;
+        		lastUpdate = now;
+        		
+        		/*if (now - lastUpdate > 1000000000/UPS) {
+        			Log.d("UPDATING AGAIN", (now - lastUpdate) +":"+ (1000000000/UPS));
+        		}*/
+            }
+            
+            now = System.nanoTime();
+            if (now - lastRender > 1000000000/FPS) {
+            	game.getCurrentScreen().paint(System.nanoTime() - game.renderView.lastRender);
+                Canvas canvas = holder.lockCanvas();
+                canvas.drawBitmap(framebuffer, null, canvas.getClipBounds(), null);                           
+                holder.unlockCanvasAndPost(canvas); 
+        		
+        		frameCount++;
+        		lastRender = now;
+        		
+        		/*if (now - lastRender > 1000000000/FPS) {
+        			Log.d("RENDERING AGAIN", (now - lastRender) +":"+ (1000000000/FPS));
+        		}*/
+            }
         }
     }
 

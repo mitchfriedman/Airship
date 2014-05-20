@@ -9,6 +9,7 @@
     
     <!-- Backgrounds -->
 	<image key="Background/ocean" path="Backgrounds/ocean.png" />
+	<image key="Background/riverterrain" path="Backgrounds/riverterrain.png" />
 	
 	<!-- Menu -->
 	<image key="Menu/platform" path="Menu/platform1.png" />

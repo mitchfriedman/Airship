@@ -34,7 +34,7 @@ public abstract class Enemy extends GameBody {
 	@Override
 	public void onPaint(float deltaTime) { 
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos(), getSize());
+		g.drawImage(image, getPos());
 	}
 
 	@Override

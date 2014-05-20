@@ -1,11 +1,8 @@
 package com.mitch.framework.implementation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import android.R;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.os.Bundle;
@@ -25,13 +22,17 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 
 public abstract class AndroidGame extends Activity implements Game {
-    AndroidFastRenderView renderView;
+	public static float SCALE;
+	public static final float SCREEN_WIDTH = 201; // assets made for this dont change!!
+	
+    public AndroidFastRenderView renderView;
     Graphics graphics;
     Audio audio;
     Input input;
     FileIO fileIO;
     Screen screen;
     WakeLock wakeLock;
+    Vector2d screenSize;
     
     // keep these for reference
 	/*private ArrayList<String> highScores  = new ArrayList<String>();
@@ -48,31 +49,40 @@ public abstract class AndroidGame extends Activity implements Game {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         Display display = getWindowManager().getDefaultDisplay();
-        Vector2d screenSize = new Vector2d(display.getWidth(), display.getHeight());
+        screenSize = new Vector2d(display.getWidth(), display.getHeight());
         
-        int frameBufferWidth  = 201;
-        int frameBufferHeight = (int)((screenSize.y/screenSize.x)*frameBufferWidth);
-        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth,
-                frameBufferHeight, Config.RGB_565);
+        /**
+         * Scaling the game size increases smoothness. Scale of 1 is jittery.
+         * screenSize.x / SCREEN_WIDTH is the maximum scale size. (note for preferences.)
+         */
+        AndroidGame.SCALE = 3;
         
-        float scaleX = (float) frameBufferWidth
-                / getWindowManager().getDefaultDisplay().getWidth();
-        float scaleY = (float) frameBufferHeight
-                / getWindowManager().getDefaultDisplay().getHeight();
-
-        renderView = new AndroidFastRenderView(this, frameBuffer);
-        graphics = new AndroidGraphics(getAssets(), frameBuffer);
+        createFrameBuffer();
+        
         fileIO = new AndroidFileIO(this);
         audio = new AndroidAudio(this);
-        input = new AndroidInput(this, renderView, scaleX, scaleY);
         screen = getInitScreen();
         setContentView(renderView);
         
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "MyGame");
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
         
         /*prefs  = getPreferences(MODE_PRIVATE); 
         editor = getPreferences(MODE_PRIVATE).edit();*/
+    }
+    
+    public void createFrameBuffer()
+    {
+    	int frameBufferX = (int) (SCREEN_WIDTH*SCALE);
+    	int frameBufferY = (int) ((screenSize.y/screenSize.x)*frameBufferX);
+    	float scaleX = (float)(frameBufferX/screenSize.x);
+    	float scaleY = (float) (frameBufferY/screenSize.y);
+    	Bitmap frameBuffer = Bitmap.createBitmap( (int) frameBufferX,
+                (int) frameBufferY, Config.RGB_565);
+    	
+    	renderView = new AndroidFastRenderView(this, frameBuffer);
+    	graphics = new AndroidGraphics(getAssets(), frameBuffer);
+    	input = new AndroidInput(this, renderView, scaleX, scaleY);
     }
     
     @Override

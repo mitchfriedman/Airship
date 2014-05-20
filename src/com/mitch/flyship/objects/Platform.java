@@ -31,7 +31,7 @@ public class Platform extends GameBody {
 	public void onPaint(float deltaTime) {
 		// TODO Auto-generated method stub
 		Graphics g = game.getGraphics();
-		g.drawImage(getImage(), getBounds().getRealPosition(), getBounds().getRealSize());
+		//g.drawImage(getImage(), getBounds().getRealPosition(), getBounds().getRealSize());
 	}
 
 	@Override

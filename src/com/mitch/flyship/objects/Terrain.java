@@ -11,7 +11,6 @@ import com.mitch.flyship.GameBody;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Rect;
-import com.mitch.framework.containers.Vector2d;
 
 public class Terrain extends GameBody {
 
@@ -68,7 +67,7 @@ public class Terrain extends GameBody {
 	@Override
 	public void onPaint(float deltaTime) {
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getBounds().getRealPosition().add(new Vector2d(sway, 0)), getBounds().getRealSize());
+		//g.drawImage(image, getBounds().getRealPosition().add(new Vector2d(sway, 0)), getBounds().getRealSize());
 		
 		
 		for (Cloud cloud : clouds) {
