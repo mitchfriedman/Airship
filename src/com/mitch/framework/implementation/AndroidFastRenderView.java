@@ -68,7 +68,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             
             now = System.nanoTime();
             if (now - lastUpdate > 1000000000/UPS) {
-            	game.getCurrentScreen().update(System.nanoTime() - lastUpdate);
+            	game.getCurrentScreen().update((now - lastUpdate)*1000000);
             	
         		updateCount++;
         		lastUpdate = now;
@@ -80,7 +80,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             
             now = System.nanoTime();
             if (now - lastRender > 1000000000/FPS) {
-            	game.getCurrentScreen().paint(System.nanoTime() - game.renderView.lastRender);
+            	game.getCurrentScreen().paint((now - lastRender)*1000000);
                 Canvas canvas = holder.lockCanvas();
                 canvas.drawBitmap(framebuffer, null, canvas.getClipBounds(), null);                           
                 holder.unlockCanvasAndPost(canvas); 
