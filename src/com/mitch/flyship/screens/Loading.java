@@ -8,7 +8,7 @@ import com.mitch.framework.Screen;
 
 public class Loading extends Screen {
 	
-	double splashDisplayTime = 1.000; //180 works best
+	double splashDisplayTime = 1800; //180 works best
 	double elapsedTime = 0;
 	double opacity = 0;
 	Image splash;

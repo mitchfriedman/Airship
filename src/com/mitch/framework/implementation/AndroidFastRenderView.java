@@ -2,7 +2,6 @@ package com.mitch.framework.implementation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -68,29 +67,21 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             
             now = System.nanoTime();
             if (now - lastUpdate > 1000000000/UPS) {
-            	game.getCurrentScreen().update((now - lastUpdate)*1000000);
+            	game.getCurrentScreen().update((now - lastUpdate)/1000000);
             	
         		updateCount++;
         		lastUpdate = now;
-        		
-        		/*if (now - lastUpdate > 1000000000/UPS) {
-        			Log.d("UPDATING AGAIN", (now - lastUpdate) +":"+ (1000000000/UPS));
-        		}*/
             }
             
             now = System.nanoTime();
             if (now - lastRender > 1000000000/FPS) {
-            	game.getCurrentScreen().paint((now - lastRender)*1000000);
+            	game.getCurrentScreen().paint((now - lastRender)/1000000);
                 Canvas canvas = holder.lockCanvas();
                 canvas.drawBitmap(framebuffer, null, canvas.getClipBounds(), null);                           
                 holder.unlockCanvasAndPost(canvas); 
         		
         		frameCount++;
         		lastRender = now;
-        		
-        		/*if (now - lastRender > 1000000000/FPS) {
-        			Log.d("RENDERING AGAIN", (now - lastRender) +":"+ (1000000000/FPS));
-        		}*/
             }
         }
     }
