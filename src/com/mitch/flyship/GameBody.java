@@ -1,5 +1,8 @@
 package com.mitch.flyship;
 
+import java.util.List;
+
+import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Input;
 import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
@@ -89,6 +92,19 @@ public abstract class GameBody {
 	public abstract void onPaint(float deltaTime);
 	public abstract void onPause();
 	public abstract void onResume();
+	
+	public static BodyConfiguration getBodyConfiguration(int configID)
+	{
+		BodyConfiguration config = new BodyConfiguration();
+		config.addConfigurationObject(new Vector2d(0,0), null);
+		return config;
+	}
+	
+	public static List<GameBody> getBodiesFromConfiguration(BodyConfiguration config,
+			Vector2d pos, Level level) 
+	{
+		return null;
+	}
 	
 	
 }

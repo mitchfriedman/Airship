@@ -38,16 +38,14 @@ public class Vector2d {
 		return new Vector2d(x/numerator, y/numerator);
 	}
 	
-	public Vector2d scaleY(double scaledX)
+	public Vector2d scaleY(double scale)
 	{
-		double scaledY = scaledX * (y/x);
-		return new Vector2d(scaledX, scaledY);
+		return new Vector2d(x, y*scale);
 	}
 	
-	public Vector2d scaleX(double scaledY)
+	public Vector2d scaleX(double scale)
 	{
-		double scaledX = scaledY * (x/y);
-		return new Vector2d(scaledX, scaledY);
+		return new Vector2d(x*scale, y);
 	}
 	
 	public double getLength()

@@ -9,28 +9,33 @@ public class BodyConfiguration {
 	
 	public final List<Vector2d> points;
 	public final List<String> types;
-	public final Vector2d maxObjectSize;
-	public final Vector2d size;
+	public Vector2d size;
 	
-	public BodyConfiguration(Vector2d maxObjectSize)
+	public BodyConfiguration()
+	{
+		this(Vector2d.ZERO);
+	}
+	
+	public BodyConfiguration(Vector2d size)
 	{
 		this.points = new ArrayList<Vector2d>();
 		this.types = new ArrayList<String>();
-		this.maxObjectSize = maxObjectSize;
-		this.size = Vector2d.ZERO;
+		setSize(size);
 	}
 	
 	public void addConfigurationObject(Vector2d point, String type)
 	{
 		points.add(point);
 		types.add(type);
-		
-		size.x = point.x > size.x ? point.x : size.x;
-		size.y = point.y > size.y ? point.y : size.y;
+	}
+	
+	public void setSize(Vector2d size)
+	{
+		this.size = size;
 	}
 	
 	public Vector2d getConfigurationSize()
 	{
-		return size.add(maxObjectSize);
+		return size;
 	}
 }

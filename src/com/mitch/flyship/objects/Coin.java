@@ -12,6 +12,7 @@ import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
 
 public class Coin extends GameBody {
+	static List<BodyConfiguration> configurations;
 	
 	final Image image;
 	public final int value;
@@ -22,6 +23,7 @@ public class Coin extends GameBody {
 		GOLD,
 		SILVER
 	}
+	
 	
 	public Coin(Level level, CoinType type)
 	{
@@ -35,6 +37,7 @@ public class Coin extends GameBody {
 	
 	@Override
 	public void onUpdate(float deltaTime) {
+		
 		if (getPos().y > game.getGraphics().getHeight()) {
 			level.getBodyManager().removeBody(this);
 		}
@@ -47,23 +50,91 @@ public class Coin extends GameBody {
 	}
 
 	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onPause() {}
 
 	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-
+	public void onResume() {}
+	
+	public boolean hasCoinInRange(double distance)
+	{
+		List<Coin> coins = level.getBodyManager().getItemsByType(Coin.class);
+		for (Coin coin : coins) {
+			if (coin != this && coin.getPos().getDistance(getPos()) <= distance) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
-	public static List<Coin> getBodiesFromConfiguration(BodyConfiguration config,
+	public static int getBodyConfigurationCount()
+	{
+		if (configurations == null) {
+			generateBodyConfigurations();
+		}
+		
+		return configurations.size();
+	}
+	
+	static void generateBodyConfigurations()
+	{
+		configurations = new ArrayList<BodyConfiguration>();
+		
+		BodyConfiguration config;
+		Vector2d goldSize = Assets.getImage("gold_coin").getSize();
+		Vector2d silverSize = Assets.getImage("silver_coin").getSize();
+		
+		/* 0: SINGLE GOLD COIN */ 
+		config = new BodyConfiguration();
+		config.addConfigurationObject(goldSize.divide(2), "GOLD");
+		config.setSize(goldSize);
+		configurations.add(config);
+		
+		/* SINGLE SILVER COIN */
+		config = new BodyConfiguration();
+		config.addConfigurationObject(silverSize.divide(2), "SILVER");
+		config.setSize(silverSize);
+		configurations.add(config);
+		
+		/* SLIDE DOWN GOLD CENTER */
+		config = new BodyConfiguration();
+		config.addConfigurationObject(goldSize.scale(0).add(silverSize), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).add(silverSize), "SILVER");
+		config.addConfigurationObject(goldSize.scale(2).add(silverSize), "SILVER");
+		config.addConfigurationObject(goldSize.scale(3).add(silverSize), "GOLD");
+		config.addConfigurationObject(goldSize.scale(4).add(silverSize), "SILVER");
+		config.addConfigurationObject(goldSize.scale(5).add(silverSize), "SILVER");
+		config.addConfigurationObject(goldSize.scale(6).add(silverSize), "SILVER");
+		config.setSize(goldSize.scale(6).add(silverSize.scale(2)));
+		configurations.add(config);
+		
+		/* HORIZONTAL SILVER */
+		config = new BodyConfiguration();
+		config.addConfigurationObject(goldSize.scale(1).scaleX(1), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).scaleX(2), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).scaleX(3), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).scaleX(4), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).scaleX(5), "SILVER");
+		config.addConfigurationObject(goldSize.scale(1).scaleX(6), "SILVER");
+		config.setSize(new Vector2d(goldSize.x*6.5+silverSize.x, goldSize.y*1.5));
+		configurations.add(config);
+	}
+	
+	public static BodyConfiguration getBodyConfiguration(int configID)
+	{
+		/* CREATES CONFIGURATIONS IF THEY DON'T ALREADY EXIST. */
+		if (configurations == null) {
+			generateBodyConfigurations();
+		}
+		
+		return configurations.get(configID);
+	}
+	
+	public static List<GameBody> getBodiesFromConfiguration(BodyConfiguration config,
 			Vector2d pos, Level level) 
 	{
-		List<Coin> coins = new ArrayList<Coin>();
+		List<GameBody> coins = new ArrayList<GameBody>();
 		for (int i = 0; i < config.points.size(); i++) {
-			CoinType coinType = config.types.get(i) == "silver" ? CoinType.SILVER : CoinType.GOLD;
+			CoinType coinType = config.types.get(i) == "GOLD" ? CoinType.GOLD : CoinType.SILVER;
 			Coin coin = new Coin(level, coinType);
 			coin.setPos(pos.add(config.points.get(i)));
 			coins.add(coin);

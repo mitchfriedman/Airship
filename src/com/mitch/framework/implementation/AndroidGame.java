@@ -1,6 +1,5 @@
 package com.mitch.framework.implementation;
 
-import android.R;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -82,7 +81,7 @@ public abstract class AndroidGame extends Activity implements Game {
     	
     	renderView = new AndroidFastRenderView(this, frameBuffer);
     	graphics = new AndroidGraphics(getAssets(), frameBuffer);
-    	input = new AndroidInput(this, renderView, scaleX, scaleY);
+    	input = new AndroidInput(this, renderView, scaleX/SCALE, scaleY/SCALE);
     }
     
     @Override

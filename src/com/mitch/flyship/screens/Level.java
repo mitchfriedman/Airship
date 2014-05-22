@@ -2,12 +2,10 @@ package com.mitch.flyship.screens;
 
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
-import com.mitch.flyship.LevelProperties;
+import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.objects.Cloud;
@@ -16,6 +14,7 @@ import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.LevelBodyManager;
+import com.mitch.framework.LevelEventManager;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 
@@ -27,7 +26,8 @@ public class Level extends Screen {
 	double backgroundPos = 0;
 	float elapsedTime = 0;
 	int backgroundHeight = 0;
-	LevelBodyManager bm;
+	final LevelBodyManager bm;
+	final LevelEventManager lem;
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -35,6 +35,8 @@ public class Level extends Screen {
 		super(game);
 		
 		bm = new LevelBodyManager();
+		lem = new LevelEventManager(this);
+		lem.loadEvents();
 		
 		ShipParams params = game.loadMerchantShipParams();
 		Player player = new Player(game);
@@ -46,7 +48,7 @@ public class Level extends Screen {
 		setSpeed(1);
 	}
 	
-	public Level(AirshipGame game, LevelProperties properties) 
+	/*public Level(AirshipGame game, LevelProperties properties) 
 	{
 		super(game);
 		
@@ -65,15 +67,12 @@ public class Level extends Screen {
 		Ship ship = new Ship(this, player, params, shipPos);
 		
 		bm.setShip(ship);
-	}
+	}*/
 	
 	public void setBackgroundImage(String image) 
 	{
 		backgroundImage = Assets.getImage(image);
 		backgroundHeight = backgroundImage.getHeight();
-		Log.d("GAME WIDTH", ""+game.getGraphics().getWidth());
-		Log.d("BACK WIDTH", ""+backgroundImage.getWidth());
-		Log.d("BACK HEIGHT", ""+backgroundImage.getHeight());
 	}
 	
 	public void setSpeed(double speed) 
@@ -91,9 +90,20 @@ public class Level extends Screen {
 		return bm;
 	}
 	
+	public float getElapsedTime_ms()
+	{
+		return elapsedTime;
+	}
+	
+	public float getElapsedTime_s()
+	{
+		return elapsedTime/1000;
+	}
+	
 	public void update(float deltaTime) 
 	{
 		elapsedTime += deltaTime;
+		lem.update();
 		
 		//updates all bodies in body manager (ship, enemies, items)
 		bm.onUpdate(deltaTime);
@@ -113,25 +123,16 @@ public class Level extends Screen {
 		
 		// Randomly spawns coins (temporary)
 		if ((int)(Math.random() * 100) == 0) {
-			Vector2d coinSize = Assets.getImage("gold_coin").getSize();
-			BodyConfiguration coinConfig = new BodyConfiguration(coinSize);
-			coinConfig.addConfigurationObject(coinSize.scale(0), "silver");
-			coinConfig.addConfigurationObject(coinSize.scale(1), "silver");
-			coinConfig.addConfigurationObject(coinSize.scale(2), "silver");
-			coinConfig.addConfigurationObject(coinSize.scale(3), "gold");
-			coinConfig.addConfigurationObject(coinSize.scale(4), "silver");
-			coinConfig.addConfigurationObject(coinSize.scale(5), "silver");
-			coinConfig.addConfigurationObject(coinSize.scale(6), "silver");
-			
+			int coinConfigID = (int) (Math.random() * Coin.getBodyConfigurationCount());
+			BodyConfiguration coinConfig = Coin.getBodyConfiguration(coinConfigID);
 			
 			Vector2d coinConfigSize = coinConfig.getConfigurationSize();
 			Vector2d coinConfigPos = new Vector2d(Math.random()*(g.getWidth()-coinConfigSize.x), -coinConfigSize.y);
-			List<Coin> coins = Coin.getBodiesFromConfiguration(coinConfig, coinConfigPos, this);
-			for (Coin coin : coins) {
+			List<GameBody> coins = Coin.getBodiesFromConfiguration(coinConfig, coinConfigPos, this);
+			for (GameBody coin : coins) {
 				bm.addBodyToItems(coin);
 			}
 		}
-		
 	}
 	
 	public void paint(float deltaTime) 
@@ -158,5 +159,7 @@ public class Level extends Screen {
 	
 	@Override
 	public void backButton() {}
+	
+	
 
 }

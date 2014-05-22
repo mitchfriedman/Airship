@@ -2,7 +2,6 @@ package com.mitch.framework.implementation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -62,7 +61,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     			ups = updateCount;
     			updateCount = 0;
     			frameCount = 0;
-    			Log.d("FPS:UPS", fps + ":"+ups);
+    			//Log.d("FPS:UPS", fps + ":"+ups);
     		}
             
             now = System.nanoTime();
