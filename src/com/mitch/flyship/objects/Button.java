@@ -1,6 +1,6 @@
 package com.mitch.flyship.objects;
 
-import android.graphics.Paint.Align;
+import com.mitch.framework.containers.Align;
 
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
@@ -13,52 +13,34 @@ import com.mitch.framework.containers.Vector2d;
 public class Button extends GameBody {
 	boolean lastTouched = false;
 	boolean down = false;
-	Align align = Align.LEFT;
+	Align align;
 	Vector2d offset = Vector2d.ZERO;
 	ButtonClickListener listener;
-	
-	
-	
-	//Image depressedImage;
+
 	Image pressedImage;
 	Image activeImage;
 	Image currentImage;
 	
-	//boolean justTouched = false;
-	//float timeTouchUp = 0;
-	/*
-	enum state {
-		pressed,
-		//depressed,
-		active
-	}
-	state CURRENT;*/
 	
-	public Button(AirshipGame game, String name, Vector2d position, String imageID, int height, Align align, ButtonClickListener listener)
+	public Button(AirshipGame game, String name, Align align, ButtonClickListener listener)
 	{
-		super(game, name, position);
-		//CURRENT = state.active;
-		
+		super(game, name);
+		setPos(new Vector2d(0,0));
 		
 		try {
-			activeImage = Assets.getImage(imageID);
-			pressedImage = Assets.getImage(imageID+" Pressed");
-			
-			//depressedImage = Assets.getImage(imageID+" Depressed");
+			activeImage  = Assets.getImage(name+"-active");
+			pressedImage = Assets.getImage(name+"-hover");
 		}
 		catch (Exception e){
 			
 		}
 		
-		setSize(activeImage.getSize().scaleX(height));
-		setSize(pressedImage.getSize().scaleX(height));
-		//setSize(depressedImage.getSize().scaleX(height));
 		
 		currentImage = activeImage;
 
 		this.listener = listener;
 		
-		switch(align) {
+		switch(align.getHorizontal()) {
 		case LEFT:
 			break;
 		case CENTER:
@@ -67,6 +49,16 @@ public class Button extends GameBody {
 		case RIGHT:
 			offset.x = -getSize().x;
 			break;
+		}
+		switch(align.getVertical()) {
+			case TOP:
+				break;
+			case BOTTOM:
+				offset.y = -getSize().y;
+				break;
+			case CENTER:
+				offset.y = -getSize().y/2;
+				break;
 		}
 	}
 	public Image getImage() {
@@ -85,20 +77,6 @@ public class Button extends GameBody {
 	{
 		boolean touched = isTouched(offset);
 		
-		/*if(justTouched) {
-			if(timeTouchUp < 40 && timeTouchUp > 0) {
-				currentImage = depressedImage;
-				timeTouchUp += deltaTime;	
-			}
-			
-			else if(timeTouchUp >= 40) {
-				currentImage = activeImage;
-				timeTouchUp = 0;
-				justTouched = false;
-			}
-		}
-		*/
-		
 		if (touched && !lastTouched) {
 			onDown();
 			down = true;
@@ -116,7 +94,7 @@ public class Button extends GameBody {
 	public void onPaint(float deltaTime) 
 	{
 		Graphics g = game.getGraphics();
-		//g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y, getSize().x, getSize().y);
+		g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y);
 	}
 	
 	void onDown()
@@ -129,8 +107,6 @@ public class Button extends GameBody {
 	{
 		listener.onUp();
 		currentImage = activeImage;
-		//justTouched = true;
-		//timeTouchUp = 1;
 	}
 
 	@Override

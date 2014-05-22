@@ -16,10 +16,10 @@ public class Terrain extends GameBody {
 
 	Image image;
 	
-	double swayLength = 30;
+	double swayLength = 20;
 	double sway = 0;
 	double swayDirection = 1;
-	double swayTime = 1500;
+	double swayTime = 3000;
 	
 	List<Cloud> clouds;
 	int cloudSpawnRate = 300;
@@ -28,14 +28,13 @@ public class Terrain extends GameBody {
 	int cloudMaxY;
 	
 		
-	public Terrain(AirshipGame game, String name, Rect bounds) {
-		super(game, name, bounds);
+	public Terrain(AirshipGame game, String name) {
+		super(game, name);
 		this.image = Assets.getImage(name);
 		
 		clouds = new ArrayList<Cloud>();
 		cloudMinY = -5;
 		cloudMaxY = (int) image.getHeight();
-		Log.w("height:",""+image.getHeight());
 	}
 	public Image getImage() {
 		return image;
@@ -68,7 +67,7 @@ public class Terrain extends GameBody {
 	public void onPaint(float deltaTime) {
 		Graphics g = game.getGraphics();
 		//g.drawImage(image, getBounds().getRealPosition().add(new Vector2d(sway, 0)), getBounds().getRealSize());
-		
+		g.drawImage(image, getPos().x+sway, getPos().y);
 		
 		for (Cloud cloud : clouds) {
 			cloud.onPaint(deltaTime);

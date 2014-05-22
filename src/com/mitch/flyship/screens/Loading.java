@@ -31,8 +31,8 @@ public class Loading extends Screen {
 		opacity = 255 * percentage;
 		
 		if (Assets.isLoaded() && elapsedTime > splashDisplayTime) {
-			//game.setScreen(new Menu(game));
-			game.setScreen(new Level(game));
+			game.setScreen(new Menu(game));
+			//game.setScreen(new Level(game));
 		}
 		
 	}
