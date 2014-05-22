@@ -2,7 +2,6 @@ package com.mitch.framework.containers;
 
 public class Vector2d {
 	
-	public static final Vector2d ZERO = new Vector2d(0,0);
 	
 	public double x, y;
 	

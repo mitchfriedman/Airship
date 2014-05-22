@@ -3,23 +3,20 @@ package com.mitch.flyship.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
-import com.mitch.framework.containers.Rect;
 
 public class Terrain extends GameBody {
 
 	Image image;
 	
-	double swayLength = 20;
+	double swayLength = 30;
 	double sway = 0;
 	double swayDirection = 1;
-	double swayTime = 3000;
+	double swayTime = 15000;
 	
 	List<Cloud> clouds;
 	int cloudSpawnRate = 300;

@@ -1,20 +1,19 @@
 package com.mitch.flyship.objects;
 
-import com.mitch.framework.containers.Align;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
+import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
 
 public class Button extends GameBody {
 	boolean lastTouched = false;
 	boolean down = false;
 	Align align;
-	Vector2d offset = Vector2d.ZERO;
+	Vector2d offset = new Vector2d(0,0);
 	ButtonClickListener listener;
 
 	Image pressedImage;
@@ -22,23 +21,15 @@ public class Button extends GameBody {
 	Image currentImage;
 	
 	
-	public Button(AirshipGame game, String name, Align align, ButtonClickListener listener)
+	public Button(AirshipGame game, String name, Align align, Vector2d pos, ButtonClickListener listener)
 	{
-		super(game, name);
-		setPos(new Vector2d(0,0));
-		
-		try {
-			activeImage  = Assets.getImage(name+"-active");
-			pressedImage = Assets.getImage(name+"-hover");
-		}
-		catch (Exception e){
-			
-		}
-		
-		
-		currentImage = activeImage;
-
+		super(game, name, pos);
 		this.listener = listener;
+		
+		activeImage  = Assets.getImage(name+"-active");
+		pressedImage = Assets.getImage(name+"-hover");
+		currentImage = activeImage;
+		setSize(currentImage.getSize());
 		
 		switch(align.getHorizontal()) {
 		case LEFT:
@@ -51,14 +42,14 @@ public class Button extends GameBody {
 			break;
 		}
 		switch(align.getVertical()) {
-			case TOP:
-				break;
-			case BOTTOM:
-				offset.y = -getSize().y;
-				break;
-			case CENTER:
-				offset.y = -getSize().y/2;
-				break;
+		case TOP:
+			break;
+		case BOTTOM:
+			offset.y = -getSize().y;
+			break;
+		case CENTER:
+			offset.y = -getSize().y/2;
+			break;
 		}
 	}
 	public Image getImage() {
@@ -76,13 +67,24 @@ public class Button extends GameBody {
 	public void onUpdate(float deltaTime) 
 	{
 		boolean touched = isTouched(offset);
+		boolean screenTouched = game.getInput().isTouchDown(0);
 		
 		if (touched && !lastTouched) {
+			listener.onDown();
 			onDown();
+			
 			down = true;
 			lastTouched = true;
 		}
+		else if (lastTouched && !touched && screenTouched) {
+			listener.onCancel();
+			onCancel();
+			
+			down = false;
+			lastTouched = false;
+		}
 		else if (lastTouched && !touched) {
+			listener.onUp();
 			onUp();
 			
 			down = false;
@@ -94,19 +96,22 @@ public class Button extends GameBody {
 	public void onPaint(float deltaTime) 
 	{
 		Graphics g = game.getGraphics();
-		g.drawImage(currentImage, getPos().x+offset.x, getPos().y+offset.y);
+		g.drawImage(currentImage, getPos().add(offset));
 	}
 	
 	void onDown()
 	{
-		listener.onDown();
 		currentImage = pressedImage;
 	}
 	
 	void onUp()
 	{
-		listener.onUp();
 		currentImage = activeImage;
+	}
+	
+	void onCancel()
+	{
+		onUp();
 	}
 
 	@Override

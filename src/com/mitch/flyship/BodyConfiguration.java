@@ -13,7 +13,7 @@ public class BodyConfiguration {
 	
 	public BodyConfiguration()
 	{
-		this(Vector2d.ZERO);
+		this(new Vector2d(0,0));
 	}
 	
 	public BodyConfiguration(Vector2d size)

@@ -18,7 +18,7 @@ public abstract class GameBody {
 	{
 		this.game = game;
 		this.name = name;
-		this.velocity = Vector2d.ZERO;
+		this.velocity = new Vector2d(0,0);
 		this.bounds = new Rect(0,0,0,0);
 	}
 	
@@ -31,7 +31,7 @@ public abstract class GameBody {
 	public GameBody(AirshipGame game, String name, Vector2d position)
 	{
 		this(game, name);
-		this.bounds = new Rect(position, Vector2d.ZERO);
+		this.bounds = new Rect(position, new Vector2d(0,0));
 	}
 	public void setBounds(Rect bounds) {
 		this.bounds = bounds;
