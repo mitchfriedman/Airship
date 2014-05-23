@@ -61,6 +61,12 @@ public class Menu extends Screen {
 		@Override
 		public void onCancel() { }
 	};
+	ButtonClickListener instructionsListener = new ButtonClickListener() {
+		@Override
+		public void onUp() { }
+		public void onDown() { }
+		public void onCancel() { }
+	};
 	
 	public Menu(AirshipGame game)
 	{
@@ -68,8 +74,9 @@ public class Menu extends Screen {
 		
 		Graphics g = game.getGraphics();
 		Assets.getMusic("blue").setLooping(true);
+		Platform platform = new Platform(game, "Menu/platform");
 		bodies.add(new Terrain(game, "Menu/terrain"));
-		bodies.add(new Platform(game, "Menu/platform"));
+		bodies.add(platform);
 		
 		
 		Align alignment;
@@ -80,16 +87,20 @@ public class Menu extends Screen {
 		bodies.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
 		
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.LEFT);
-		position = new Vector2d(0, g.getHeight());
+		position = new Vector2d(0, g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Missions", alignment, position, missionsListener));
 		
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.CENTER);
-		position = new Vector2d(g.getWidth()/2, g.getHeight());
+		position = new Vector2d(g.getWidth()/2, g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Endless", alignment, position, endlessListener));
 		
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth(), g.getHeight());
+		position = new Vector2d(g.getWidth(), g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Shop", alignment, position, shopListener));
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		position = new Vector2d(g.getWidth()-8, platform.getPos().y+10);
+		bodies.add(new Button(game, "GUI/Instructions Button", alignment, position, instructionsListener));
 	}
 	
 	@Override
@@ -106,6 +117,7 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onPaint(deltaTime);
 		}
+		
 	}
 	
 	@Override

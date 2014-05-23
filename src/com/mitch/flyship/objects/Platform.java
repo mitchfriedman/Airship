@@ -5,7 +5,6 @@ import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
-import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public class Platform extends GameBody {
@@ -17,6 +16,7 @@ public class Platform extends GameBody {
 		
 		this.image = Assets.getImage(name);
 		setPos(new Vector2d(0, game.getGraphics().getHeight()-image.getHeight()));
+		
 	}
 	public Image getImage() {
 		return image;
@@ -26,20 +26,20 @@ public class Platform extends GameBody {
 	}
 	@Override
 	public void onUpdate(float deltaTime) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onPaint(float deltaTime) {
-		// TODO Auto-generated method stub
 		Graphics g = game.getGraphics();
 		g.drawImage(getImage(), getPos().x, getPos().y);
+		g.drawImage(Assets.getImage("Menu/cargo"), g.getWidth()/2+30, getPos().y+60);
+		g.drawImage(Assets.getImage("Menu/bottom border"), 0, g.getHeight()-2);
+		g.drawImage(Assets.getImage("ship/Interceptor-normal"), g.getWidth()/2-10, getPos().y+25);
 	}
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		
 	}
 
