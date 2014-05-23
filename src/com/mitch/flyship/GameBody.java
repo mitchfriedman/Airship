@@ -93,18 +93,10 @@ public abstract class GameBody {
 	public abstract void onPause();
 	public abstract void onResume();
 	
-	public static BodyConfiguration getBodyConfiguration(int configID)
-	{
-		BodyConfiguration config = new BodyConfiguration();
-		config.addConfigurationObject(new Vector2d(0,0), null);
-		return config;
-	}
 	
-	public static List<GameBody> getBodiesFromConfiguration(BodyConfiguration config,
-			Vector2d pos, Level level) 
+	public static List<GameBody> spawnObjects(Level level)
 	{
 		return null;
 	}
-	
 	
 }

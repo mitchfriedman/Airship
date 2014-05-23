@@ -6,6 +6,7 @@ import java.util.List;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
 import com.mitch.flyship.GameBody;
+import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -16,6 +17,7 @@ public class Coin extends GameBody {
 	
 	final Image image;
 	public final int value;
+	public static List<Float> spawnWeights = new ArrayList<Float>();
 	
 	Level level;
 	
@@ -78,6 +80,7 @@ public class Coin extends GameBody {
 	static void generateBodyConfigurations()
 	{
 		configurations = new ArrayList<BodyConfiguration>();
+		spawnWeights = new ArrayList<Float>();
 		
 		BodyConfiguration config;
 		Vector2d goldSize = Assets.getImage("gold_coin").getSize();
@@ -88,12 +91,14 @@ public class Coin extends GameBody {
 		config.addConfigurationObject(goldSize.divide(2), "GOLD");
 		config.setSize(goldSize);
 		configurations.add(config);
+		spawnWeights.add(1f);
 		
 		/* SINGLE SILVER COIN */
 		config = new BodyConfiguration();
 		config.addConfigurationObject(silverSize.divide(2), "SILVER");
 		config.setSize(silverSize);
 		configurations.add(config);
+		spawnWeights.add(10f);
 		
 		/* SLIDE DOWN GOLD CENTER */
 		config = new BodyConfiguration();
@@ -106,6 +111,7 @@ public class Coin extends GameBody {
 		config.addConfigurationObject(goldSize.scale(6).add(silverSize), "SILVER");
 		config.setSize(goldSize.scale(6).add(silverSize.scale(2)));
 		configurations.add(config);
+		spawnWeights.add(2f);
 		
 		/* HORIZONTAL SILVER */
 		config = new BodyConfiguration();
@@ -117,6 +123,19 @@ public class Coin extends GameBody {
 		config.addConfigurationObject(goldSize.scale(1).scaleX(6), "SILVER");
 		config.setSize(new Vector2d(goldSize.x*6.5+silverSize.x, goldSize.y*1.5));
 		configurations.add(config);
+		spawnWeights.add(3f);
+	}
+	
+	public static List<GameBody> spawnObjects(Level level)
+	{
+		int configID = ObjectSpawner.getRandomValueFromWeights(spawnWeights);
+		BodyConfiguration config = getBodyConfiguration(configID);
+		
+		Graphics g = level.getAirshipGame().getGraphics();
+		double xPos = Math.random()*(g.getWidth()-config.getConfigurationSize().x);
+		double yPos = -config.getConfigurationSize().y;
+		Vector2d pos = new Vector2d(xPos, yPos);
+		return getBodiesFromConfiguration(config, pos, level);
 	}
 	
 	public static BodyConfiguration getBodyConfiguration(int configID)

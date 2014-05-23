@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
-import com.mitch.flyship.BodyConfiguration;
 import com.mitch.flyship.GameBody;
+import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.objects.Cloud;
@@ -28,6 +28,7 @@ public class Level extends Screen {
 	int backgroundHeight = 0;
 	final LevelBodyManager bm;
 	final LevelEventManager lem;
+	ObjectSpawner coinSpawner = new ObjectSpawner(Coin.class, 275f, 1250f);
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -36,7 +37,7 @@ public class Level extends Screen {
 		
 		bm = new LevelBodyManager();
 		lem = new LevelEventManager(this);
-		lem.loadEvents();
+		//lem.loadEvents();
 		
 		ShipParams params = game.loadMerchantShipParams();
 		Player player = new Player(game);
@@ -113,6 +114,7 @@ public class Level extends Screen {
 		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
 		
 		Graphics g = game.getGraphics();
+		// Once you've touch somebody's heart, you'll be as cool as the rest of the cold hearted murderers out there.
 		
 		if ((int)(Math.random() * 100) == 0) {
 			Cloud cloud = new Cloud(this, new Vector2d(0,1));
@@ -121,7 +123,17 @@ public class Level extends Screen {
 			bm.addBodyToItems(cloud);
 		}
 		
-		// Randomly spawns coins (temporary)
+		coinSpawner.updateTime(deltaTime);
+		if (coinSpawner.canSpawn()) {
+			List<GameBody> coinList = coinSpawner.trySpawnObjects(this);
+			for (GameBody body : coinList) {
+				getBodyManager().addBodyToItems(body);
+			}
+			coinSpawner.resetTimeInfo();
+		}
+		
+		
+		/*// Randomly spawns coins (temporary)
 		if ((int)(Math.random() * 100) == 0) {
 			int coinConfigID = (int) (Math.random() * Coin.getBodyConfigurationCount());
 			BodyConfiguration coinConfig = Coin.getBodyConfiguration(coinConfigID);
@@ -132,7 +144,7 @@ public class Level extends Screen {
 			for (GameBody coin : coins) {
 				bm.addBodyToItems(coin);
 			}
-		}
+		}*/
 	}
 	
 	public void paint(float deltaTime) 
@@ -158,7 +170,10 @@ public class Level extends Screen {
 	public void dispose() {}
 	
 	@Override
-	public void backButton() {}
+	public void backButton() 
+	{
+		game.setScreen(new Menu(game));
+	}
 	
 	
 

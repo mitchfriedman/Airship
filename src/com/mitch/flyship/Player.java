@@ -1,7 +1,5 @@
 package com.mitch.flyship;
 
-import android.util.Log;
-
 import com.mitch.framework.Input;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
