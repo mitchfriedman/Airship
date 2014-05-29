@@ -8,9 +8,12 @@ import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public abstract class GameBody {
+	public boolean affectedByLevelSpeed = true;
 	protected AirshipGame game;
 	protected Vector2d velocity;
 	protected Vector2d offset;
+	protected Rect collisionOffset = new Rect(0,0,0,0);
+	float depth = 100;
 	Rect bounds;
 	String name;
 	
@@ -33,12 +36,37 @@ public abstract class GameBody {
 		this(game, name);
 		this.bounds = new Rect(position, new Vector2d(0,0));
 	}
-	public void setBounds(Rect bounds) {
+	
+	public void setDepth(float depth)
+	{
+		this.depth = depth;
+	}
+	
+	public float getDepth()
+	{
+		return depth;
+	}
+	
+	public void setBounds(Rect bounds) 
+	{
 		this.bounds = bounds;
 	}
-	public Rect getBounds() {
+	
+	public Rect getBounds() 
+	{
 		return bounds;
 	}
+	
+	public Rect getCollisionBounds()
+	{
+		Rect rect = new Rect(bounds);
+		rect.x += collisionOffset.x;
+		rect.y += collisionOffset.y;
+		rect.width  -= collisionOffset.width  + collisionOffset.x;
+		rect.height -= collisionOffset.height + collisionOffset.y;
+		return rect;
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -94,7 +122,7 @@ public abstract class GameBody {
 	public abstract void onResume();
 	
 	
-	public static List<GameBody> spawnObjects(Level level)
+	public static List<GameBody> spawnObjects(Level level, String type)
 	{
 		return null;
 	}

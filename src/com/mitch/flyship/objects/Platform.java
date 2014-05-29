@@ -34,7 +34,7 @@ public class Platform extends GameBody {
 		Graphics g = game.getGraphics();
 		g.drawImage(getImage(), getPos().x, getPos().y);
 		g.drawImage(Assets.getImage("Menu/cargo"), g.getWidth()/2+30, getPos().y+60);
-		g.drawImage(Assets.getImage("Menu/bottom border"), 0, g.getHeight()-2);
+		g.drawImage(Assets.getImage("Menu/bottom border"), 0, g.getHeight()-3);
 		g.drawImage(Assets.getImage("ship/Interceptor-normal"), g.getWidth()/2-10, getPos().y+25);
 	}
 

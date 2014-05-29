@@ -22,6 +22,8 @@ public class ShipParams {
 	final public int coinAttractionRange;
 	final public int coinAttractionSpeed;
 	
+	final public Rect collisionOffset;
+	
 	public ShipParams(String type)
 	{
 		this.tilt0 = Assets.getImage("ship/" + type + "-normal");
@@ -41,5 +43,8 @@ public class ShipParams {
 		this.coinCollectionRange = 3;
 		this.coinAttractionRange = 30;
 		this.coinAttractionSpeed = 3;
+		
+		// 8 from left, ten from top, 8 from right, 3 from bottom
+		this.collisionOffset = new Rect(8,10,8,3);
 	}
 }

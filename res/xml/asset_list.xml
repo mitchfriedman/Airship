@@ -30,9 +30,16 @@
 	<image key="GUI/Gear-hover" path="GUI/gear-hover.png" />
 	<image key="GUI/Gear-active" path="GUI/gear-active.png" />
 	
-	<image key="GUI/Instructions Button-active" path="GUI/Instructions Button-active.png" />
-	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button-hover.png" />
+	<image key="GUI/Instructions Button-active" path="GUI/Instructions Button.png" />
+	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button Hover.png" />
 	
+	<!-- Enemies -->
+	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />
+	
+	
+	<!-- TEMP -->
+	<image key="hud1" path="GUI/HUD 1.png" />
+	<image key="hud2" path="GUI/HUD 2.png" />
 	
 	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />
@@ -43,6 +50,7 @@
 	<image key="Clouds/cloud 5" path="Clouds/cloud 5.png" />
 	<image key="Clouds/cloud 6" path="Clouds/cloud 6.png" />
 	<image key="Clouds/cloud 7" path="Clouds/cloud 7.png" />
+	<image key="Clouds/cloud 8" path="Clouds/cloud 8.png" />
 	
 	<!-- Ships -->
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />

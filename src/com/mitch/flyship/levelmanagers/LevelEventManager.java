@@ -1,4 +1,4 @@
-package com.mitch.framework;
+package com.mitch.flyship.levelmanagers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import android.util.Log;
 
 import com.mitch.flyship.screens.Level;
+import com.mitch.framework.Event;
 
 public class LevelEventManager {
 	final Level level;

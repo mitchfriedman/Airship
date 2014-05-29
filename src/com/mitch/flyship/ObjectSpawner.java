@@ -7,27 +7,68 @@ import com.mitch.flyship.screens.Level;
 
 public class ObjectSpawner {
 	
+	
+	Level level;
 	Method spawnObjects;
 	
-	public Class<?> cls;
-	public float spawnStart;
-	public float spawnEnd;
+	String name;
+	Class<?> cls;
+	float spawnStart;
+	float spawnEnd;
 	
 	float timeSinceLastSpawn = 0;
 	float randomSpawnTime = 0;
 	
+	public ObjectSpawner(String name, Class<?> cls, float spawnStart, float spawnEnd)
+	{
+		this(cls, spawnStart, spawnEnd);
+		this.name = name;
+	}
+	
 	public ObjectSpawner(Class<?> cls, float spawnStart, float spawnEnd)
 	{
+		this.name = null;
 		this.cls = cls;
 		this.spawnStart = spawnStart;
 		this.spawnEnd = spawnEnd;
 		resetTimeInfo();
 		
 		try {
-			this.spawnObjects = cls.getMethod("spawnObjects", Level.class);
+			this.spawnObjects = cls.getMethod("spawnObjects", Level.class, String.class);
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public Class<?> getSpawnerClass()
+	{
+		return cls;
+	}
+	
+	public float getSpawnStart()
+	{
+		return spawnStart;
+	}
+	
+	public float getSpawnEnd()
+	{
+		return spawnEnd;
+	}
+	
+	public void setSpawnTimes(float spawnStart, float spawnEnd)
+	{
+		this.spawnStart = spawnStart;
+		this.spawnEnd = spawnEnd;
+	}
+	
+	public void setLevel(Level level)
+	{
+		this.level = level;
 	}
 	
 	public float getTimeSinceLastSpawn()
@@ -48,7 +89,8 @@ public class ObjectSpawner {
 	
 	public boolean canSpawn()
 	{
-		return timeSinceLastSpawn > spawnStart + randomSpawnTime;
+		double speedModifier = level != null ? level.getSpeed() : 1;
+		return timeSinceLastSpawn > spawnStart/speedModifier + randomSpawnTime/speedModifier;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -59,7 +101,7 @@ public class ObjectSpawner {
 		}
 		
 		try {
-			return (List<GameBody>) spawnObjects.invoke(null, (Object) level);
+			return (List<GameBody>) spawnObjects.invoke(null, level, name);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

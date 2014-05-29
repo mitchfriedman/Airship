@@ -1,6 +1,11 @@
 package com.mitch.flyship.objects;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.util.Log;
+
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.screens.Level;
@@ -10,7 +15,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Cloud extends GameBody {
 	
-	static final int N_CLOUDS = 8;
+	static final int N_CLOUDS = 9;
 	
 	Level level;
 	Image image;
@@ -51,6 +56,19 @@ public class Cloud extends GameBody {
 	@Override
 	public void onResume() {
 
+	}
+	
+	public static List<GameBody> spawnObjects(Level level, String type)
+	{
+		Log.d("SPAWNING CLOUD", "k?");
+		Cloud cloud = new Cloud(level, new Vector2d(0,1));
+		Vector2d cloudSize = cloud.getSize();
+		Graphics g = level.getAirshipGame().getGraphics();
+		cloud.setPos(new Vector2d(Math.random() * (g.getWidth()+cloudSize.x*2) - cloudSize.x, -cloudSize.y));
+		
+		List<GameBody> clouds = new ArrayList<GameBody>();
+		clouds.add(cloud);
+		return clouds;
 	}
 
 }
