@@ -6,17 +6,17 @@ import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
 
-public class VerticalEnemy extends Enemy {
+public class HorizontalEnemy extends Enemy {
 	
 	Image image;
-	boolean facingDown;
+	boolean facingLeft;
 	
-	public VerticalEnemy(Level level, Image image, double speed, boolean facingDown)
+	public HorizontalEnemy(Level level, Image image, double speed, boolean facingLeft)
 	{
 		super(level);
-		super.velocity = new Vector2d(0,speed);
-		this.facingDown = facingDown;
+		super.velocity = new Vector2d(speed,0);
 		this.image = image;
+		this.facingLeft = facingLeft;
 		setSize(image.getSize());
 	}
 	
@@ -25,16 +25,16 @@ public class VerticalEnemy extends Enemy {
 	{
 		super.onPaint(deltaTime);
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos(), false, !facingDown && velocity.y < 0);
+		g.drawImage(image, getPos(), !facingLeft && velocity.x < 0, false);
 	}
 	
 	@Override
 	public Enemy spawn() {
-		VerticalEnemy enemy = new VerticalEnemy(level, image, velocity.y, facingDown);
+		HorizontalEnemy enemy = new HorizontalEnemy(level, image, velocity.x, facingLeft);
 		
 		Graphics g = level.getAirshipGame().getGraphics();
-		double xPos = Math.random() * ( g.getWidth() - enemy.getSize().x );
-		double yPos = velocity.y < 0 ? g.getHeight() : -enemy.getSize().y;
+		double xPos = velocity.y < 0 ? g.getWidth() : -enemy.getSize().x;
+		double yPos = Math.random() * ( g.getHeight() - enemy.getSize().y );
 		enemy.setPos(new Vector2d(xPos, yPos));
 		
 		return enemy;

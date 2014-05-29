@@ -35,7 +35,8 @@
 	
 	<!-- Enemies -->
 	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />
-	
+	<image key="Enemy/crimson_fighter" path="Enemies/Crimson Fighter.png" />
+	<image key="Enemy/gunship" path="Enemies/Heavy Gunship.png" />
 	
 	<!-- TEMP -->
 	<image key="hud1" path="GUI/HUD 1.png" />
@@ -56,7 +57,8 @@
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />
 	<image key="ship/Interceptor-tilt1" path="Ships/Interceptor/tilt1.png" />
 	<image key="ship/Interceptor-tilt2" path="Ships/Interceptor/tilt2.png" />
-	<image key="ship/Interceptor-prop_anim" path="Ships/Interceptor/prop_anims.png" />
+	<image key="ship/Interceptor-prop1" path="Ships/Interceptor/prop1.png" />
+	<image key="ship/Interceptor-prop2" path="Ships/Interceptor/prop2.png" />
 	
 	<!-- Items -->
 	<image key="silver_coin" path="Items/Silver Coin.png" />

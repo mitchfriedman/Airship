@@ -43,6 +43,8 @@ public class Level extends Screen {
 		sm = new LevelSpawnerManager(this, true);
 		//lem.loadEvents();
 		
+		Enemy.generateDictionary(this);
+		
 		ShipParams params = game.loadMerchantShipParams();
 		Player player = new Player(game);
 		Vector2d centerScreen = game.getGraphics().getSize().scale(0.5);
@@ -52,9 +54,14 @@ public class Level extends Screen {
 		setBackgroundImage("Background/riverterrain");
 		setSpeed(1);
 		
-		sm.addSpawner(new ObjectSpawner(Coin.class, 275f, 1250f));
-		sm.addSpawner(new ObjectSpawner(Cloud.class, 250f, 2500f));
+		
+		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, 275f, 1250f));
+		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, 250f, 2500f));
+		
+		// Spawns enemies
 		sm.addSpawner(new ObjectSpawner("BIRD", Enemy.class, 2000f, 10000f));
+		sm.addSpawner(new ObjectSpawner("FIGHTER", Enemy.class, 2000f, 10000f));
+		sm.addSpawner(new ObjectSpawner("GUNSHIP", Enemy.class, 2000f, 10000f));
 	}
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 

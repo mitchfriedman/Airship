@@ -46,7 +46,7 @@ public class Ship extends GameBody {
 		tilt0 = params.tilt0;
 		tilt1 = params.tilt1;
 		tilt2 = params.tilt2;
-		propellerAnim = new AnimationImage(params.propellerAnimImage, params.animationTime);
+		propellerAnim = new AnimationImage(params.animation_fps);
 		propellerAnim.setFrames(params.animationRects);
 		propellerPos = params.propellerPos;
 		
@@ -62,8 +62,7 @@ public class Ship extends GameBody {
 	public void onUpdate(float deltaTime) 
 	{
 		
-		propellerAnim.addTime(deltaTime);
-		propellerAnim.updateCurrentFrame();
+		propellerAnim.updateTime(deltaTime);
 		
 		Vector2d velocity = player.getInput_Speed();
 		velocity.y += level.getSpeed();
@@ -79,7 +78,8 @@ public class Ship extends GameBody {
 	public void onPaint(float deltaTime) {
 		Graphics g = game.getGraphics();
 		g.drawImage(image, getPos(), imageReversed, false);
-		g.drawImage(propellerAnim.getImage(), getPos().add(propellerPos), propellerAnim.getCurrentFrame());
+		g.drawImage(propellerAnim.getFrame().image, getPos().add(propellerPos), 
+				propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
 		player.onPaint(deltaTime);
 	}
 

@@ -19,28 +19,21 @@ public class LevelSpawnerManager {
 	
 	public boolean addSpawner(ObjectSpawner spawner)
 	{
-		for (ObjectSpawner spawnerCheck : spawners) {
-			if (spawnerCheck.getName() == spawner.getName()) {
-				return false;
+		if (spawner.getName() == null || getSpawnerByName(spawner.getName()) == null) {
+			if (useLevelSpeed) {
+				spawner.setLevel(level);
 			}
+			
+			spawners.add(spawner);
+			return true;
 		}
 		
-		if (useLevelSpeed) {
-			spawner.setLevel(level);
-		}
-		
-		spawners.add(spawner);
-		return true;
+		return false;
 	}
 	
 	public boolean spawnerExists(ObjectSpawner spawner)
 	{
-		for (ObjectSpawner spawnerCheck : spawners) {
-			if (spawnerCheck.getName() == spawner.getName()) {
-				return true;
-			}
-		}
-		return false;
+		return getSpawnerByName(spawner.getName()) != null;
 	}
 	
 	public ObjectSpawner getSpawnerByName(String name)

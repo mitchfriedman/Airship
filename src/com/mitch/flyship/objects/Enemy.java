@@ -1,16 +1,18 @@
 package com.mitch.flyship.objects;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
+import com.mitch.flyship.objects.enemytypes.HorizontalEnemy;
 import com.mitch.flyship.objects.enemytypes.VerticalEnemy;
 import com.mitch.flyship.screens.Level;
-import com.mitch.framework.Graphics;
-import com.mitch.framework.containers.Vector2d;
 
 public abstract class Enemy extends GameBody {
+	
+	public static HashMap<String, Enemy> enemies = new HashMap<String, Enemy>();
 	
 	protected Level level;
 	int damage = 0;
@@ -29,7 +31,8 @@ public abstract class Enemy extends GameBody {
 	}
 	
 	public abstract void onHit();
-
+	public abstract Enemy spawn();
+	
 	@Override
 	public void onUpdate(float deltaTime) {
 		setPos(getPos().add(velocity));
@@ -44,22 +47,24 @@ public abstract class Enemy extends GameBody {
 	@Override
 	public void onResume() { }
 	
+	public static void generateDictionary(Level level)
+	{
+		enemies.put("BIRD", new VerticalEnemy(level, Assets.getImage("Enemy/flock_of_gulls"), 1, true));
+		enemies.put("FIGHTER", new VerticalEnemy(level, Assets.getImage("Enemy/crimson_fighter"), 1.2, true));
+		enemies.put("GUNSHIP", new HorizontalEnemy(level, Assets.getImage("Enemy/gunship"), 1, true));
+	}
+	
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-		Graphics g = level.getAirshipGame().getGraphics();
-		
-		if (type == "BIRD") {
-			List<GameBody> birdList = new ArrayList<GameBody>();
+		if (enemies.containsKey(type)) {
 			
-			VerticalEnemy birds = new VerticalEnemy(level, Assets.getImage("Enemy/flock_of_gulls"), 1);
-			double xPos = Math.random() * (g.getWidth()-birds.getSize().x);
-			birds.setPos(new Vector2d(xPos, -birds.getSize().y));
-			
-			birdList.add(birds);
-			return birdList;
+			List<GameBody> enemyList = new ArrayList<GameBody>();
+			enemyList.add(enemies.get(type).spawn());
+			return enemyList;
 		}
-		
-		return null;
+		else {
+			return null;
+		}
 	}
 	
 }
