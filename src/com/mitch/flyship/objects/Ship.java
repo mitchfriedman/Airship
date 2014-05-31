@@ -9,6 +9,7 @@ import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
+import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public class Ship extends GameBody {
@@ -31,8 +32,10 @@ public class Ship extends GameBody {
 	public Ship(Level level, Player player, ShipParams params, Vector2d pos)
 	{
 		super(level.getAirshipGame(), "PlayerShip", pos);
+		super.affectedByLevelSpeed = false;
 		this.player = player;
 		this.level = level;
+		setDepth(150);
 		setParams(params);
 		image = tilt0;
 		setSize(image.getSize());
@@ -43,32 +46,41 @@ public class Ship extends GameBody {
 		tilt0 = params.tilt0;
 		tilt1 = params.tilt1;
 		tilt2 = params.tilt2;
-		propellerAnim = new AnimationImage(params.propellerAnimImage, params.animationTime);
+		propellerAnim = new AnimationImage(params.animation_fps);
 		propellerAnim.setFrames(params.animationRects);
 		propellerPos = params.propellerPos;
 		
 		coinAttractionRange = params.coinAttractionRange;
 		coinCollectionRange = params.coinCollectionRange;
 		coinAttractionSpeed = params.coinAttractionSpeed;
+		
+		
+		super.collisionOffset = params.collisionOffset;
 	}
 	
 	@Override
 	public void onUpdate(float deltaTime) 
 	{
-		propellerAnim.addTime(deltaTime);
-		propellerAnim.updateCurrentFrame();
+		
+		propellerAnim.updateTime(deltaTime);
+		
 		Vector2d velocity = player.getInput_Speed();
+		velocity.y += level.getSpeed();
+		
 		addVelocityWithBoundsCheck(velocity);
 		setImageFromVelocity(velocity);
 		checkForCollisions();
 		attractNearbyCoins();
+		player.onUpdate(deltaTime);
 	}
 
 	@Override
 	public void onPaint(float deltaTime) {
 		Graphics g = game.getGraphics();
 		g.drawImage(image, getPos(), imageReversed, false);
-		g.drawImage(propellerAnim.getImage(), getPos().add(propellerPos), propellerAnim.getCurrentFrame());
+		g.drawImage(propellerAnim.getFrame().image, getPos().add(propellerPos), 
+				propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
+		player.onPaint(deltaTime);
 	}
 
 	@Override
@@ -111,20 +123,28 @@ public class Ship extends GameBody {
 	
 	void checkForCollisions()
 	{
+		List<Enemy> enemies = level.getBodyManager().getBodiesBySuperClass(Enemy.class);
 		
+		for (Enemy enemy : enemies) {
+			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())) {
+				enemy.onHit();
+				player.applyDamage(enemy.damage);
+			}
+		}
 	}
 	
 	void attractNearbyCoins()
 	{
-		List<Coin> coins = level.getBodyManager().getItemsByType(Coin.class);
+		List<Coin> coins = level.getBodyManager().getBodiesByClass(Coin.class);
 		for (Coin coin : coins) {
 			
 			Vector2d shipCenter = getPos().add(getSize().scale(0.5));
-			if ( coin.getPos().getDistance(shipCenter) < coinCollectionRange ) {
+			double distance = coin.getPos().getDistance(shipCenter);
+			if ( distance < coinCollectionRange ) {
 				player.addCurrency(coin.value);
 				level.getBodyManager().removeBody(coin);
 			}
-			else if ( coin.getPos().getDistance(shipCenter) < coinAttractionRange ) {
+			else if ( distance < coinAttractionRange ) {
 				Vector2d direction = shipCenter.subtract(coin.getPos());
 				double distanceDivisor = direction.getLength() / coinAttractionRange;
 				double length = coinAttractionSpeed - distanceDivisor * coinAttractionSpeed;

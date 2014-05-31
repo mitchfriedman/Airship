@@ -47,11 +47,13 @@ public class Rect {
 		this.y = position.y;
 	}
 	
-	public double getHeight() {
+	public double getHeight() 
+	{
 		return height;
 	}
 	
-	public double getWidth() {
+	public double getWidth() 
+	{
 		return width;
 	}
 	
@@ -91,20 +93,14 @@ public class Rect {
 	
 	public static boolean rectCollides(Rect a, Rect b)
 	{
-		double startX = a.x < b.x ? a.x : b.x;
-		double startY = a.y < b.y ? a.y : b.y;
-		double endX = a.y+a.width  > b.x+b.width  ? a.x+a.width  : b.x+b.width;
-		double endY = a.y+a.height > b.y+b.height ? a.y+a.height : b.y+b.height;
-		
-		boolean withinX = a.width  + b.width  <= endX-startX;
-		boolean withinY = a.height + b.height <= endY-startY;
-		
-		return withinX && withinY;
+		return !(a.y+a.height < b.y ||
+				 a.y > b.y+b.height ||
+				 a.x > b.x+b.width  ||
+				 a.x+a.width < b.x);
 	}
 	
 	public static boolean vectorWithinRect(Vector2d vec, Rect rect)
 	{
-		
 		boolean withinX = vec.x <= rect.x + rect.width  && vec.x >= rect.x;
 		boolean withinY = vec.y <= rect.y + rect.height && vec.y >= rect.y;
 		

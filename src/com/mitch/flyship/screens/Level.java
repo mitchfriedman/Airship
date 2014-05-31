@@ -8,13 +8,15 @@ import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
+import com.mitch.flyship.levelmanagers.LevelBodyManager;
+import com.mitch.flyship.levelmanagers.LevelEventManager;
+import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
 import com.mitch.flyship.objects.Cloud;
 import com.mitch.flyship.objects.Coin;
+import com.mitch.flyship.objects.Enemy;
 import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
-import com.mitch.framework.LevelBodyManager;
-import com.mitch.framework.LevelEventManager;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 
@@ -27,8 +29,9 @@ public class Level extends Screen {
 	float elapsedTime = 0;
 	int backgroundHeight = 0;
 	final LevelBodyManager bm;
-	final LevelEventManager lem;
-	ObjectSpawner coinSpawner = new ObjectSpawner(Coin.class, 275f, 1250f);
+	final LevelEventManager em;
+	final LevelSpawnerManager sm;
+	
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -36,8 +39,11 @@ public class Level extends Screen {
 		super(game);
 		
 		bm = new LevelBodyManager();
-		lem = new LevelEventManager(this);
+		em = new LevelEventManager(this);
+		sm = new LevelSpawnerManager(this, true);
 		//lem.loadEvents();
+		
+		Enemy.generateDictionary(this);
 		
 		ShipParams params = game.loadMerchantShipParams();
 		Player player = new Player(game);
@@ -47,6 +53,15 @@ public class Level extends Screen {
 		
 		setBackgroundImage("Background/riverterrain");
 		setSpeed(1);
+		
+		
+		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, 275f, 1250f));
+		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, 250f, 2500f));
+		
+		// Spawns enemies
+		sm.addSpawner(new ObjectSpawner("BIRD", Enemy.class, 2000f, 10000f));
+		sm.addSpawner(new ObjectSpawner("FIGHTER", Enemy.class, 2000f, 10000f));
+		sm.addSpawner(new ObjectSpawner("GUNSHIP", Enemy.class, 2000f, 10000f));
 	}
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 
@@ -100,51 +115,37 @@ public class Level extends Screen {
 	{
 		return elapsedTime/1000;
 	}
-	
+	boolean isSpawning = true;
 	public void update(float deltaTime) 
 	{
+		// Once you've touch somebody's heart, you'll be as cool as 
+		// the rest of the cold hearted murderers out there
 		elapsedTime += deltaTime;
-		lem.update();
 		
 		//updates all bodies in body manager (ship, enemies, items)
 		bm.onUpdate(deltaTime);
-		bm.offsetItems(new Vector2d(0, speed));
+		bm.offsetBodies(new Vector2d(0, speed));
 		
+		// Sets off events
+		em.update();
+		
+		// Updates background position
 		backgroundPos += getSpeed();
 		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
 		
-		Graphics g = game.getGraphics();
-		// Once you've touch somebody's heart, you'll be as cool as the rest of the cold hearted murderers out there.
-		
-		if ((int)(Math.random() * 100) == 0) {
-			Cloud cloud = new Cloud(this, new Vector2d(0,1));
-			Vector2d cloudSize = cloud.getSize();
-			cloud.setPos(new Vector2d(Math.random() * (g.getWidth()-cloudSize.x), -cloudSize.y));
-			bm.addBodyToItems(cloud);
-		}
-		
-		coinSpawner.updateTime(deltaTime);
-		if (coinSpawner.canSpawn()) {
-			List<GameBody> coinList = coinSpawner.trySpawnObjects(this);
-			for (GameBody body : coinList) {
-				getBodyManager().addBodyToItems(body);
+		// Spawns objects from LevelSpawningManager. Iterates through all spawners, 
+		// checks if spawner can spawn, Instantiates however that object spawns and
+		// adds them to LevelBodyManager.
+		for (ObjectSpawner spawner : sm.getSpawners()) {
+			spawner.updateTime(deltaTime);
+			if (spawner.canSpawn() && isSpawning) {
+				List<GameBody> bodyList = spawner.trySpawnObjects(this);
+				for (GameBody body : bodyList) {
+					getBodyManager().addBody(body);
+				}
+				spawner.resetTimeInfo();
 			}
-			coinSpawner.resetTimeInfo();
 		}
-		
-		
-		/*// Randomly spawns coins (temporary)
-		if ((int)(Math.random() * 100) == 0) {
-			int coinConfigID = (int) (Math.random() * Coin.getBodyConfigurationCount());
-			BodyConfiguration coinConfig = Coin.getBodyConfiguration(coinConfigID);
-			
-			Vector2d coinConfigSize = coinConfig.getConfigurationSize();
-			Vector2d coinConfigPos = new Vector2d(Math.random()*(g.getWidth()-coinConfigSize.x), -coinConfigSize.y);
-			List<GameBody> coins = Coin.getBodiesFromConfiguration(coinConfig, coinConfigPos, this);
-			for (GameBody coin : coins) {
-				bm.addBodyToItems(coin);
-			}
-		}*/
 	}
 	
 	public void paint(float deltaTime) 
@@ -161,10 +162,16 @@ public class Level extends Screen {
 	}
 	
 	@Override
-	public void pause() {}
+	public void pause() 
+	{
+		Assets.getMusic("blue").pause();
+	}
 	
 	@Override
-	public void resume() {}
+	public void resume() 
+	{
+		Assets.getMusic("blue").play();
+	}
 	
 	@Override
 	public void dispose() {}

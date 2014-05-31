@@ -30,9 +30,17 @@
 	<image key="GUI/Gear-hover" path="GUI/gear-hover.png" />
 	<image key="GUI/Gear-active" path="GUI/gear-active.png" />
 	
-	<image key="GUI/Instructions Button-active" path="GUI/Instructions Button-active.png" />
-	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button-hover.png" />
+	<image key="GUI/Instructions Button-active" path="GUI/Instructions Button.png" />
+	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button Hover.png" />
 	
+	<!-- Enemies -->
+	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />
+	<image key="Enemy/crimson_fighter" path="Enemies/Crimson Fighter.png" />
+	<image key="Enemy/gunship" path="Enemies/Heavy Gunship.png" />
+	
+	<!-- TEMP -->
+	<image key="hud1" path="GUI/HUD 1.png" />
+	<image key="hud2" path="GUI/HUD 2.png" />
 	
 	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />
@@ -43,12 +51,14 @@
 	<image key="Clouds/cloud 5" path="Clouds/cloud 5.png" />
 	<image key="Clouds/cloud 6" path="Clouds/cloud 6.png" />
 	<image key="Clouds/cloud 7" path="Clouds/cloud 7.png" />
+	<image key="Clouds/cloud 8" path="Clouds/cloud 8.png" />
 	
 	<!-- Ships -->
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />
 	<image key="ship/Interceptor-tilt1" path="Ships/Interceptor/tilt1.png" />
 	<image key="ship/Interceptor-tilt2" path="Ships/Interceptor/tilt2.png" />
-	<image key="ship/Interceptor-prop_anim" path="Ships/Interceptor/prop_anims.png" />
+	<image key="ship/Interceptor-prop1" path="Ships/Interceptor/prop1.png" />
+	<image key="ship/Interceptor-prop2" path="Ships/Interceptor/prop2.png" />
 	
 	<!-- Items -->
 	<image key="silver_coin" path="Items/Silver Coin.png" />

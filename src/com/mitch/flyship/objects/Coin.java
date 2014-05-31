@@ -59,7 +59,7 @@ public class Coin extends GameBody {
 	
 	public boolean hasCoinInRange(double distance)
 	{
-		List<Coin> coins = level.getBodyManager().getItemsByType(Coin.class);
+		List<Coin> coins = level.getBodyManager().getBodiesByClass(Coin.class);
 		for (Coin coin : coins) {
 			if (coin != this && coin.getPos().getDistance(getPos()) <= distance) {
 				return true;
@@ -126,7 +126,7 @@ public class Coin extends GameBody {
 		spawnWeights.add(3f);
 	}
 	
-	public static List<GameBody> spawnObjects(Level level)
+	public static List<GameBody> spawnObjects(Level level, String type)
 	{
 		int configID = ObjectSpawner.getRandomValueFromWeights(spawnWeights);
 		BodyConfiguration config = getBodyConfiguration(configID);

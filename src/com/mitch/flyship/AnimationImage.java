@@ -3,66 +3,74 @@ package com.mitch.flyship;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mitch.framework.Image;
-import com.mitch.framework.containers.Rect;
+import com.mitch.framework.containers.Frame;
 
 public class AnimationImage {
 	
-	Image src;
-	List<Rect> frames = new ArrayList<Rect>();
+	List<Frame> frames = new ArrayList<Frame>();
 	int currentFrame = 0;
-	double time = 0;
-	double deltaFrameTime;
+	float time = 0;
+	float deltaFrameTime = 1000;
 	
-	public AnimationImage(Image src, double deltaFrameTime)
+	public AnimationImage(float fps)
 	{
-		this.src = src;
-		this.deltaFrameTime = deltaFrameTime;
+		setSpeed(fps);
 	}
 	
-	public Image getImage()
+	public void setSpeed(float fps)
 	{
-		return src;
+		deltaFrameTime = 1000/fps;
 	}
 	
-	public Rect getFrameAtIndex(int index)
+	public Frame getFrame(int index)
 	{
-		if (index < frames.size() && index >= 0) {
+		if (index < frames.size()) {
 			return frames.get(index);
-		}
+		} 
 		else {
 			return null;
 		}
 	}
 	
-	public Rect getCurrentFrame()
+	public Frame getFrame()
 	{
-		return getFrameAtIndex(currentFrame);
+		return getFrame(getCurrentFrameIndex());
 	}
 	
-	public void addTime(double time)
+	public int getAnimationSize()
 	{
-		this.time += time;
+		return frames.size();
 	}
 	
-	public void updateCurrentFrame()
+	public int getCurrentFrameIndex()
 	{
-		if (frames.size() > 0) {
-			currentFrame = (int) (time * deltaFrameTime) % frames.size();
+		return currentFrame;
+	}
+	
+	public void updateTime(float deltaTime)
+	{
+		this.time += deltaTime;
+		if (time > deltaFrameTime) {
+			currentFrame++;
+			time = 0;
+		}
+		
+		if (currentFrame >= getAnimationSize()) {
+			currentFrame = 0;
 		}
 	}
 	
-	public void addFrame(Rect frame)
+	public void addFrame(Frame frame)
 	{
 		frames.add(frame);
 	}
 	
-	public void setFrames(List<Rect> frames)
+	public void setFrames(List<Frame> frames)
 	{
 		this.frames = frames;
 	}
 	
-	public void addFrame(int index, Rect frame)
+	public void addFrame(int index, Frame frame)
 	{
 		frames.add(index, frame);
 	}
