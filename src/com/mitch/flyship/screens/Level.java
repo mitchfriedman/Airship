@@ -1,9 +1,11 @@
 package com.mitch.flyship.screens;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
+import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
@@ -11,6 +13,7 @@ import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
 import com.mitch.flyship.levelmanagers.LevelEventManager;
 import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
+import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Cloud;
 import com.mitch.flyship.objects.Coin;
 import com.mitch.flyship.objects.Enemy;
@@ -18,7 +21,9 @@ import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
+import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
+import com.mitch.framework.Popup;
 
 
 public class Level extends Screen {
@@ -32,6 +37,60 @@ public class Level extends Screen {
 	final LevelEventManager em;
 	final LevelSpawnerManager sm;
 	
+	List<Button> buttons = new ArrayList<Button>();
+	List<Button> pauseButtons = new ArrayList<Button>();
+	
+	Popup options;
+	
+	boolean isSpawning = true;
+	
+	enum GameState {
+		RUNNING,
+		PAUSED,
+		OVER
+	}
+	
+	GameState state = GameState.RUNNING;
+	
+	ButtonClickListener settingsListener = new ButtonClickListener() {
+		@Override
+		public void onUp() { options.setEnabled(true); }
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};
+	
+	ButtonClickListener hangarListener = new ButtonClickListener() {
+		@Override
+		public void onUp() { backButton(); }
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};
+	
+	ButtonClickListener resumeListener = new ButtonClickListener() {
+		@Override
+		public void onUp() { 
+			state = GameState.RUNNING;
+		}
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};
+	
+	ButtonClickListener gearListener = new ButtonClickListener() {
+		@Override
+		public void onUp() { 
+			state = GameState.PAUSED;
+		}
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};		
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -62,6 +121,32 @@ public class Level extends Screen {
 		sm.addSpawner(new ObjectSpawner("BIRD", Enemy.class, 2000f, 10000f));
 		sm.addSpawner(new ObjectSpawner("FIGHTER", Enemy.class, 2000f, 10000f));
 		sm.addSpawner(new ObjectSpawner("GUNSHIP", Enemy.class, 2000f, 10000f));
+		
+		
+		Graphics g = game.getGraphics();
+		Align alignment;
+		Vector2d position;
+		
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		position = new Vector2d(g.getWidth()-8, 8);
+		buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
+			
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		position = new Vector2d(0,0);
+		Button settingsButton = new Button(game, "GUI/Settings Button", alignment, position, settingsListener);
+		settingsButton.setPos(new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()));
+		pauseButtons.add(settingsButton);
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
+		pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
+		pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
+
+		options = new Popup(game, "GUI/Settings Screen");
 	}
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 
@@ -115,8 +200,8 @@ public class Level extends Screen {
 	{
 		return elapsedTime/1000;
 	}
-	boolean isSpawning = true;
-	public void update(float deltaTime) 
+	
+	private void updateRunning(float deltaTime) 
 	{
 		// Once you've touch somebody's heart, you'll be as cool as 
 		// the rest of the cold hearted murderers out there
@@ -148,6 +233,41 @@ public class Level extends Screen {
 		}
 	}
 	
+	private void updatePaused(float deltaTime)
+	{
+		for(Button button: pauseButtons) {
+			button.onUpdate(deltaTime);
+		}
+		if(game.getInput().isTouchDown(0)) {
+			
+		}
+		options.update(deltaTime);
+	}
+	
+	public void updateOver(float deltaTime)
+	{
+		
+	}
+	
+	public void update(float deltaTime) 
+	{
+		for (Button button : buttons) {
+			button.onUpdate(deltaTime);
+		}
+		
+		switch(state) {
+		case RUNNING:
+			updateRunning(deltaTime);
+			break;
+		case PAUSED:
+			updatePaused(deltaTime);
+			break;
+		case OVER:
+			updateOver(deltaTime);
+			 break;
+		}
+	}
+	
 	public void paint(float deltaTime) 
 	{
 		Graphics g = game.getGraphics();
@@ -159,6 +279,39 @@ public class Level extends Screen {
 		
 		//paints all bodies in body manager (ship, enemies, items)
 		bm.onPaint(deltaTime);
+		
+		for(Button button: buttons) {
+			button.onPaint(deltaTime);
+		}
+		
+		switch(state) {
+		case RUNNING:
+			paintRunning(deltaTime);
+			break;
+		case PAUSED:
+			paintPaused(deltaTime);
+			break;
+		case OVER:
+			paintOver(deltaTime);
+			break;
+		}
+		
+	}
+	
+	private void paintOver(float deltaTime) {
+		
+	}
+	
+	private void paintRunning(float deltaTime) {
+		
+	}
+	
+	private void paintPaused(float deltaTime) 
+	{
+		for(Button button: pauseButtons) {
+			button.onPaint(deltaTime);
+		}
+		options.paint(deltaTime);
 	}
 	
 	@Override
