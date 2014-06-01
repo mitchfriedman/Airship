@@ -3,6 +3,8 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
@@ -42,6 +44,10 @@ public class Level extends Screen {
 	List<Button> pauseButtons = new ArrayList<Button>();
 	
 	Popup options;
+	
+	float elapsedTimeAfterPauseInMS = 0;
+	static final float BUTTON_ANIMATION_TIME_IN_MS = 350;
+	float buttonXOffset = 0;
 	
 	boolean isSpawning = true;
 	
@@ -85,7 +91,8 @@ public class Level extends Screen {
 	ButtonClickListener gearListener = new ButtonClickListener() {
 		@Override
 		public void onUp() { 
-			state = GameState.PAUSED;
+			state = state == GameState.PAUSED ? GameState.RUNNING : GameState.PAUSED;
+			//GameState.PAUSED; 
 		}
 		@Override
 		public void onDown() { }
@@ -132,21 +139,35 @@ public class Level extends Screen {
 		position = new Vector2d(g.getWidth()-8, 8);
 		buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
 			
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
 		position = new Vector2d(0,0);
 		Button settingsButton = new Button(game, "GUI/Settings Button", alignment, position, settingsListener);
 		settingsButton.setPos(new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()));
 		pauseButtons.add(settingsButton);
 		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
 		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
 		pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
 		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
 		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
 		pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
 
 		options = new Popup(game, "GUI/Settings Screen");
+	}
+	
+	private void animateButton(float deltaTime, Button button) {
+		if (elapsedTimeAfterPauseInMS < BUTTON_ANIMATION_TIME_IN_MS) {
+			Log.d("Time after pause: ", ""+elapsedTimeAfterPauseInMS);
+		    buttonXOffset = (elapsedTimeAfterPauseInMS / BUTTON_ANIMATION_TIME_IN_MS) * button.getImage().getWidth();
+		    button.setPos(new Vector2d(button.getPos().x-buttonXOffset, button.getPos().y));
+		}
+		else {
+		    buttonXOffset = button.getImage().getWidth();
+		}
+	
+		
+		elapsedTimeAfterPauseInMS += deltaTime;
 	}
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 
@@ -247,6 +268,8 @@ public class Level extends Screen {
 	{
 		for(Button button: pauseButtons) {
 			button.onUpdate(deltaTime);
+			animateButton(deltaTime, button);
+			Log.d("POS:", "POS: "+button.getPos().x);
 		}
 		if(game.getInput().isTouchDown(0)) {
 			

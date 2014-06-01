@@ -100,9 +100,11 @@ public class Menu extends Screen {
 		position = new Vector2d(g.getWidth(), g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Shop", alignment, position, shopListener));
 		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+		/*alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth()-8, platform.getPos().y+10);
 		bodies.add(new Button(game, "GUI/Instructions Button", alignment, position, instructionsListener));
+		*/
+		
 	}
 	
 	@Override
