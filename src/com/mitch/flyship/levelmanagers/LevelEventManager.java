@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Event;
+import com.mitch.framework.implementation.AndroidGame;
 
 public class LevelEventManager {
 	final Level level;
@@ -16,7 +17,8 @@ public class LevelEventManager {
 	float lastEventTime = 0;
 	
 	enum Events {
-		SPEED_CHANGE
+		SPEED_CHANGE,
+		CHANGE_SMOOTHING
 	}
 	
 	public LevelEventManager(Level level)
@@ -27,9 +29,17 @@ public class LevelEventManager {
 	public void loadEvents()
 	{
 		/*List<String> attributes = new ArrayList<String>();
-		attributes.add("20");
-		Event event = new Event("SPEED_CHANGE", 5, attributes);
-		events.add(event);*/
+		
+		Event event;
+		
+		for (int i = 1; i <= 5; i++) {
+			attributes.clear();
+			attributes.add(String.valueOf(i));
+			event = new Event("CHANGE_SMOOTHING", 5, attributes);
+			events.add(event);
+		}*/
+		
+		
 	}
 	
 	public void update()
@@ -58,6 +68,10 @@ public class LevelEventManager {
 		case SPEED_CHANGE:
 			double speed = Double.parseDouble(event.attributes.get(0));
 			level.setSpeed(speed);
+			break;
+		case CHANGE_SMOOTHING:
+			AndroidGame.SCALE = Float.parseFloat(event.attributes.get(0));
+			level.getAirshipGame().createFrameBuffer();
 			break;
 		}
 	}

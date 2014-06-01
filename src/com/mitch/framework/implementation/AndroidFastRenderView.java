@@ -12,8 +12,8 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     public SurfaceHolder holder;
     volatile boolean running = false;
     
-    final float FPS = 45.0f;
-    final float UPS = 45.0f;
+    public static final float FPS = 45.0f;
+    public static final float UPS = 45.0f;
     
     public long startTime;
     public long lastUpdate;

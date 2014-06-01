@@ -25,7 +25,7 @@ public class HorizontalEnemy extends Enemy {
 	{
 		super.onPaint(deltaTime);
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos(), !facingLeft && velocity.x < 0, false);
+		g.drawImage(image, getPos(), (!facingLeft && velocity.x < 0) || (facingLeft && velocity.x > 0), false);
 	}
 	
 	@Override

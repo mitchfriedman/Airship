@@ -13,25 +13,25 @@ public class ObjectSpawner {
 	
 	String name;
 	Class<?> cls;
-	float spawnStart;
-	float spawnEnd;
+	double spawnStart;
+	double spawnEnd;
 	
-	float timeSinceLastSpawn = 0;
-	float randomSpawnTime = 0;
+	double distanceSinceLastSpawn = 0;
+	double randomSpawnDistance = 0;
 	
-	public ObjectSpawner(String name, Class<?> cls, float spawnStart, float spawnEnd)
+	public ObjectSpawner(String name, Class<?> cls, double spawnStart, double spawnEnd)
 	{
 		this(cls, spawnStart, spawnEnd);
 		this.name = name;
 	}
 	
-	public ObjectSpawner(Class<?> cls, float spawnStart, float spawnEnd)
+	public ObjectSpawner(Class<?> cls, double spawnStart, double spawnEnd)
 	{
 		this.name = null;
 		this.cls = cls;
 		this.spawnStart = spawnStart;
 		this.spawnEnd = spawnEnd;
-		resetTimeInfo();
+		resetDistanceInfo();
 		
 		try {
 			this.spawnObjects = cls.getMethod("spawnObjects", Level.class, String.class);
@@ -50,17 +50,17 @@ public class ObjectSpawner {
 		return cls;
 	}
 	
-	public float getSpawnStart()
+	public double getSpawnStart()
 	{
 		return spawnStart;
 	}
 	
-	public float getSpawnEnd()
+	public double getSpawnEnd()
 	{
 		return spawnEnd;
 	}
 	
-	public void setSpawnTimes(float spawnStart, float spawnEnd)
+	public void setSpawnDistances(float spawnStart, float spawnEnd)
 	{
 		this.spawnStart = spawnStart;
 		this.spawnEnd = spawnEnd;
@@ -71,26 +71,26 @@ public class ObjectSpawner {
 		this.level = level;
 	}
 	
-	public float getTimeSinceLastSpawn()
+	public double getDistanceSinceLastSpawn()
 	{
-		return timeSinceLastSpawn;
+		return distanceSinceLastSpawn;
 	}
 	
-	public void updateTime(float deltaTime)
+	public void updateDistance(double distance)
 	{
-		timeSinceLastSpawn += deltaTime;
+		distanceSinceLastSpawn += distance;
 	}
 	
-	public void resetTimeInfo()
+	public void resetDistanceInfo()
 	{
-		timeSinceLastSpawn = 0;
-		randomSpawnTime = (int) (Math.random() * (spawnEnd - spawnStart));
+		distanceSinceLastSpawn = 0;
+		randomSpawnDistance = (int) (Math.random() * (spawnEnd - spawnStart));
 	}
 	
 	public boolean canSpawn()
 	{
 		double speedModifier = level != null ? level.getSpeed() : 1;
-		return timeSinceLastSpawn > spawnStart/speedModifier + randomSpawnTime/speedModifier;
+		return distanceSinceLastSpawn > spawnStart/speedModifier + randomSpawnDistance/speedModifier;
 	}
 	
 	@SuppressWarnings("unchecked")

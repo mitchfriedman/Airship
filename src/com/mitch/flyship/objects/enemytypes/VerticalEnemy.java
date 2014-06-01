@@ -25,7 +25,7 @@ public class VerticalEnemy extends Enemy {
 	{
 		super.onPaint(deltaTime);
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos(), false, !facingDown && velocity.y < 0);
+		g.drawImage(image, getPos(), false, (facingDown && velocity.y < 0) || (!facingDown && velocity.y > 0));
 	}
 	
 	@Override

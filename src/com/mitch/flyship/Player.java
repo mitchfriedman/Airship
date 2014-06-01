@@ -3,6 +3,7 @@ package com.mitch.flyship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Input;
+import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
 
@@ -56,6 +57,12 @@ public class Player {
 	{
 		Input input = game.getInput();
 		return new Vector2d(-input.GetTiltX(), input.GetTiltY());
+	}
+	
+	public Rect getShipBounds()
+	{
+		Graphics g = game.getGraphics();
+		return new Rect(0,0,g.getWidth(),g.getHeight()-hud.getHeight());
 	}
 	
 	public Vector2d getCenteredOrientation()

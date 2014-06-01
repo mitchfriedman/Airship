@@ -6,6 +6,7 @@
 <assets>
     <!-- Music -->
     <music key="blue" path="Music/blue.mp3" />
+    <music key="wind" path="Music/Wind_Ambience.wav"/>
     
     <!-- Backgrounds -->
 	<image key="Background/ocean" path="Backgrounds/ocean.png" />
@@ -72,7 +73,7 @@
 	<image key="ship/Interceptor-prop2" path="Ships/Interceptor/prop2.png" />
 	
 	<!-- Items -->
-	<image key="silver_coin" path="Items/Silver Coin.png" />
+	<image key="silver_coin" path="Items/Coin.png" />
 	<image key="gold_coin" path="Items/Gold Coin.png" />
 	
 </assets>

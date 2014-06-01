@@ -24,6 +24,7 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.Popup;
+import com.mitch.framework.implementation.AndroidFastRenderView;
 
 
 public class Level extends Screen {
@@ -100,7 +101,7 @@ public class Level extends Screen {
 		bm = new LevelBodyManager();
 		em = new LevelEventManager(this);
 		sm = new LevelSpawnerManager(this, true);
-		//lem.loadEvents();
+		em.loadEvents();
 		
 		Enemy.generateDictionary(this);
 		
@@ -113,14 +114,13 @@ public class Level extends Screen {
 		setBackgroundImage("Background/riverterrain");
 		setSpeed(1);
 		
-		
-		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, 275f, 1250f));
-		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, 250f, 2500f));
+		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, timeToDistance(275), timeToDistance(1250)));
+		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, timeToDistance(250), timeToDistance(2500)));
 		
 		// Spawns enemies
-		sm.addSpawner(new ObjectSpawner("BIRD", Enemy.class, 2000f, 10000f));
-		sm.addSpawner(new ObjectSpawner("FIGHTER", Enemy.class, 2000f, 10000f));
-		sm.addSpawner(new ObjectSpawner("GUNSHIP", Enemy.class, 2000f, 10000f));
+		sm.addSpawner(new ObjectSpawner("BIRD",    Enemy.class, timeToDistance(2000), timeToDistance(10000)));
+		sm.addSpawner(new ObjectSpawner("FIGHTER", Enemy.class, timeToDistance(2000), timeToDistance(10000)));
+		sm.addSpawner(new ObjectSpawner("GUNSHIP", Enemy.class, timeToDistance(2000), timeToDistance(10000)));
 		
 		
 		Graphics g = game.getGraphics();
@@ -186,6 +186,16 @@ public class Level extends Screen {
 		return speed;
 	}
 	
+	public double distanceToTime(double distance)
+	{
+		return distance / (getSpeed() * AndroidFastRenderView.UPS);
+	}
+	
+	public double timeToDistance(float time)
+	{
+		return time/1000 * (AndroidFastRenderView.UPS * getSpeed());
+	}
+	
 	public LevelBodyManager getBodyManager()
 	{
 		return bm;
@@ -222,13 +232,13 @@ public class Level extends Screen {
 		// checks if spawner can spawn, Instantiates however that object spawns and
 		// adds them to LevelBodyManager.
 		for (ObjectSpawner spawner : sm.getSpawners()) {
-			spawner.updateTime(deltaTime);
+			spawner.updateDistance(getSpeed());
 			if (spawner.canSpawn() && isSpawning) {
 				List<GameBody> bodyList = spawner.trySpawnObjects(this);
 				for (GameBody body : bodyList) {
 					getBodyManager().addBody(body);
 				}
-				spawner.resetTimeInfo();
+				spawner.resetDistanceInfo();
 			}
 		}
 	}

@@ -59,8 +59,10 @@ public class Cloud extends GameBody {
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
 		Cloud cloud = new Cloud(level, new Vector2d(0,1));
-		Vector2d cloudSize = cloud.getSize();
+		cloud.setDepth( 149 + (int) (Math.random()*2) );
+		
 		Graphics g = level.getAirshipGame().getGraphics();
+		Vector2d cloudSize = cloud.getSize();
 		cloud.setPos(new Vector2d(Math.random() * (g.getWidth()+cloudSize.x*2) - cloudSize.x, -cloudSize.y));
 		
 		List<GameBody> clouds = new ArrayList<GameBody>();

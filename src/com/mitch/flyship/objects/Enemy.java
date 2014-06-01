@@ -17,16 +17,20 @@ public abstract class Enemy extends GameBody {
 	protected Level level;
 	int damage = 0;
 
-	public Enemy(Level level) {
+	public Enemy(Level level) 
+	{
 		super(level.getAirshipGame(), "Enemy");
 		this.level = level;
 	}
 	
 	
-	public int getDamage() {
+	public int getDamage() 
+	{
 		return damage;
 	}
-	public void setDamage(int damage) {
+	
+	public void setDamage(int damage) 
+	{
 		this.damage = damage;
 	}
 	
@@ -34,7 +38,8 @@ public abstract class Enemy extends GameBody {
 	public abstract Enemy spawn();
 	
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(float deltaTime)
+	{
 		setPos(getPos().add(velocity));
 	}
 
@@ -66,5 +71,4 @@ public abstract class Enemy extends GameBody {
 			return null;
 		}
 	}
-	
 }

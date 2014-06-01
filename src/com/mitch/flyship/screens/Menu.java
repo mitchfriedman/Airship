@@ -74,6 +74,8 @@ public class Menu extends Screen {
 		
 		Graphics g = game.getGraphics();
 		Assets.getMusic("blue").setLooping(true);
+		Assets.getMusic("wind").setLooping(true);
+		Assets.getMusic("wind").setVolume(0.1f);
 		Platform platform = new Platform(game, "Menu/platform");
 		bodies.add(new Terrain(game, "Menu/terrain"));
 		bodies.add(platform);
@@ -123,12 +125,12 @@ public class Menu extends Screen {
 	@Override
 	public void pause() 
 	{
-		Assets.getMusic("blue").pause();
+		Assets.getMusic("wind").pause();
 	}
 
 	@Override
 	public void resume() {
-		Assets.getMusic("blue").play();
+		Assets.getMusic("wind").play();
 	}
 
 	@Override

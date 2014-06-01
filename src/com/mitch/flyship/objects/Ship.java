@@ -92,16 +92,15 @@ public class Ship extends GameBody {
 	
 	void addVelocityWithBoundsCheck(Vector2d velocity)
 	{
-		Graphics g = game.getGraphics();
 		Vector2d newPos = getPos().add(velocity);
 		
 		// Checks x bounds.
-		if (newPos.x > 0 && newPos.x < g.getWidth()-getSize().x) {
+		if (newPos.x > player.getShipBounds().x && newPos.x < player.getShipBounds().width - getSize().x) {
 			setPos(new Vector2d(newPos.x, getPos().y));
 		}
 		
 		// Checks y bounds
-		if (newPos.y > 0 && newPos.y < g.getHeight()-getSize().y) {
+		if (newPos.y > player.getShipBounds().y && newPos.y < player.getShipBounds().height - getSize().y) {
 			setPos(new Vector2d(getPos().x, newPos.y));
 		}
 	}
