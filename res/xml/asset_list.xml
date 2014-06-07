@@ -17,7 +17,7 @@
 	<image key="Menu/terrain" path="Menu/riverterrain.png" />
 	<image key="Menu/cargo" path="Menu/Cargo.png" />
 	<image key="Menu/bottom border" path="Menu/Bottom Border.png" />
-		
+	
 	<!-- Menu Buttons -->
 	<image key="Menu/Buttons/Endless-hover" path="Menu/Buttons/endless-hover.png" />
 	<image key="Menu/Buttons/Endless-active" path="Menu/Buttons/endless-active.png"/>
@@ -45,14 +45,39 @@
 	
 	<image key="GUI/Settings Screen" path="GUI/Settings Screen.png" />
 	
+	<!-- HUD -->
+	<image key="GUI_BASE" path="GUI/base hull.png" />
+	
+	<!-- COIN COUNTER -->
+	<image key="FONT/COIN/0" path="Fonts/Coin Counter/0.png" />
+	<image key="FONT/COIN/1" path="Fonts/Coin Counter/1.png" />
+	<image key="FONT/COIN/2" path="Fonts/Coin Counter/2.png" />
+	<image key="FONT/COIN/3" path="Fonts/Coin Counter/3.png" />
+	<image key="FONT/COIN/4" path="Fonts/Coin Counter/4.png" />
+	<image key="FONT/COIN/5" path="Fonts/Coin Counter/5.png" />
+	<image key="FONT/COIN/6" path="Fonts/Coin Counter/6.png" />
+	<image key="FONT/COIN/7" path="Fonts/Coin Counter/7.png" />
+	<image key="FONT/COIN/8" path="Fonts/Coin Counter/8.png" />
+	<image key="FONT/COIN/9" path="Fonts/Coin Counter/9.png" />
+	<image key="FONT/COIN/comma" path="Fonts/Coin Counter/comma.png" />
+	
+	<!-- TIMER -->
+	<image key="FONT/TIMER/0" path="Fonts/Timer/0.png" />
+	<image key="FONT/TIMER/1" path="Fonts/Timer/1.png" />
+	<image key="FONT/TIMER/2" path="Fonts/Timer/2.png" />
+	<image key="FONT/TIMER/3" path="Fonts/Timer/3.png" />
+	<image key="FONT/TIMER/4" path="Fonts/Timer/4.png" />
+	<image key="FONT/TIMER/5" path="Fonts/Timer/5.png" />
+	<image key="FONT/TIMER/6" path="Fonts/Timer/6.png" />
+	<image key="FONT/TIMER/7" path="Fonts/Timer/7.png" />
+	<image key="FONT/TIMER/8" path="Fonts/Timer/8.png" />
+	<image key="FONT/TIMER/9" path="Fonts/Timer/9.png" />
+	<image key="FONT/TIMER/colon" path="Fonts/Timer/colon.png" />
+	
 	<!-- Enemies -->
 	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />
 	<image key="Enemy/crimson_fighter" path="Enemies/Crimson Fighter.png" />
 	<image key="Enemy/gunship" path="Enemies/Heavy Gunship.png" />
-	
-	<!-- TEMP -->
-	<image key="hud1" path="GUI/HUD 1.png" />
-	<image key="hud2" path="GUI/HUD 2.png" />
 	
 	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />

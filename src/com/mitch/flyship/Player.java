@@ -27,25 +27,21 @@ public class Player {
 	final double DOWN_TILT_LIMITER = 0.2;
 	final double HORIZONTAL_TILT_LIMITER = 0.4;
 	
-	AndroidGame game;
 	Vector2d orientationOffset = new Vector2d(0, 3);
+	AndroidGame game;
+	float elapsedTime = 0;
 	int currency = 0;
 	boolean paused = false;
 	boolean lights = false;
 	int health = MAX_HEALTH;
 	int water = MAX_WATER;
 	
-	Image hud;;
-	Image hud1;
-	Image hud2;
-	
+	Image hud;
 	
 	public Player(AirshipGame game)
 	{
 		this.game = game;
-		hud1 = Assets.getImage("hud1");
-		hud2 = Assets.getImage("hud2");
-		hud = hud1;
+		this.hud = Assets.getImage("GUI_BASE");
 	}
 	
 	public void centerOrientation()
@@ -62,7 +58,7 @@ public class Player {
 	public Rect getShipBounds()
 	{
 		Graphics g = game.getGraphics();
-		return new Rect(0,0,g.getWidth(),g.getHeight()-hud.getHeight());
+		return new Rect(0,0,g.getWidth(), g.getHeight());
 	}
 	
 	public Vector2d getCenteredOrientation()
@@ -151,8 +147,12 @@ public class Player {
 	
 	public void addCurrency(int amount)
 	{
-		currency += amount;
-		//Log.d("Currency changed", currency +"");
+		if (currency + amount < 100000) {
+			currency += amount;
+		} else {
+			currency = 99999;
+		}
+		
 	}
 	
 	public void pause()
@@ -160,21 +160,53 @@ public class Player {
 		
 	}
 	
+	public void drawTime(int msTime)
+	{
+		int elapsedSeconds = msTime/1000;
+		int minutes = (int) (elapsedSeconds / 60);
+		int seconds = (int) (elapsedSeconds % 60);
+
+		int width = 8;
+		Graphics g = game.getGraphics();
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes / 10) ), new Vector2d( width*0 + 4, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes % 10) ), new Vector2d( width*1 + 4, 5));
+		
+		g.drawImage(Assets.getImage("FONT/TIMER/colon"), new Vector2d(width*2+6,8));
+		
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds / 10) ), new Vector2d( width*3 + 4, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds % 10) ), new Vector2d( width*4 + 4, 5));
+	}
+	
+	public void drawCurrency()
+	{
+		Graphics g = game.getGraphics();
+		Vector2d pos = new Vector2d(17, g.getHeight()-13);
+		Vector2d commaSize = Assets.getImage("FONT/COIN/comma").getSize();
+		Vector2d nSize = Assets.getImage("FONT/COIN/0").getSize();
+		
+		g.drawImage(Assets.getImage("FONT/COIN/" + (int) (currency/10000 % 10) ), new Vector2d( nSize.x*0 + pos.x+0, pos.y));
+		g.drawImage(Assets.getImage("FONT/COIN/" + (int) (currency/1000 % 10) ), new Vector2d(  nSize.x*1 + pos.x+1, pos.y));
+		
+		g.drawImage(Assets.getImage("FONT/COIN/comma"), new Vector2d(nSize.x*2 + pos.x+2, nSize.y-commaSize.y+pos.y));
+		
+		g.drawImage(Assets.getImage("FONT/COIN/" + (int) (currency/100 % 10) ), new Vector2d( nSize.x*2 + pos.x+5 + commaSize.x, pos.y) );
+		g.drawImage(Assets.getImage("FONT/COIN/" + (int) (currency/10 % 10) ), new Vector2d(  nSize.x*3 + pos.x+6 + commaSize.x, pos.y) );
+		g.drawImage(Assets.getImage("FONT/COIN/" + (int) (currency/1 % 10) ), new Vector2d(   nSize.x*4 + pos.x+7 + commaSize.x, pos.y) );
+		
+	}
+	
 	public void onPaint(float deltaTime)
 	{
 		Graphics g = game.getGraphics();
-		Vector2d pos = new Vector2d(g.getWidth()/2-hud.getWidth()/2, g.getHeight()-hud.getHeight());
-		g.drawImage(hud, pos);
+		g.drawImage(hud, new Vector2d(0, g.getHeight()-hud.getHeight()));
+		
+		drawTime( (int)elapsedTime );
+		drawCurrency();
 	}
 	
 	public void onUpdate(float deltaTime)
 	{
-		if (getInput_ShootRight()) {
-			hud = hud2;
-		}
-		else if (getInput_ShootLeft()) {
-			hud = hud1;
-		}
+		elapsedTime += deltaTime;
 	}
 	
 }
