@@ -12,6 +12,7 @@ import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
+import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
 import com.mitch.flyship.levelmanagers.LevelEventManager;
 import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
@@ -98,7 +99,41 @@ public class Level extends Screen {
 		public void onDown() { }
 		@Override
 		public void onCancel() { }
-	};		
+	};	
+	
+	ButtonClickListener calibrateListener = new ButtonClickListener() {
+		@Override
+		public void onUp() {}
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};	
+	
+	SliderMoveListener sensitivityListener = new SliderMoveListener() {
+		@Override
+		public void onDown() {}
+		@Override
+		public void onUp() {}
+		@Override
+		public void onCancel() {}
+		@Override
+		public void onPositionChanged(float position) {
+			Log.d("POS:",""+position);
+		}
+	};
+	SliderMoveListener smoothnessListener = new SliderMoveListener() {
+		@Override
+		public void onDown() {}
+		@Override
+		public void onUp() {}
+		@Override
+		public void onCancel() {}
+		@Override
+		public void onPositionChanged(float position) {
+			Log.d("POS:",""+position);
+		}
+	};
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -139,36 +174,38 @@ public class Level extends Screen {
 		position = new Vector2d(g.getWidth()-8, 8);
 		buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
 			
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
 		position = new Vector2d(0,0);
 		Button settingsButton = new Button(game, "GUI/Settings Button", alignment, position, settingsListener);
 		settingsButton.setPos(new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()));
 		pauseButtons.add(settingsButton);
 		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
 		pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
 		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
 		pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
-
-		options = new Popup(game, "GUI/Settings Screen");
-	}
-	
-	private void animateButton(float deltaTime, Button button) {
-		if (elapsedTimeAfterPauseInMS < BUTTON_ANIMATION_TIME_IN_MS) {
-			Log.d("Time after pause: ", ""+elapsedTimeAfterPauseInMS);
-		    buttonXOffset = (elapsedTimeAfterPauseInMS / BUTTON_ANIMATION_TIME_IN_MS) * button.getImage().getWidth();
-		    button.setPos(new Vector2d(button.getPos().x-buttonXOffset, button.getPos().y));
-		}
-		else {
-		    buttonXOffset = button.getImage().getWidth();
-		}
-	
+			
+		options = new Popup(game);
 		
-		elapsedTimeAfterPauseInMS += deltaTime;
+		options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
+		options.addSlider(sensitivityListener);
+		
+		options.setMargin(20);
+		
+		options.addImage("GUI/smoothness", Align.Horizontal.CENTER);
+		options.setMargin(30);
+		options.addSlider(smoothnessListener);
+		
+		options.setMargin(20);
+		options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
+		options.setMargin(20);
+		options.addButton(calibrateListener, "GUI/Calibrate");
+
 	}
+	
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 
 	{
@@ -267,9 +304,8 @@ public class Level extends Screen {
 	private void updatePaused(float deltaTime)
 	{
 		for(Button button: pauseButtons) {
-			button.onUpdate(deltaTime);
-			animateButton(deltaTime, button);
-			Log.d("POS:", "POS: "+button.getPos().x);
+			if(!options.getEnabled())
+				button.onUpdate(deltaTime);
 		}
 		if(game.getInput().isTouchDown(0)) {
 			
