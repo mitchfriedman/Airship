@@ -3,6 +3,8 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
@@ -10,6 +12,7 @@ import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
+import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
 import com.mitch.flyship.levelmanagers.LevelEventManager;
 import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
@@ -42,6 +45,10 @@ public class Level extends Screen {
 	List<Button> pauseButtons = new ArrayList<Button>();
 	
 	Popup options;
+	
+	float elapsedTimeAfterPauseInMS = 0;
+	static final float BUTTON_ANIMATION_TIME_IN_MS = 350;
+	float buttonXOffset = 0;
 	
 	boolean isSpawning = true;
 	
@@ -85,13 +92,48 @@ public class Level extends Screen {
 	ButtonClickListener gearListener = new ButtonClickListener() {
 		@Override
 		public void onUp() { 
-			state = GameState.PAUSED;
+			state = state == GameState.PAUSED ? GameState.RUNNING : GameState.PAUSED;
+			//GameState.PAUSED; 
 		}
 		@Override
 		public void onDown() { }
 		@Override
 		public void onCancel() { }
-	};		
+	};	
+	
+	ButtonClickListener calibrateListener = new ButtonClickListener() {
+		@Override
+		public void onUp() {}
+		@Override
+		public void onDown() { }
+		@Override
+		public void onCancel() { }
+	};	
+	
+	SliderMoveListener sensitivityListener = new SliderMoveListener() {
+		@Override
+		public void onDown() {}
+		@Override
+		public void onUp() {}
+		@Override
+		public void onCancel() {}
+		@Override
+		public void onPositionChanged(float position) {
+			Log.d("POS:",""+position);
+		}
+	};
+	SliderMoveListener smoothnessListener = new SliderMoveListener() {
+		@Override
+		public void onDown() {}
+		@Override
+		public void onUp() {}
+		@Override
+		public void onCancel() {}
+		@Override
+		public void onPositionChanged(float position) {
+			Log.d("POS:",""+position);
+		}
+	};
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -145,9 +187,25 @@ public class Level extends Screen {
 		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
 		pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
+			
+		options = new Popup(game);
+		
+		options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
+		options.addSlider(sensitivityListener);
+		
+		options.setMargin(20);
+		
+		options.addImage("GUI/smoothness", Align.Horizontal.CENTER);
+		options.setMargin(30);
+		options.addSlider(smoothnessListener);
+		
+		options.setMargin(20);
+		options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
+		options.setMargin(20);
+		options.addButton(calibrateListener, "GUI/Calibrate");
 
-		options = new Popup(game, "GUI/Settings Screen");
 	}
+	
 	
 	/*public Level(AirshipGame game, LevelProperties properties) 
 	{
@@ -246,7 +304,8 @@ public class Level extends Screen {
 	private void updatePaused(float deltaTime)
 	{
 		for(Button button: pauseButtons) {
-			button.onUpdate(deltaTime);
+			if(!options.getEnabled())
+				button.onUpdate(deltaTime);
 		}
 		if(game.getInput().isTouchDown(0)) {
 			

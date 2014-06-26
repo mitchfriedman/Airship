@@ -44,6 +44,22 @@
 	<image key="GUI/Hangar Button-hover" path="GUI/Hangar Button.png" />
 	
 	<image key="GUI/Settings Screen" path="GUI/Settings Screen.png" />
+	<image key="GUI/Slider bar" path="GUI/slider bar.png"/>
+	<image key="GUI/Slider notch" path="GUI/Settings Slider.png" />
+	<image key="GUI/low" path="GUI/low.png" />
+	<image key="GUI/high" path="GUI/high.png" />
+	
+	
+	<!-- SETTINGS POPUP -->
+	<image key="GUI/menu border" path="GUI/menu border.png" />
+	<image key="GUI/smoothness"  path="GUI/smoothness.png"/>
+	<image key="GUI/menu center" path="GUI/menu center.png" />
+	
+	<image key="GUI/tilt sensitivity" path="GUI/tilt sensitivity.png"/>
+	<image key="GUI/tilt calibration" path="GUI/Tilt Calibration.png"/>
+	
+	<image key="GUI/Calibrate-active" path="GUI/Calibrate-active.png"/>
+	<image key="GUI/Calibrate-hover"  path="GUI/Calibrate-hover.png"/>
 	
 	<!-- HUD -->
 	<image key="GUI_BASE" path="GUI/base hull.png" />
