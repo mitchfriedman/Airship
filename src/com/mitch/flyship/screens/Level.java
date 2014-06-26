@@ -112,7 +112,7 @@ public class Level extends Screen {
 		bm.setShip(ship);
 		
 		setBackgroundImage("Background/riverterrain");
-		setSpeed(1);
+		setSpeed(1.5);
 		
 		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, timeToDistance(275), timeToDistance(1250)));
 		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, timeToDistance(250), timeToDistance(2500)));

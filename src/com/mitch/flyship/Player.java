@@ -29,7 +29,7 @@ public class Player {
 	
 	Vector2d orientationOffset = new Vector2d(0, 3);
 	AndroidGame game;
-	float elapsedTime = 0;
+	long elapsedTime = 0;
 	int currency = 0;
 	boolean paused = false;
 	boolean lights = false;
