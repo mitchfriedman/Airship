@@ -41,10 +41,33 @@ public class Rect {
 		return new Vector2i(x,y);
 	}
 	
+	
+	
 	public void setPosition(Vector2d position)
 	{
 		this.x = position.x;
 		this.y = position.y;
+	}
+	
+	public Rect scalePosition(float scale)
+	{
+		Rect rect = new Rect(this);
+		rect.x *= scale;
+		rect.y *= scale;
+		return rect;
+	}
+	
+	public Rect scaleSize(float scale)
+	{
+		Rect rect = new Rect(this);
+		rect.width  *= scale;
+		rect.height *= scale;
+		return rect;
+	}
+	
+	public Rect scaleValues(float scale)
+	{
+		return scaleSize(scale).scalePosition(scale);
 	}
 	
 	public double getHeight() 

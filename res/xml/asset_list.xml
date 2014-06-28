@@ -116,5 +116,6 @@
 	<!-- Items -->
 	<image key="silver_coin" path="Items/Coin.png" />
 	<image key="gold_coin" path="Items/Gold Coin.png" />
+	<image key="water" path="Items/Water Droplet.png" />
 	
 </assets>

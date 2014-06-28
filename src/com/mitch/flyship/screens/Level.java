@@ -21,6 +21,7 @@ import com.mitch.flyship.objects.Cloud;
 import com.mitch.flyship.objects.Coin;
 import com.mitch.flyship.objects.Enemy;
 import com.mitch.flyship.objects.Ship;
+import com.mitch.flyship.objects.Water;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
@@ -156,8 +157,9 @@ public class Level extends Screen {
 		setBackgroundImage("Background/riverterrain");
 		setSpeed(1.5);
 		
-		sm.addSpawner(new ObjectSpawner("COIN", Coin.class, timeToDistance(275), timeToDistance(1250)));
-		sm.addSpawner(new ObjectSpawner("CLOUD", Cloud.class, timeToDistance(250), timeToDistance(2500)));
+		sm.addSpawner( new ObjectSpawner("COIN", Coin.class, timeToDistance(275), timeToDistance(1250)) );
+		sm.addSpawner( new ObjectSpawner("WATER", Water.class, timeToDistance(30000), timeToDistance(50000)) );
+		sm.addSpawner( new ObjectSpawner("CLOUD", Cloud.class, timeToDistance(250), timeToDistance(2500)) );
 		
 		// Spawns enemies
 		sm.addSpawner(new ObjectSpawner("BIRD",    Enemy.class, timeToDistance(2000), timeToDistance(10000)));

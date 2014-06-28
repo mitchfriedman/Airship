@@ -1,5 +1,7 @@
 package com.mitch.flyship;
 
+import android.graphics.Color;
+
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Input;
@@ -8,6 +10,9 @@ import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
 
 public class Player {
+	
+	final int WATER_VALUE_DRAIN_TIME = 50000;
+	final int HEALTH_VALUE_DRAIN_TIME = -1;
 	
 	final int WATER_VALUE = 30;
 	final int HEALTH_VALUE = 30;
@@ -34,14 +39,18 @@ public class Player {
 	boolean paused = false;
 	boolean lights = false;
 	int health = MAX_HEALTH;
-	int water = MAX_WATER;
+	double water = MAX_WATER;
 	
 	Image hud;
+	Image hudBorder;
+	Rect waterPositionRelHud = new Rect(191,13, 6,49);
+	int waterColor = Color.rgb(67, 173, 195);
 	
 	public Player(AirshipGame game)
 	{
 		this.game = game;
 		this.hud = Assets.getImage("GUI_BASE");
+		this.hudBorder = Assets.getImage("Menu/bottom border");
 	}
 	
 	public void centerOrientation()
@@ -155,11 +164,6 @@ public class Player {
 		
 	}
 	
-	public void pause()
-	{
-		
-	}
-	
 	public void drawTime(int msTime)
 	{
 		int elapsedSeconds = msTime/1000;
@@ -180,7 +184,7 @@ public class Player {
 	public void drawCurrency()
 	{
 		Graphics g = game.getGraphics();
-		Vector2d pos = new Vector2d(17, g.getHeight()-13);
+		Vector2d pos = new Vector2d(17, g.getHeight()-15);
 		Vector2d commaSize = Assets.getImage("FONT/COIN/comma").getSize();
 		Vector2d nSize = Assets.getImage("FONT/COIN/0").getSize();
 		
@@ -195,18 +199,48 @@ public class Player {
 		
 	}
 	
+	public void drawWater()
+	{
+		Rect waterPosition = new Rect(waterPositionRelHud);
+		double waterPercentage = water/MAX_WATER;
+		
+		int waterHeight = (int) (waterPosition.height * waterPercentage);
+		waterPosition.y += hud.getHeight() + hudBorder.getHeight() + (waterPosition.height - waterHeight);
+		waterPosition.height = waterHeight;
+		
+		Graphics g = game.getGraphics();
+		g.drawRect(waterPosition, waterColor);
+		
+	}
+	
 	public void onPaint(float deltaTime)
 	{
 		Graphics g = game.getGraphics();
-		g.drawImage(hud, new Vector2d(0, g.getHeight()-hud.getHeight()));
+		
+		drawWater();
+		g.drawImage(hud, new Vector2d(0, g.getHeight()-hud.getHeight()-2));
+		g.drawImage(hudBorder, new Vector2d(0, g.getHeight()-2));
 		
 		drawTime( (int)elapsedTime );
 		drawCurrency();
 	}
 	
+	@SuppressWarnings("unused")
 	public void onUpdate(float deltaTime)
 	{
 		elapsedTime += deltaTime;
+		if (WATER_VALUE_DRAIN_TIME > 0) {
+			water -= deltaTime * (WATER_VALUE / WATER_VALUE_DRAIN_TIME);
+		}
+		
+		if (HEALTH_VALUE_DRAIN_TIME > 0) {
+			health -= deltaTime * (HEALTH_VALUE / HEALTH_VALUE_DRAIN_TIME);
+		}
+	}
+	
+	public void pause()
+	{
+		
 	}
 	
 }
