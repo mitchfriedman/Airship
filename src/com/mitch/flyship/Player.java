@@ -1,5 +1,8 @@
 package com.mitch.flyship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Color;
 
 import com.mitch.framework.Graphics;
@@ -12,12 +15,9 @@ import com.mitch.framework.implementation.AndroidGame;
 public class Player {
 	
 	final int WATER_VALUE_DRAIN_TIME = 50000;
-	final int HEALTH_VALUE_DRAIN_TIME = -1;
-	
 	final int WATER_VALUE = 30;
-	final int HEALTH_VALUE = 30;
 	
-	final int MAX_HEALTH = 90;
+	final int MAX_HEALTH = 9;
 	final int MAX_WATER = 90;
 	
 	final double MAX_TILT_UP = 1.5;
@@ -32,25 +32,56 @@ public class Player {
 	final double DOWN_TILT_LIMITER = 0.2;
 	final double HORIZONTAL_TILT_LIMITER = 0.4;
 	
+	final double hudCoinSpeed = 0.001;
+	
 	Vector2d orientationOffset = new Vector2d(0, 3);
 	AndroidGame game;
 	long elapsedTime = 0;
 	int currency = 0;
 	boolean paused = false;
 	boolean lights = false;
+	boolean vibrateOnDamage = false;
 	int health = MAX_HEALTH;
 	double water = MAX_WATER;
 	
 	Image hud;
 	Image hudBorder;
+	Image hudCoin;
+	Vector2d hudCoinStartPosRelHud = new Vector2d(5,7);
 	Rect waterPositionRelHud = new Rect(191,13, 6,49);
 	int waterColor = Color.rgb(67, 173, 195);
+	
+	List<Double> hudCoinsPercentage = new ArrayList<Double>();
+	
+	Vector2d hullArrowOriginRelHud = new Vector2d(102, 42);
+	List<Vector2d> hullArrowOrigins = new ArrayList<Vector2d>();
+	List<Image> hullArrows = new ArrayList<Image>();
+	
 	
 	public Player(AirshipGame game)
 	{
 		this.game = game;
 		this.hud = Assets.getImage("GUI_BASE");
 		this.hudBorder = Assets.getImage("Menu/bottom border");
+		this.hudCoin = Assets.getImage("hudcoin");
+		
+		hullArrows.add(Assets.getImage("HULL_ARROW 1"));
+		hullArrows.add(Assets.getImage("HULL_ARROW 2"));
+		hullArrows.add(Assets.getImage("HULL_ARROW 3"));
+		hullArrows.add(Assets.getImage("HULL_ARROW 4"));
+		hullArrows.add(Assets.getImage("HULL_ARROW 5"));
+		
+		// image | health# | flipX
+		hullArrowOrigins.add(new Vector2d(6,1)); // 1 | 0 | false
+		hullArrowOrigins.add(new Vector2d(6,3)); // 2 | 1 | false
+		hullArrowOrigins.add(new Vector2d(5,5)); // 3 | 2 | false
+		hullArrowOrigins.add(new Vector2d(3,6)); // 4 | 3 | false
+		hullArrowOrigins.add(new Vector2d(1,6)); // 5 | 4 | false CENTER
+		hullArrowOrigins.add(new Vector2d(0,6)); // 4 | 6 | true
+		hullArrowOrigins.add(new Vector2d(0,5)); // 3 | 7 | true
+		hullArrowOrigins.add(new Vector2d(0,3)); // 2 | 8 | true
+		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
+		
 	}
 	
 	public void centerOrientation()
@@ -144,14 +175,17 @@ public class Player {
 		water += WATER_VALUE;
 	}
 	
-	public void addHealth()
+	public void addHealth(int amount)
 	{
-		health += HEALTH_VALUE;
+		health += amount;
 	}
 	
 	public void applyDamage(int damage)
 	{
 		health -= damage;
+		if (health <= 0) {
+			//TODO: GAME OVER
+		}
 	}
 	
 	public void addCurrency(int amount)
@@ -162,6 +196,7 @@ public class Player {
 			currency = 99999;
 		}
 		
+		hudCoinsPercentage.add( 0.0 );
 	}
 	
 	public void drawTime(int msTime)
@@ -213,28 +248,59 @@ public class Player {
 		
 	}
 	
+	public void drawHudCoins()
+	{
+		Graphics g = game.getGraphics();
+		int tubeHeight = (int) (hud.getHeight() - hudCoinStartPosRelHud.y);
+		
+		for (Double coinPercentage : hudCoinsPercentage) {
+			Vector2d coinPos = new Vector2d( 0,g.getHeight()-hud.getHeight() ).add(hudCoinStartPosRelHud);
+			
+			int distancePX = (int)(tubeHeight * coinPercentage);
+			g.drawImage( hudCoin, coinPos.add( new Vector2d(0, distancePX) ) );
+		}
+	}
+	
+	public void drawHullArrow()
+	{
+		Graphics g = game.getGraphics();
+		// 5 is subracted from health if health > 5. 
+		// This gives us the arrows past the center that we need to flip.
+		Image image = hullArrows.get( health > 5 ? health-5 : health );
+		Vector2d pos = hullArrowOriginRelHud.subtract(hullArrowOrigins.get(health));
+		
+		g.drawImage(image, pos, health > 5, false);
+	}
+	
 	public void onPaint(float deltaTime)
 	{
 		Graphics g = game.getGraphics();
 		
 		drawWater();
+		drawHudCoins();
 		g.drawImage(hud, new Vector2d(0, g.getHeight()-hud.getHeight()-2));
 		g.drawImage(hudBorder, new Vector2d(0, g.getHeight()-2));
 		
 		drawTime( (int)elapsedTime );
 		drawCurrency();
+		drawHullArrow();
 	}
 	
-	@SuppressWarnings("unused")
 	public void onUpdate(float deltaTime)
 	{
 		elapsedTime += deltaTime;
+		
+		//TODO: Stop if paused
 		if (WATER_VALUE_DRAIN_TIME > 0) {
 			water -= deltaTime * (WATER_VALUE / WATER_VALUE_DRAIN_TIME);
 		}
 		
-		if (HEALTH_VALUE_DRAIN_TIME > 0) {
-			health -= deltaTime * (HEALTH_VALUE / HEALTH_VALUE_DRAIN_TIME);
+		for (Double n : hudCoinsPercentage) {
+			n += hudCoinSpeed * deltaTime;
+		}
+		
+		if (hudCoinsPercentage.size() > 0 && hudCoinsPercentage.get(0) >= 1) {
+			hudCoinsPercentage.remove(0);
 		}
 	}
 	
