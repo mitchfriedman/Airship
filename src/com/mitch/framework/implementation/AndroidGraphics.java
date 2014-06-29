@@ -93,10 +93,17 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void drawRect(int x, int y, int width, int height, int color) {
-        paint.setColor(color);
-        paint.setStyle(Style.FILL);
-        canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
+    public void drawRect(int x, int y, int width, int height, int color) 
+    {
+        drawRect(new Rect(x,y,width,height), color);
+    }
+    
+    public void drawRect(Rect rect, int color)
+    {
+    	rect.scaleValues(AndroidGame.SCALE);
+    	paint.setColor(color);
+    	paint.setStyle(Style.FILL);
+    	canvas.drawRect(rect.getAndroidRect(), paint);
     }
     
     @Override

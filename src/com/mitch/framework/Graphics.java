@@ -25,6 +25,8 @@ public interface Graphics {
 
 	public void drawRect(int x, int y, int width, int height, int color);
 	
+	public void drawRect(Rect rect, int color);
+	
 	// Draw Image (scaled to game size)
 	public void drawImage(Image image, Vector2d pos, Rect src, boolean reverseX, boolean reverseY);
 	
@@ -46,6 +48,5 @@ public interface Graphics {
 	public Vector2d getSize();
 
 	public Canvas getCanvas();
-
 	
 }

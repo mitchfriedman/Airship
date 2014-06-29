@@ -63,6 +63,14 @@
 	
 	<!-- HUD -->
 	<image key="GUI_BASE" path="GUI/base hull.png" />
+	<image key="hudcoin" path="GUI/HUD coin.png" />
+	
+	<!-- HULL ARROWS -->
+	<image key="HULL_ARROW 1" path="GUI/hull arrows/hull arrow 1.png" />
+	<image key="HULL_ARROW 2" path="GUI/hull arrows/hull arrow 2.png" />
+	<image key="HULL_ARROW 3" path="GUI/hull arrows/hull arrow 3.png" />
+	<image key="HULL_ARROW 4" path="GUI/hull arrows/hull arrow 4.png" />
+	<image key="HULL_ARROW 5" path="GUI/hull arrows/hull arrow 5.png" />
 	
 	<!-- COIN COUNTER -->
 	<image key="FONT/COIN/0" path="Fonts/Coin Counter/0.png" />
@@ -116,5 +124,6 @@
 	<!-- Items -->
 	<image key="silver_coin" path="Items/Coin.png" />
 	<image key="gold_coin" path="Items/Gold Coin.png" />
+	<image key="water" path="Items/Water Droplet.png" />
 	
 </assets>

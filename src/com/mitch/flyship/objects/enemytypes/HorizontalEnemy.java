@@ -28,6 +28,9 @@ public class HorizontalEnemy extends Enemy {
 		g.drawImage(image, getPos(), (!facingLeft && velocity.x < 0) || (facingLeft && velocity.x > 0), false);
 	}
 	
+	
+	
+	
 	@Override
 	public Enemy spawn() {
 		HorizontalEnemy enemy = new HorizontalEnemy(level, image, velocity.x, facingLeft);
@@ -44,5 +47,12 @@ public class HorizontalEnemy extends Enemy {
 	public void onHit() 
 	{
 		level.getBodyManager().removeBody(this);
+	}
+	
+	@Override
+	public boolean withinBounds() {
+		int width = level.getAirshipGame().getGraphics().getWidth();
+		
+		return (velocity.x < 0 && getPos().x > -getSize().x) || (velocity.x > 0 && getPos().x < width);
 	}
 }

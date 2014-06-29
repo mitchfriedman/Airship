@@ -45,4 +45,11 @@ public class VerticalEnemy extends Enemy {
 	{
 		level.getBodyManager().removeBody(this);
 	}
+	
+	@Override
+	public boolean withinBounds() {
+		int height = level.getAirshipGame().getGraphics().getHeight();
+		
+		return (velocity.y < 0 && getPos().y > -getSize().y) || (velocity.y > 0 && getPos().y < height);
+	}
 }

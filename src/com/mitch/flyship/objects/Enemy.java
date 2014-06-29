@@ -23,6 +23,28 @@ public abstract class Enemy extends GameBody {
 		this.level = level;
 	}
 	
+	public abstract boolean withinBounds();
+	public abstract void onHit();
+	public abstract Enemy spawn();
+	
+	@Override
+	public void onUpdate(float deltaTime)
+	{
+		setPos(getPos().add(velocity));
+		
+		if (!withinBounds()) {
+			level.getBodyManager().removeBody(this);
+		}
+	}
+	
+	@Override
+	public void onPaint(float deltaTime) { }
+
+	@Override
+	public void onPause() { }
+
+	@Override
+	public void onResume() { }
 	
 	public int getDamage() 
 	{
@@ -33,24 +55,6 @@ public abstract class Enemy extends GameBody {
 	{
 		this.damage = damage;
 	}
-	
-	public abstract void onHit();
-	public abstract Enemy spawn();
-	
-	@Override
-	public void onUpdate(float deltaTime)
-	{
-		setPos(getPos().add(velocity));
-	}
-
-	@Override
-	public void onPaint(float deltaTime) { }
-
-	@Override
-	public void onPause() { }
-
-	@Override
-	public void onResume() { }
 	
 	public static void generateDictionary(Level level)
 	{
