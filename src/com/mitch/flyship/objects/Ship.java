@@ -58,6 +58,11 @@ public class Ship extends GameBody {
 		super.collisionOffset = params.collisionOffset;
 	}
 	
+	public Player getPlayer()
+	{
+		return player;
+	}
+	
 	@Override
 	public void onUpdate(float deltaTime) 
 	{

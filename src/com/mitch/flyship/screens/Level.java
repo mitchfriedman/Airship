@@ -11,6 +11,7 @@ import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
+import com.mitch.flyship.Popup;
 import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
@@ -27,7 +28,6 @@ import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.Popup;
 import com.mitch.framework.implementation.AndroidFastRenderView;
 
 
@@ -104,7 +104,10 @@ public class Level extends Screen {
 	
 	ButtonClickListener calibrateListener = new ButtonClickListener() {
 		@Override
-		public void onUp() {}
+		public void onUp() 
+		{
+			bm.getShip().getPlayer().centerOrientation();
+		}
 		@Override
 		public void onDown() { }
 		@Override

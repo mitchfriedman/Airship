@@ -1,13 +1,9 @@
-package com.mitch.framework;
+package com.mitch.flyship;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.mitch.flyship.AirshipGame;
-import com.mitch.flyship.Assets;
-import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.objects.Slider;
-import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.objects.Button;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;

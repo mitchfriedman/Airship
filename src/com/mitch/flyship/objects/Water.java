@@ -46,17 +46,6 @@ public class Water extends GameBody {
 	@Override
 	public void onResume() {}
 	
-	public boolean hasCoinInRange(double distance)
-	{
-		List<Water> coins = level.getBodyManager().getBodiesByClass(Water.class);
-		for (Water coin : coins) {
-			if (coin != this && coin.getPos().getDistance(getPos()) <= distance) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
 		Graphics g = level.getAirshipGame().getGraphics();

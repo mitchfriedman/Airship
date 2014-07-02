@@ -41,7 +41,7 @@ public class ShipParams {
 		
 		this.coinCollectionRange = 3;
 		this.coinAttractionRange = 30;
-		this.coinAttractionSpeed = 3;
+		this.coinAttractionSpeed = 6;
 		
 		// 8 from left, ten from top, 8 from right, 3 from bottom
 		this.collisionOffset = new Rect(8,10,8,3);

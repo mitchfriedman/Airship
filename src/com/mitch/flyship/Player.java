@@ -99,7 +99,7 @@ public class Player {
 	public Rect getShipBounds()
 	{
 		Graphics g = game.getGraphics();
-		return new Rect(0,0,g.getWidth(), g.getHeight());
+		return new Rect(0,0,g.getWidth(), g.getHeight()-hud.getHeight());
 	}
 	
 	public Vector2d getCenteredOrientation()
@@ -189,11 +189,10 @@ public class Player {
 	
 	public void applyDamage(int damage)
 	{
-		if (health - damage <= 0) {
+		health -= damage;
+		if (health <= 0) {
 			health = 0;
 			gameOver();
-		} else {
-			health -= damage;
 		}
 	}
 	
