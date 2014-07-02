@@ -11,9 +11,10 @@ public class HorizontalEnemy extends Enemy {
 	Image image;
 	boolean facingLeft;
 	
-	public HorizontalEnemy(Level level, Image image, double speed, boolean facingLeft)
+	public HorizontalEnemy(Level level, int damage, Image image, double speed, boolean facingLeft)
 	{
 		super(level);
+		super.damage = damage;
 		super.velocity = new Vector2d(speed,0);
 		this.image = image;
 		this.facingLeft = facingLeft;
@@ -33,7 +34,7 @@ public class HorizontalEnemy extends Enemy {
 	
 	@Override
 	public Enemy spawn() {
-		HorizontalEnemy enemy = new HorizontalEnemy(level, image, velocity.x, facingLeft);
+		HorizontalEnemy enemy = new HorizontalEnemy(level, 1, image, velocity.x, facingLeft);
 		
 		Graphics g = level.getAirshipGame().getGraphics();
 		double xPos = velocity.y < 0 ? g.getWidth() : -enemy.getSize().x;

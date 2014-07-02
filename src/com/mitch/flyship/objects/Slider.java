@@ -7,7 +7,6 @@ import com.mitch.flyship.SliderMoveListener;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Align;
-import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public class Slider extends GameBody {

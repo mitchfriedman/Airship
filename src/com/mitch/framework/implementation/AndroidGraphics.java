@@ -103,7 +103,7 @@ public class AndroidGraphics implements Graphics {
     	rect.scaleValues(AndroidGame.SCALE);
     	paint.setColor(color);
     	paint.setStyle(Style.FILL);
-    	canvas.drawRect(rect.getAndroidRect(), paint);
+    	canvas.drawRect(rect.scaleValues(AndroidGame.SCALE).getAndroidRectOffseted(), paint);
     }
     
     @Override

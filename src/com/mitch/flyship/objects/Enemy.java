@@ -15,7 +15,7 @@ public abstract class Enemy extends GameBody {
 	public static HashMap<String, Enemy> enemies = new HashMap<String, Enemy>();
 	
 	protected Level level;
-	int damage = 0;
+	protected int damage = 0;
 
 	public Enemy(Level level) 
 	{
@@ -51,16 +51,11 @@ public abstract class Enemy extends GameBody {
 		return damage;
 	}
 	
-	public void setDamage(int damage) 
-	{
-		this.damage = damage;
-	}
-	
 	public static void generateDictionary(Level level)
 	{
-		enemies.put("BIRD", new VerticalEnemy(level, Assets.getImage("Enemy/flock_of_gulls"), 1, true));
-		enemies.put("FIGHTER", new VerticalEnemy(level, Assets.getImage("Enemy/crimson_fighter"), 1.2, true));
-		enemies.put("GUNSHIP", new HorizontalEnemy(level, Assets.getImage("Enemy/gunship"), 1, true));
+		enemies.put("BIRD", new VerticalEnemy(level, 1, Assets.getImage("Enemy/flock_of_gulls"), 1, true));
+		enemies.put("FIGHTER", new VerticalEnemy(level, 1, Assets.getImage("Enemy/crimson_fighter"), 1.2, true));
+		enemies.put("GUNSHIP", new HorizontalEnemy(level, 1, Assets.getImage("Enemy/gunship"), 1, true));
 	}
 	
 	public static List<GameBody> spawnObjects(Level level, String type)

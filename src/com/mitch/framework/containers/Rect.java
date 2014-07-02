@@ -106,6 +106,11 @@ public class Rect {
 		return new android.graphics.Rect( (int)x, (int)y, (int)width, (int)height);
 	}
 	
+	public android.graphics.Rect getAndroidRectOffseted()
+	{
+		return new android.graphics.Rect( (int)x, (int)y, (int)(width+x), (int)(height+y));
+	}
+	
 	public boolean isOutsideRect(Rect rect)
 	{
 		boolean isOutsideX = x < rect.x || x > rect.width-width;

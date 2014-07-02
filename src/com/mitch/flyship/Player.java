@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -14,8 +15,8 @@ import com.mitch.framework.implementation.AndroidGame;
 
 public class Player {
 	
-	final int WATER_VALUE_DRAIN_TIME = 50000;
-	final int WATER_VALUE = 30;
+	final double WATER_VALUE_DRAIN_TIME = 50000;
+	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9;
 	final int MAX_WATER = 90;
@@ -48,7 +49,7 @@ public class Player {
 	Image hudBorder;
 	Image hudCoin;
 	Vector2d hudCoinStartPosRelHud = new Vector2d(5,7);
-	Rect waterPositionRelHud = new Rect(191,13, 6,49);
+	Rect waterPositionRelHud = new Rect(191,45, 6,32);
 	int waterColor = Color.rgb(67, 173, 195);
 	
 	List<Double> hudCoinsPercentage = new ArrayList<Double>();
@@ -172,7 +173,13 @@ public class Player {
 	
 	public void addWater()
 	{
-		water += WATER_VALUE;
+		addWater( (int) WATER_VALUE );
+	}
+	
+	public void addWater(int waterValue)
+	{
+		water += waterValue;
+		water = water > MAX_WATER ? MAX_WATER : water;
 	}
 	
 	public void addHealth(int amount)
@@ -182,9 +189,11 @@ public class Player {
 	
 	public void applyDamage(int damage)
 	{
-		health -= damage;
-		if (health <= 0) {
-			//TODO: GAME OVER
+		if (health - damage <= 0) {
+			health = 0;
+			gameOver();
+		} else {
+			health -= damage;
 		}
 	}
 	
@@ -197,6 +206,11 @@ public class Player {
 		}
 		
 		hudCoinsPercentage.add( 0.0 );
+	}
+	
+	public void gameOver()
+	{
+		
 	}
 	
 	public void drawTime(int msTime)
@@ -239,11 +253,10 @@ public class Player {
 		Rect waterPosition = new Rect(waterPositionRelHud);
 		double waterPercentage = water/MAX_WATER;
 		
-		int waterHeight = (int) (waterPosition.height * waterPercentage);
-		waterPosition.y += hud.getHeight() + hudBorder.getHeight() + (waterPosition.height - waterHeight);
-		waterPosition.height = waterHeight;
-		
 		Graphics g = game.getGraphics();
+		waterPosition.height = waterPosition.height * waterPercentage;
+		waterPosition.y += g.getHeight() - hud.getHeight() - hudBorder.getHeight() - waterPosition.height;
+		
 		g.drawRect(waterPosition, waterColor);
 		
 	}
@@ -264,10 +277,11 @@ public class Player {
 	public void drawHullArrow()
 	{
 		Graphics g = game.getGraphics();
-		// 5 is subracted from health if health > 5. 
+		// "Math.abs(health-9)" uses the opposite images it would normally use from health 5 to health 9
 		// This gives us the arrows past the center that we need to flip.
-		Image image = hullArrows.get( health > 5 ? health-5 : health );
-		Vector2d pos = hullArrowOriginRelHud.subtract(hullArrowOrigins.get(health));
+		Image image = hullArrows.get( health > 5 ? Math.abs(health-9) : health-1 );
+		Vector2d pos = new Vector2d(0,g.getHeight() - hudBorder.getHeight() - hud.getHeight() );
+		pos = pos.add( hullArrowOriginRelHud.subtract(hullArrowOrigins.get(health-1)) );
 		
 		g.drawImage(image, pos, health > 5, false);
 	}
@@ -290,13 +304,29 @@ public class Player {
 	{
 		elapsedTime += deltaTime;
 		
-		//TODO: Stop if paused
 		if (WATER_VALUE_DRAIN_TIME > 0) {
-			water -= deltaTime * (WATER_VALUE / WATER_VALUE_DRAIN_TIME);
+			water -= (WATER_VALUE / WATER_VALUE_DRAIN_TIME) * (double) deltaTime;
+		}
+		
+		if (water <= 0) {
+			water = 0;
+			gameOver();
+		}
+		
+		if (health <= 0) {
+			health = 0;
+			gameOver();
+		}
+		
+		for (int i = 0; i < hudCoinsPercentage.size(); i++) {
+			double percentage = hudCoinsPercentage.get(i);
+			percentage += hudCoinSpeed * deltaTime;
+			hudCoinsPercentage.set(i, percentage);
 		}
 		
 		for (Double n : hudCoinsPercentage) {
-			n += hudCoinSpeed * deltaTime;
+			
+			Log.d("HUD COIN POS", n+"");
 		}
 		
 		if (hudCoinsPercentage.size() > 0 && hudCoinsPercentage.get(0) >= 1) {

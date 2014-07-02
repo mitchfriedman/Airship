@@ -11,9 +11,10 @@ public class VerticalEnemy extends Enemy {
 	Image image;
 	boolean facingDown;
 	
-	public VerticalEnemy(Level level, Image image, double speed, boolean facingDown)
+	public VerticalEnemy(Level level, int damage, Image image, double speed, boolean facingDown)
 	{
 		super(level);
+		super.damage = damage;
 		super.velocity = new Vector2d(0,speed);
 		this.facingDown = facingDown;
 		this.image = image;
@@ -30,7 +31,7 @@ public class VerticalEnemy extends Enemy {
 	
 	@Override
 	public Enemy spawn() {
-		VerticalEnemy enemy = new VerticalEnemy(level, image, velocity.y, facingDown);
+		VerticalEnemy enemy = new VerticalEnemy(level, damage, image, velocity.y, facingDown);
 		
 		Graphics g = level.getAirshipGame().getGraphics();
 		double xPos = Math.random() * ( g.getWidth() - enemy.getSize().x );
