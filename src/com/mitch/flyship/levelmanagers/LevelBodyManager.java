@@ -117,5 +117,6 @@ public class LevelBodyManager {
 		for (GameBody body : removeQueue) {
 			bodies.remove(body);
 		}
+		removeQueue.clear();
 	}
 }

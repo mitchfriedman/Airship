@@ -128,7 +128,7 @@ public class Coin extends GameBody {
 	
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-		int configID = ObjectSpawner.getRandomValueFromWeights(spawnWeights);
+		int configID = ObjectSpawner.generateRandomValueFromWeights(spawnWeights);
 		BodyConfiguration config = getBodyConfiguration(configID);
 		
 		Graphics g = level.getAirshipGame().getGraphics();

@@ -15,7 +15,6 @@ import com.mitch.flyship.Popup;
 import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
-import com.mitch.flyship.levelmanagers.LevelEventManager;
 import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Cloud;
@@ -33,13 +32,14 @@ import com.mitch.framework.implementation.AndroidFastRenderView;
 
 public class Level extends Screen {
 	
+	
 	double speed;
 	Image backgroundImage;
 	double backgroundPos = 0;
 	float elapsedTime = 0;
 	int backgroundHeight = 0;
 	final LevelBodyManager bm;
-	final LevelEventManager em;
+	//final LevelEventManager em;
 	final LevelSpawnerManager sm;
 	
 	List<Button> buttons = new ArrayList<Button>();
@@ -145,9 +145,9 @@ public class Level extends Screen {
 		super(game);
 		
 		bm = new LevelBodyManager();
-		em = new LevelEventManager(this);
+		//em = new LevelEventManager(this);
 		sm = new LevelSpawnerManager(this, true);
-		em.loadEvents();
+		//em.loadEvents();
 		
 		Enemy.generateDictionary(this);
 		
@@ -285,7 +285,7 @@ public class Level extends Screen {
 		bm.offsetBodies(new Vector2d(0, speed));
 		
 		// Sets off events
-		em.update();
+		//em.update();
 		
 		// Updates background position
 		backgroundPos += getSpeed();

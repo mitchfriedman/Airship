@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -20,6 +19,7 @@ public class Player {
 	
 	final int MAX_HEALTH = 9;
 	final int MAX_WATER = 90;
+	final boolean INVINCIBLE = true;
 	
 	final double MAX_TILT_UP = 1.5;
 	final double MAX_TILT_DOWN = 2.3;
@@ -189,7 +189,10 @@ public class Player {
 	
 	public void applyDamage(int damage)
 	{
-		health -= damage;
+		if (!INVINCIBLE) {
+			health -= damage;
+		}
+		
 		if (health <= 0) {
 			health = 0;
 			gameOver();
@@ -321,11 +324,6 @@ public class Player {
 			double percentage = hudCoinsPercentage.get(i);
 			percentage += hudCoinSpeed * deltaTime;
 			hudCoinsPercentage.set(i, percentage);
-		}
-		
-		for (Double n : hudCoinsPercentage) {
-			
-			Log.d("HUD COIN POS", n+"");
 		}
 		
 		if (hudCoinsPercentage.size() > 0 && hudCoinsPercentage.get(0) >= 1) {

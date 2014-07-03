@@ -108,9 +108,14 @@ public class ObjectSpawner {
 		}
 	}
 	
-	public static int getRandomValueFromWeights(List<Float> weights)
+	/***
+	 * Generates a random number from an array of weights
+	 * @param weights An ArrayList of numbers. These numbers are the probability of its index being returned
+	 * @return Random number in the range of 0 to weights.size()-1 (inclusive). This number is based on the weights given. -1 on error
+	 */
+	public static int generateRandomValueFromWeights(List<Float> weights)
 	{
-		// adds all configuration weights, gets a random number within all weights
+		// adds all configuration weights, gets a random number within range of weights.size
 		// finds corresponding ID.
 		float weightTotal = 0;
 		for (Float v : weights) {
