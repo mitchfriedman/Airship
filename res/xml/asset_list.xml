@@ -35,13 +35,13 @@
 	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button Hover.png" />
 	
 	<image key="GUI/Settings Button-active" path="GUI/Settings Button.png" />
-	<image key="GUI/Settings Button-hover" path="GUI/Settings Button.png" />
+	<image key="GUI/Settings Button-hover" path="GUI/Settings Button Hover.png" />
 	
-	<image key="GUI/Resume Button-active" path="GUI/Quit Button.png" />
-	<image key="GUI/Resume Button-hover" path="GUI/Quit Button.png" />
+	<image key="GUI/Resume Button-active" path="GUI/resume button.png" />
+	<image key="GUI/Resume Button-hover" path="GUI/resume button hover.png" />
 	
 	<image key="GUI/Hangar Button-active" path="GUI/Hangar Button.png" />
-	<image key="GUI/Hangar Button-hover" path="GUI/Hangar Button.png" />
+	<image key="GUI/Hangar Button-hover" path="GUI/Hangar Button Hover.png" />
 	
 	<image key="GUI/Settings Screen" path="GUI/Settings Screen.png" />
 	<image key="GUI/Slider bar" path="GUI/slider bar.png"/>
