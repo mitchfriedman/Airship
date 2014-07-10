@@ -15,14 +15,14 @@ public class Popup {
 	
 	private static final int TOUCH_OFFSET = 5;
 	private static final float DEFAULT_MARGIN = 10;
-	private static final float MIN_POPUP_HEIGHT = 250;
+	//private static final float MIN_POPUP_HEIGHT = 250;
 	
 	Vector2d position;
 	AirshipGame game;
 	Graphics g;
 	
 	boolean enabled;
-	float popupHeight = 200;//= MIN_POPUP_HEIGHT;
+	float popupHeight = 160;//= MIN_POPUP_HEIGHT;
 	double currentY;
 	float margin = 0;
 	
@@ -135,11 +135,11 @@ public class Popup {
 		currentY += image.getHeight();
 	}
 	
-	public void addSlider(SliderMoveListener listener) {
+	public void addSlider(float defaultValue, SliderMoveListener listener) {
 
 		Vector2d pos = new Vector2d(0,0);//new Vector2d((g.getWidth() - )/2,currentY);
 		
-		Slider slider = new Slider(game, "GUI/Slider bar", pos, listener);
+		Slider slider = new Slider(game, "GUI/Slider bar", pos, defaultValue, listener);
 		pos = new Vector2d((g.getWidth() - slider.getWidth())/2, currentY);
 		setMargin(30);
 		pos = addMargin(pos);

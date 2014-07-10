@@ -9,7 +9,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build.VERSION;
 import android.view.View;
-import android.util.Log;
 
 import com.mitch.framework.Input;
 
@@ -17,7 +16,8 @@ public class AndroidInput implements Input {
     TouchHandler touchHandler;
     private float tiltX, tiltY;
 
-    public AndroidInput(Context context, View view, float scaleX, float scaleY) {
+    @SuppressWarnings("deprecation")
+	public AndroidInput(Context context, View view, float scaleX, float scaleY) {
         if(Integer.parseInt(VERSION.SDK) < 5) 
             touchHandler = new SingleTouchHandler(view, scaleX, scaleY);
         else

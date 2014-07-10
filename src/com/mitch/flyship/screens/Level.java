@@ -3,8 +3,6 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
@@ -28,6 +26,7 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidFastRenderView;
+import com.mitch.framework.implementation.Preferences;
 
 
 public class Level extends Screen {
@@ -120,22 +119,8 @@ public class Level extends Screen {
 		@Override
 		public void onUp() {}
 		@Override
-		public void onCancel() {}
-		@Override
 		public void onPositionChanged(float position) {
-			Log.d("POS:",""+position);
-		}
-	};
-	SliderMoveListener smoothnessListener = new SliderMoveListener() {
-		@Override
-		public void onDown() {}
-		@Override
-		public void onUp() {}
-		@Override
-		public void onCancel() {}
-		@Override
-		public void onPositionChanged(float position) {
-			Log.d("POS:",""+position);
+			Preferences.putSensitivityInPercent(position);
 		}
 	};
 	
@@ -196,13 +181,7 @@ public class Level extends Screen {
 		options = new Popup(game);
 		
 		options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
-		options.addSlider(sensitivityListener);
-		
-		options.setMargin(20);
-		
-		options.addImage("GUI/smoothness", Align.Horizontal.CENTER);
-		options.setMargin(30);
-		options.addSlider(smoothnessListener);
+		options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
 		
 		options.setMargin(20);
 		options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);

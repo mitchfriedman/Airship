@@ -75,7 +75,10 @@ public abstract class GameBody {
 	public void setPos(Vector2d position)
 	{
 		bounds.setPosition(position);
+		onSetPos();
 	}
+	
+	protected void onSetPos() {}
 	
 	public Vector2d getPos()
 	{

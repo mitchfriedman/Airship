@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,6 +22,10 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 
 public abstract class AndroidGame extends Activity implements Game {
+	public static final float MIN_SCALE = 1;
+	public static final float MAX_SENSITIVY = 2.0f;
+	public static final float MIN_SENSITIVTY = 0.3f;
+	
 	public static float SCALE;
 	public static final float SCREEN_WIDTH = 201; // assets made for this dont change!!
 	
@@ -32,11 +37,6 @@ public abstract class AndroidGame extends Activity implements Game {
     Screen screen;
     WakeLock wakeLock;
     Vector2d screenSize;
-    
-    // keep these for reference
-	/*private ArrayList<String> highScores  = new ArrayList<String>();
-	private SharedPreferences prefs;
-	private SharedPreferences.Editor editor;*/
 	
     @SuppressWarnings("deprecation")
 	@Override
@@ -50,11 +50,17 @@ public abstract class AndroidGame extends Activity implements Game {
         Display display = getWindowManager().getDefaultDisplay();
         screenSize = new Vector2d(display.getWidth(), display.getHeight());
         
+        Preferences.loadPreferences(getPreferences(MODE_PRIVATE), getPreferences(MODE_PRIVATE).edit());
+        Preferences.DEFAULT_SENSITIVITY_PERCENT = 1.0f / (MAX_SENSITIVY - MIN_SENSITIVTY);
+        
         /**
          * Scaling the game size increases smoothness. Scale of 1 is jittery.
          * screenSize.x / SCREEN_WIDTH is the maximum scale size. (note for preferences.)
          */
-        AndroidGame.SCALE = 3;
+        
+        AndroidGame.SCALE = (int) (screenSize.x / SCREEN_WIDTH * 0.7);
+        AndroidGame.SCALE = AndroidGame.SCALE < 1 ? 1 : AndroidGame.SCALE;
+        Log.d("SCALE", ""+AndroidGame.SCALE);
         
         createFrameBuffer();
         
@@ -65,9 +71,6 @@ public abstract class AndroidGame extends Activity implements Game {
         
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
-        
-        /*prefs  = getPreferences(MODE_PRIVATE); 
-        editor = getPreferences(MODE_PRIVATE).edit();*/
     }
     
     public void createFrameBuffer()

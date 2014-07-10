@@ -1,11 +1,13 @@
 package com.mitch.framework.implementation;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+@SuppressLint("ViewConstructor")
 public class AndroidFastRenderView extends SurfaceView implements Runnable {
     public AndroidGame game;
     public Bitmap framebuffer;
@@ -14,7 +16,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     volatile boolean running = false;
     
     public static final float FPS = 35.0f;
-    public static final float UPS = 30.0f;
+    public static final float UPS = 35.0f;
     
     final double TIME_BETWEEN_UPDATES = 1000000000/UPS;
     final double TIME_BETWEEN_RENDERS = 1000000000/FPS;
@@ -39,7 +41,8 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
         renderThread.start();  
     }      
     
-    public void run() {
+    @SuppressWarnings("unused")
+	public void run() {
     	now = System.nanoTime();
         startTime  = now;
         lastUpdate = startTime;
@@ -67,7 +70,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     			ups = updateCount;
     			updateCount = 0;
     			frameCount = 0;
-    			Log.d("FPS:UPS", fps + ":"+ups);
+    			//Log.d("FPS:UPS", fps + ":"+ups);
     		}
             
             now = System.nanoTime();

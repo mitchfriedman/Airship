@@ -127,6 +127,11 @@ public class Rect {
 				 a.x+a.width < b.x);
 	}
 	
+	@Override
+	public String toString() {
+		return "{ " + x + ", " + y + " | " + width + ", " + height + " }";
+	}
+	
 	public static boolean vectorWithinRect(Vector2d vec, Rect rect)
 	{
 		boolean withinX = vec.x <= rect.x + rect.width  && vec.x >= rect.x;

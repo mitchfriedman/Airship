@@ -1,7 +1,6 @@
 package com.mitch.framework.implementation;
 
 import android.media.SoundPool;
-import android.util.Log;
 
 import com.mitch.framework.Sound;
 
