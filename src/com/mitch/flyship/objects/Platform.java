@@ -35,7 +35,11 @@ public class Platform extends GameBody {
 		g.drawImage(getImage(), getPos().x, getPos().y);
 		g.drawImage(Assets.getImage("Menu/cargo"), g.getWidth()/2+30, getPos().y+60);
 		g.drawImage(Assets.getImage("Menu/bottom border"), 0, g.getHeight()-3);
-		g.drawImage(Assets.getImage("ship/Interceptor-normal"), g.getWidth()/2-10, getPos().y+25);
+		Image ship = Assets.getImage("ship/Interceptor-normal");
+		Vector2d shipPos = new Vector2d(g.getWidth()/2-10, getPos().y+25);
+		g.drawImage(ship, shipPos.x, shipPos.y);
+		g.drawImage(Assets.getImage("ship/Interceptor-prop1"),  shipPos.x + ship.getWidth()/2 - Assets.getImage("ship/Interceptor-prop1").getWidth()/2,
+				shipPos.y + ship.getHeight());
 	}
 
 	@Override
