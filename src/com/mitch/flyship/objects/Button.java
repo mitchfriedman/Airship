@@ -11,6 +11,8 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Button extends GameBody {
 	boolean lastTouched = false;
+	boolean lastScreenTouched = false;
+	boolean wasCanceled = false;
 	boolean down = false;
 	Align align;
 	Vector2d offset = new Vector2d(0,0);
@@ -69,7 +71,7 @@ public class Button extends GameBody {
 		boolean touched = isTouched(offset);
 		boolean screenTouched = game.getInput().isTouchDown(0);
 		
-		if (touched && !lastTouched) {
+		if (touched && !lastTouched && (!lastScreenTouched || wasCanceled)) {
 			listener.onDown();
 			onDown();
 			
@@ -80,6 +82,7 @@ public class Button extends GameBody {
 			listener.onCancel();
 			onCancel();
 			
+			wasCanceled = true;
 			down = false;
 			lastTouched = false;
 		}
@@ -89,6 +92,14 @@ public class Button extends GameBody {
 			
 			down = false;
 			lastTouched = false;
+		}
+		
+		if (!screenTouched && lastScreenTouched) {
+			lastScreenTouched = false;
+			wasCanceled = false;
+		}
+		else if (screenTouched && !lastScreenTouched) {
+			lastScreenTouched = true;
 		}
 	}
 	

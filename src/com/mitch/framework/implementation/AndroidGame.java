@@ -1,7 +1,6 @@
 package com.mitch.framework.implementation;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -14,8 +13,6 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.mitch.flyship.GoogleApiClientBuilder;
 import com.mitch.framework.Audio;
 import com.mitch.framework.FileIO;
 import com.mitch.framework.Game;
@@ -25,11 +22,8 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Vector2d;
 
 public abstract class AndroidGame extends Activity implements Game {
-	public static final float MIN_SCALE = 1;
-	public static final float MAX_SENSITIVY = 2.0f;
-	public static final float MIN_SENSITIVTY = 0.3f;
 	
-	public GoogleApiClientBuilder clientBuilder;
+	//public GoogleApiClientBuilder clientBuilder;
 	
 	public static float SCALE;
 	public static final float SCREEN_WIDTH = 201; // assets made for this dont change!!
@@ -55,9 +49,6 @@ public abstract class AndroidGame extends Activity implements Game {
         Display display = getWindowManager().getDefaultDisplay();
         screenSize = new Vector2d(display.getWidth(), display.getHeight());
         
-        Preferences.loadPreferences(getPreferences(MODE_PRIVATE), getPreferences(MODE_PRIVATE).edit());
-        Preferences.DEFAULT_SENSITIVITY_PERCENT = 1.0f / (MAX_SENSITIVY - MIN_SENSITIVTY);
-        
         /**
          * Scaling the game size increases smoothness. Scale of 1 is jittery.
          * screenSize.x / SCREEN_WIDTH is the maximum scale size. (note for preferences.)
@@ -74,23 +65,23 @@ public abstract class AndroidGame extends Activity implements Game {
         screen = getInitScreen();
         setContentView(renderView);
         
-        validateGooglePlayServices();
+        /*validateGooglePlayServices();
         clientBuilder = new GoogleApiClientBuilder(this);
         if(!clientBuilder.connected) {
         	clientBuilder.connect();
         }
-		pushHighScore(10);
+		pushHighScore(10);*/
 
         
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
     }
     
-    public int validateGooglePlayServices() {
+    /*public int validateGooglePlayServices() {
         return GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-    }
+    }*/
     
-    public void pushHighScore(int score) {
+    /*public void pushHighScore(int score) {
         if(!clientBuilder.connected) {
         	try {
         		clientBuilder.connect();
@@ -98,7 +89,7 @@ public abstract class AndroidGame extends Activity implements Game {
             	clientBuilder.pushToLeaderBoards(score);
         	}
         }
-    }
+    }*/
 
     public void createFrameBuffer()
     {
@@ -121,10 +112,10 @@ public abstract class AndroidGame extends Activity implements Game {
         screen.resume();
         renderView.resume();
         
-        validateGooglePlayServices();
+        /*validateGooglePlayServices();
         if(!clientBuilder.connected) {
         	clientBuilder.connect();
-        }
+        }*/
     }
     
     @Override

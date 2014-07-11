@@ -1,10 +1,9 @@
-package com.mitch.framework.implementation;
+package com.mitch.flyship;
 
 import android.content.SharedPreferences;
 
 public class Preferences {
 	
-	public static float DEFAULT_SCALE_PERCENT = 0;
 	public static float DEFAULT_SENSITIVITY_PERCENT = 1;
 	
 	enum KEYS {
@@ -30,6 +29,12 @@ public class Preferences {
 	{
 		Preferences.preferences = preferences;
 		Preferences.editor = preferencesEditor;
+	}
+	
+	public static void resetDefaults()
+	{
+		editor.putFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY_PERCENT);
+		editor.commit();
 	}
 	
 	public static void putSensitivityInPercent(float percent)

@@ -3,8 +3,8 @@ package com.mitch.flyship;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.mitch.flyship.objects.Slider;
 import com.mitch.flyship.objects.Button;
+import com.mitch.flyship.objects.Slider;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Input;
@@ -16,6 +16,9 @@ public class Popup {
 	private static final int TOUCH_OFFSET = 5;
 	private static final float DEFAULT_MARGIN = 10;
 	//private static final float MIN_POPUP_HEIGHT = 250;
+	
+	boolean screenLastTouched = false;
+	boolean lastTouchedOutside = false;
 	
 	Vector2d position;
 	AirshipGame game;
@@ -64,10 +67,17 @@ public class Popup {
 			slider.onUpdate(deltaTime);
 		}
 		
+		
+		if (!input.isTouchDown(0) && screenLastTouched && lastTouchedOutside) {
+			setEnabled(false);
+		}
+		
 		if (input.isTouchDown(0)) {
-			if(touchedOutside(input)) {
-				setEnabled(false);
-			}
+			screenLastTouched = true;
+			lastTouchedOutside = touchedOutside(input);
+		}
+		else {
+			screenLastTouched = false;
 		}
 	}
 	private boolean touchedOutside(Input input) {
@@ -187,5 +197,9 @@ public class Popup {
 	
 	public boolean getEnabled() {
 		return this.enabled;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
 	}
 }

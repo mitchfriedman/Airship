@@ -35,6 +35,7 @@ public class Player {
 	
 	final double hudCoinSpeed = 0.001;
 	
+	double tiltSensitivity = 1;
 	Vector2d orientationOffset = new Vector2d(0, 3);
 	AndroidGame game;
 	long elapsedTime = 0;
@@ -82,7 +83,20 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,5)); // 3 | 7 | true
 		hullArrowOrigins.add(new Vector2d(0,3)); // 2 | 8 | true
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
-				
+		
+		resetTiltSensitivityToPreference();
+	}
+	
+	void resetTiltSensitivityToPreference()
+	{
+		tiltSensitivity = convertPercentToSensitivity( Preferences.retrieveSensitivityInPercent() );
+	}
+	
+	double convertPercentToSensitivity(float percent)
+	{
+		double max = AirshipGame.MAX_SENSITIVITY;
+		double min = AirshipGame.MIN_SENSITIVITY;
+		return Math.abs(max-(percent * (max - min) + min))+min;
 	}
 	
 	public void centerOrientation()
@@ -110,36 +124,37 @@ public class Player {
 	public Vector2d getInput_Speed()
 	{
 		Vector2d orientation = getCenteredOrientation();
+		final double ts = tiltSensitivity;
 		
-		if (orientation.x < -MAX_TILT_HORIZONTAL) {
+		if (orientation.x < -MAX_TILT_HORIZONTAL*ts) {
 			orientation.x = -MAX_SPEED_HORIZONTAL;
 		}
-		else if (orientation.x > MAX_TILT_HORIZONTAL) {
+		else if (orientation.x > MAX_TILT_HORIZONTAL*ts) {
 			orientation.x = MAX_SPEED_HORIZONTAL;
 		} 
-		else if(orientation.x > HORIZONTAL_TILT_LIMITER || orientation.x < -HORIZONTAL_TILT_LIMITER) {
-			orientation.x *= MAX_SPEED_HORIZONTAL / (MAX_TILT_HORIZONTAL-HORIZONTAL_TILT_LIMITER);
+		else if(orientation.x > HORIZONTAL_TILT_LIMITER*ts || orientation.x < -HORIZONTAL_TILT_LIMITER*ts) {
+			orientation.x *= MAX_SPEED_HORIZONTAL / (MAX_TILT_HORIZONTAL*ts-HORIZONTAL_TILT_LIMITER*ts);
 		} 
 		else {
 			orientation.x = 0;
 		}
 		
-		if (orientation.y > MAX_TILT_DOWN) {
+		if (orientation.y > MAX_TILT_DOWN*ts) {
 			orientation.y = MAX_SPEED_DOWN;
 		}
-		else if (orientation.y > DOWN_TILT_LIMITER) {
-			orientation.y *= MAX_SPEED_DOWN / (MAX_TILT_DOWN-DOWN_TILT_LIMITER);
+		else if (orientation.y > DOWN_TILT_LIMITER*ts) {
+			orientation.y *= MAX_SPEED_DOWN / (MAX_TILT_DOWN*ts-DOWN_TILT_LIMITER*ts);
 		}
 		
 		
-		else if (orientation.y < -MAX_TILT_UP) {
+		else if (orientation.y < -MAX_TILT_UP*ts) {
 			orientation.y = -MAX_SPEED_UP;
 		}
-		else if (orientation.y < -UP_TILT_LIMITER) {
-			orientation.y *= MAX_SPEED_UP / (MAX_TILT_UP-UP_TILT_LIMITER);
+		else if (orientation.y < -UP_TILT_LIMITER*ts) {
+			orientation.y *= MAX_SPEED_UP / (MAX_TILT_UP*ts-UP_TILT_LIMITER*ts);
 		}
 		
-		if (orientation.y > -UP_TILT_LIMITER && orientation.y < DOWN_TILT_LIMITER) {
+		if (orientation.y > -UP_TILT_LIMITER*ts && orientation.y < DOWN_TILT_LIMITER*ts) {
 			orientation.y = 0;
 		}
 		
@@ -212,7 +227,7 @@ public class Player {
 	
 	public void gameOver()
 	{
-		game.pushHighScore(currency);
+		//game.pushHighScore(currency);
 	}
 	
 	public void drawTime(int msTime)
@@ -329,6 +344,16 @@ public class Player {
 		if (hudCoinsPercentage.size() > 0 && hudCoinsPercentage.get(0) >= 1) {
 			hudCoinsPercentage.remove(0);
 		}
+	}
+	
+	public void onLevelResume()
+	{
+		resetTiltSensitivityToPreference();
+	}
+	
+	public void onLevelPause()
+	{
+		
 	}
 	
 	public void pause()

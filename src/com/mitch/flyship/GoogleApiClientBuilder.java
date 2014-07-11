@@ -1,14 +1,8 @@
-package com.mitch.flyship;
+/*package com.mitch.flyship;
 
 import android.os.Bundle;
 import android.view.Gravity;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.plus.Plus;
 import com.mitch.framework.implementation.AndroidGame;
 
 public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -77,4 +71,4 @@ public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnection
 	}
 
 
-}
+}*/

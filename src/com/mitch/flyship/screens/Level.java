@@ -10,6 +10,7 @@ import com.mitch.flyship.GameBody;
 import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.Popup;
+import com.mitch.flyship.Preferences;
 import com.mitch.flyship.ShipParams;
 import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
@@ -26,7 +27,6 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidFastRenderView;
-import com.mitch.framework.implementation.Preferences;
 
 
 public class Level extends Screen {
@@ -62,7 +62,9 @@ public class Level extends Screen {
 	
 	ButtonClickListener settingsListener = new ButtonClickListener() {
 		@Override
-		public void onUp() { options.setEnabled(true); }
+		public void onUp() {
+			options.setEnabled(true);
+		}
 		@Override
 		public void onDown() { }
 		@Override
@@ -92,8 +94,7 @@ public class Level extends Screen {
 	ButtonClickListener gearListener = new ButtonClickListener() {
 		@Override
 		public void onUp() { 
-			state = state == GameState.PAUSED ? GameState.RUNNING : GameState.PAUSED;
-			//GameState.PAUSED; 
+			toggleLevelPauseState();
 		}
 		@Override
 		public void onDown() { }
@@ -123,6 +124,7 @@ public class Level extends Screen {
 			Preferences.putSensitivityInPercent(position);
 		}
 	};
+	
 	
 	// Creates endless level
 	public Level(AirshipGame game)
@@ -255,6 +257,10 @@ public class Level extends Screen {
 	
 	private void updateRunning(float deltaTime) 
 	{
+		for (Button button : buttons) {
+			button.onUpdate(deltaTime);
+		}
+		
 		// Once you've touch somebody's heart, you'll be as cool as 
 		// the rest of the cold hearted murderers out there
 		elapsedTime += deltaTime;
@@ -287,14 +293,20 @@ public class Level extends Screen {
 	
 	private void updatePaused(float deltaTime)
 	{
-		for(Button button: pauseButtons) {
-			if(!options.getEnabled())
-				button.onUpdate(deltaTime);
-		}
-		if(game.getInput().isTouchDown(0)) {
-			
-		}
+		
 		options.update(deltaTime);
+		
+		if (!options.isEnabled()) {
+			for (Button button : pauseButtons) {
+				button.onUpdate(deltaTime);
+			}
+			
+			for (Button button : buttons) {
+				button.onUpdate(deltaTime);
+			}
+		}
+		
+		
 	}
 	
 	public void updateOver(float deltaTime)
@@ -304,9 +316,6 @@ public class Level extends Screen {
 	
 	public void update(float deltaTime) 
 	{
-		for (Button button : buttons) {
-			button.onUpdate(deltaTime);
-		}
 		
 		switch(state) {
 		case RUNNING:
@@ -365,6 +374,28 @@ public class Level extends Screen {
 			button.onPaint(deltaTime);
 		}
 		options.paint(deltaTime);
+	}
+	
+	public void toggleLevelPauseState()
+	{
+		if (state == GameState.PAUSED) {
+			state = GameState.RUNNING;
+			onLevelResume();
+		}
+		else {
+			state = GameState.PAUSED;
+			onLevelPause();
+		}
+	}
+	
+	public void onLevelPause()
+	{
+		bm.getShip().getPlayer().onLevelPause();
+	}
+	
+	public void onLevelResume()
+	{
+		bm.getShip().getPlayer().onLevelResume();
 	}
 	
 	@Override

@@ -26,40 +26,37 @@
 	<image key="Menu/Buttons/Missions-active" path="Menu/Buttons/missions-active.png"/>
 	
 	<image key="Menu/Buttons/Shop-hover" path="Menu/Buttons/shops-hover.png" />
-	<image key="Menu/Buttons/Shop-active" path="Menu/Buttons/shops-active.png"/>
+	<image key="Menu/Buttons/Shop-active" path="Menu/Buttons/shops-active.png" />
 	
-	<image key="GUI/Gear-hover" path="GUI/gear-hover.png" />
-	<image key="GUI/Gear-active" path="GUI/gear-active.png" />
+	<!-- Pause Buttons -->
+	<image key="GUI/Gear-hover" path="GUI/pause n settings/Pause Buttons/gear-hover.png" />
+	<image key="GUI/Gear-active" path="GUI/pause n settings/Pause Buttons/gear-active.png" />
 	
-	<image key="GUI/Instructions Button-active" path="GUI/Instructions Button.png" />
-	<image key="GUI/Instructions Button-hover"  path="GUI/Instructions Button Hover.png" />
+	<image key="GUI/Settings Button-active" path="GUI/pause n settings/Pause Buttons/Settings Button.png" />
+	<image key="GUI/Settings Button-hover" path="GUI/pause n settings/Pause Buttons/Settings Button Hover.png" />
 	
-	<image key="GUI/Settings Button-active" path="GUI/Settings Button.png" />
-	<image key="GUI/Settings Button-hover" path="GUI/Settings Button Hover.png" />
+	<image key="GUI/Resume Button-active" path="GUI/pause n settings/Pause Buttons/resume button.png" />
+	<image key="GUI/Resume Button-hover" path="GUI/pause n settings/Pause Buttons/resume button hover.png" />
 	
-	<image key="GUI/Resume Button-active" path="GUI/resume button.png" />
-	<image key="GUI/Resume Button-hover" path="GUI/resume button hover.png" />
+	<image key="GUI/Hangar Button-active" path="GUI/pause n settings/Pause Buttons/Hangar Button.png" />
+	<image key="GUI/Hangar Button-hover" path="GUI/pause n settings/Pause Buttons/Hangar Button Hover.png" />
 	
-	<image key="GUI/Hangar Button-active" path="GUI/Hangar Button.png" />
-	<image key="GUI/Hangar Button-hover" path="GUI/Hangar Button Hover.png" />
-	
-	<image key="GUI/Settings Screen" path="GUI/Settings Screen.png" />
-	<image key="GUI/Slider bar" path="GUI/slider bar.png"/>
-	<image key="GUI/Slider notch" path="GUI/Settings Slider.png" />
-	<image key="GUI/low" path="GUI/low.png" />
-	<image key="GUI/high" path="GUI/high.png" />
+	<!-- Slider -->
+	<image key="GUI/Slider bar" path="GUI/pause n settings/Popup/slider bar.png"/>
+	<image key="GUI/Slider notch" path="GUI/pause n settings/Popup/Settings Slider.png" />
+	<image key="GUI/low" path="GUI/pause n settings/Popup/low.png" />
+	<image key="GUI/high" path="GUI/pause n settings/Popup/high.png" />
 	
 	
-	<!-- SETTINGS POPUP -->
-	<image key="GUI/menu border" path="GUI/menu border.png" />
-	<image key="GUI/smoothness"  path="GUI/smoothness.png"/>
-	<image key="GUI/menu center" path="GUI/menu center.png" />
+	<!-- SETTINGS SCREEN/POPUP -->
+	<image key="GUI/menu border" path="GUI/pause n settings/Popup/menu border.png" />
+	<image key="GUI/menu center" path="GUI/pause n settings/Popup/menu center.png" />
 	
-	<image key="GUI/tilt sensitivity" path="GUI/tilt sensitivity.png"/>
-	<image key="GUI/tilt calibration" path="GUI/Tilt Calibration.png"/>
+	<image key="GUI/tilt sensitivity" path="GUI/pause n settings/Popup/tilt sensitivity.png"/>
+	<image key="GUI/tilt calibration" path="GUI/pause n settings/Popup/Tilt Calibration.png"/>
 	
-	<image key="GUI/Calibrate-active" path="GUI/Calibrate-active.png"/>
-	<image key="GUI/Calibrate-hover"  path="GUI/Calibrate-hover.png"/>
+	<image key="GUI/Calibrate-active" path="GUI/pause n settings/Popup/Calibrate-active.png"/>
+	<image key="GUI/Calibrate-hover"  path="GUI/pause n settings/Popup/Calibrate-hover.png"/>
 	
 	<!-- HUD -->
 	<image key="GUI_BASE" path="GUI/base hull.png" />
