@@ -82,7 +82,7 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,5)); // 3 | 7 | true
 		hullArrowOrigins.add(new Vector2d(0,3)); // 2 | 8 | true
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
-		
+				
 	}
 	
 	public void centerOrientation()
@@ -212,7 +212,7 @@ public class Player {
 	
 	public void gameOver()
 	{
-		
+		game.pushHighScore(currency);
 	}
 	
 	public void drawTime(int msTime)
