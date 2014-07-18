@@ -1,23 +1,28 @@
-/*package com.mitch.flyship;
+package com.mitch.flyship;
 
 import android.os.Bundle;
 import android.view.Gravity;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.games.Games;
 import com.mitch.framework.implementation.AndroidGame;
 
-public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnectionFailedListener {
+public class GoogleApiClientBuilder {
 	
-	public GoogleApiClient client = null;
+	/*public GoogleApiClient client = null;
 	public boolean connected = false;
 	private boolean pushScore;
 	private int scoreToPush;
-	public String LEADERBOARD_ID; //getResources().getString(R.string.leaderboard_id);
+	public String LEADERBOARD_ID;
 	
 	public GoogleApiClientBuilder(AndroidGame androidGame) {
 		client = buildClient(androidGame);
-		LEADERBOARD_ID = androidGame.getResources().getString(R.string.leaderboard_id);
+		LEADERBOARD_ID = androidGame.getResources().getString(R.string.leaderboard_money_earned);
 	}
-	
+
 	public GoogleApiClient buildClient(AndroidGame androidGame) {
 		return new GoogleApiClient.Builder(androidGame)
         .addApi(Games.API)
@@ -41,6 +46,7 @@ public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnection
 	}
 	
 	public void pushToLeaderBoards(int score) {
+        client.
 		pushScore = true;
 		scoreToPush = score;
 		connect();
@@ -55,6 +61,7 @@ public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnection
 	public void onConnected(Bundle arg0) {
 		connected = true;
 		//if(pushScore) {
+			
 			pushConnectedCallback(10);
 			//pushScore = false;
 		//}
@@ -68,7 +75,7 @@ public class GoogleApiClientBuilder implements ConnectionCallbacks, OnConnection
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
 		connected = false;
-	}
+	}*/
 
 
-}*/
+}

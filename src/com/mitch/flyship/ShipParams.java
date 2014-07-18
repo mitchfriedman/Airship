@@ -22,6 +22,10 @@ public class ShipParams {
 	final public int coinAttractionRange;
 	final public int coinAttractionSpeed;
 	
+	final public int waterCollectionRange;
+	final public int waterAttractionRange;
+	final public double waterAttractionSpeed;
+	
 	final public Rect collisionOffset;
 	
 	public ShipParams(String type)
@@ -42,6 +46,11 @@ public class ShipParams {
 		this.coinCollectionRange = 3;
 		this.coinAttractionRange = 30;
 		this.coinAttractionSpeed = 6;
+		
+		this.waterCollectionRange = 3;
+		this.waterAttractionRange = 15;
+		this.waterAttractionSpeed = 4;
+		
 		
 		// 8 from left, ten from top, 8 from right, 3 from bottom
 		this.collisionOffset = new Rect(8,10,8,3);

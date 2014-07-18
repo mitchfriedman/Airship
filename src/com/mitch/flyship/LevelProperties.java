@@ -3,20 +3,37 @@ package com.mitch.flyship;
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParserException;
+
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
+@SuppressWarnings(value = { "unused" })
 public class LevelProperties {
-	
-	public String background;
-	public double speed;
-	
+
+	private String background, music, ship;
+	private int maxLevel, timeToMaxLevel;
+	private double startSpeed, endSpeed;
+	private int waterSpawnTimeStart, waterSpawnTimeEnd;
+	private int waterValue, waterValueDrainTime;
+
+
+	public LevelProperties()
+	{
+		maxLevel = 100;
+		timeToMaxLevel = 900000;
+	}
+
 	public LevelProperties(XmlResourceParser xrp)
 	{
-		LoadFromXML(xrp);
+		loadFromXML(xrp);
 	}
-	
-	public void LoadFromXML(XmlResourceParser xrp) 
+
+	public void loadBackgroundImage(String image) 
+	{
+		this.background = image;
+	}
+
+	public void loadFromXML(XmlResourceParser xrp) 
 	{
 		while(true) 
 		{
@@ -29,7 +46,7 @@ public class LevelProperties {
 				if (eventType != XmlResourceParser.START_TAG) {
 					continue;
 				}
-				
+
 			} catch (XmlPullParserException e) {
 				e.printStackTrace();
 				Log.d("XmlPullParserException", e.getLocalizedMessage());
@@ -39,11 +56,11 @@ public class LevelProperties {
 				Log.d("IOException", e.getLocalizedMessage());
 				continue;
 			}
-			
+
 			String type   = xrp.getName();
 			String value  = xrp.getAttributeValue(null, "value");
-			
-			
+
+
 			if (value == null || type == null) {
 				Log.d("XML Asset Error", "Key or path is null.");
 			}
@@ -57,15 +74,11 @@ public class LevelProperties {
 				Log.d("XML Asset Error", "No tag with name " + type);
 			}
 		}
-		
+
 	}
-	
-	public void loadBackgroundImage(String image) 
-	{
-		this.background = image;
-	}
+
 	public void setSpeed(String speed) 
 	{
-		this.speed = Double.parseDouble(speed);
+		//this.speed = Double.parseDouble(speed);
 	}
 }

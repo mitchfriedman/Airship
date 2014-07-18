@@ -17,9 +17,9 @@ public class Player {
 	final double WATER_VALUE_DRAIN_TIME = 50000;
 	final double WATER_VALUE = 30;
 	
-	final int MAX_HEALTH = 9;
+	final int MAX_HEALTH = 2; //9
 	final int MAX_WATER = 90;
-	final boolean INVINCIBLE = true;
+	final boolean INVINCIBLE = false;
 	
 	final double MAX_TILT_UP = 1.5;
 	final double MAX_TILT_DOWN = 2.3;
@@ -37,11 +37,9 @@ public class Player {
 	
 	double tiltSensitivity = 1;
 	Vector2d orientationOffset = new Vector2d(0, 3);
-	AndroidGame game;
+	AirshipGame game;
 	long elapsedTime = 0;
 	int currency = 0;
-	boolean paused = false;
-	boolean lights = false;
 	boolean vibrateOnDamage = false;
 	int health = MAX_HEALTH;
 	double water = MAX_WATER;
@@ -126,6 +124,8 @@ public class Player {
 		Vector2d orientation = getCenteredOrientation();
 		final double ts = tiltSensitivity;
 		
+		double ih = 1;
+		
 		if (orientation.x < -MAX_TILT_HORIZONTAL*ts) {
 			orientation.x = -MAX_SPEED_HORIZONTAL;
 		}
@@ -138,6 +138,10 @@ public class Player {
 		else {
 			orientation.x = 0;
 		}
+		
+		orientation.x *= ih;
+		
+		double iv = 1;
 		
 		if (orientation.y > MAX_TILT_DOWN*ts) {
 			orientation.y = MAX_SPEED_DOWN;
@@ -160,32 +164,7 @@ public class Player {
 		
 		return orientation;
 	}
-	
-	public boolean getInput_ShootLeft()
-	{
-		Input input = game.getInput();
-		if (input.isTouchDown(0)) {
-			return input.getTouchX(0) < game.getGraphics().getWidth()/2;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean getInput_ShootRight()
-	{
-		Input input = game.getInput();
-		if (input.isTouchDown(0)) {
-			return input.getTouchX(0) > game.getGraphics().getWidth()/2;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean getInput_Lights()
-	{
-		return lights;
-	}
-	
+
 	public void addWater()
 	{
 		addWater( (int) WATER_VALUE );
@@ -208,8 +187,8 @@ public class Player {
 			health -= damage;
 		}
 		
-		if (health <= 0) {
-			health = 0;
+		if (health <= 1) {
+			health = 1;
 			gameOver();
 		}
 	}
@@ -227,7 +206,10 @@ public class Player {
 	
 	public void gameOver()
 	{
-		//game.pushHighScore(currency);
+        health = MAX_HEALTH;
+        water = MAX_WATER;
+        game.pushMoneyScore(currency);
+        currency = 0;
 	}
 	
 	public void drawTime(int msTime)

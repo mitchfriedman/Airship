@@ -17,9 +17,15 @@ public class Ship extends GameBody {
 	Player player;
 	Level level;
 	
+	
+	int waterCollectionRange;
+	int waterAttractionRange;
+	double waterAttractionSpeed;
+	
 	int coinCollectionRange;
 	int coinAttractionRange;
 	double coinAttractionSpeed;
+	
 	boolean imageReversed = false;
 	AnimationImage propellerAnim;
 	Vector2d propellerPos;
@@ -51,9 +57,12 @@ public class Ship extends GameBody {
 		propellerPos = params.propellerPos;
 		
 		coinAttractionRange = params.coinAttractionRange;
-		coinCollectionRange = params.coinCollectionRange;
 		coinAttractionSpeed = params.coinAttractionSpeed;
+		coinCollectionRange = params.coinCollectionRange;
 		
+		waterAttractionRange = params.waterAttractionRange;
+		waterAttractionSpeed = params.waterAttractionSpeed;
+		waterCollectionRange = params.waterCollectionRange;
 		
 		super.collisionOffset = params.collisionOffset;
 	}
@@ -76,6 +85,7 @@ public class Ship extends GameBody {
 		setImageFromVelocity(velocity);
 		checkForCollisions();
 		attractNearbyCoins();
+		attractNearbyWaterDroplets();
 		player.onUpdate(deltaTime);
 	}
 
@@ -133,6 +143,27 @@ public class Ship extends GameBody {
 			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())) {
 				enemy.onHit();
 				player.applyDamage(enemy.damage);
+			}
+		}
+	}
+	
+	void attractNearbyWaterDroplets()
+	{
+		List<Water> waterDrops = level.getBodyManager().getBodiesByClass(Water.class);
+		for (Water water : waterDrops) {
+			
+			Vector2d shipCenter = getPos().add(getSize().scale(0.5));
+			double distance = water.getPos().getDistance(shipCenter);
+			if ( distance < waterCollectionRange ) {
+				player.addWater();
+				level.getBodyManager().removeBody(water);
+			}
+			else if ( distance < waterAttractionRange ) {
+				Vector2d direction = shipCenter.subtract(water.getPos());
+				double distanceDivisor = direction.getLength() / coinAttractionRange;
+				double length = waterAttractionSpeed - distanceDivisor * coinAttractionSpeed;
+				Vector2d coinPos = water.getPos().add(direction.normalize().scale(length));
+				water.setPos(coinPos);
 			}
 		}
 	}

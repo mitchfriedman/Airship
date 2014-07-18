@@ -20,21 +20,15 @@ import com.mitch.framework.containers.Vector2d;
 public class Menu extends Screen {
 	
 	List<GameBody> bodies = new ArrayList<GameBody>();
-	
+
 	ButtonClickListener gearListener = new ButtonClickListener() {
 		@Override
-		public void onUp() { 
-			Log.d("GEAR", "UP");
-		}
+		public void onUp() { }
 		@Override
-		public void onDown() { 
-			Log.d("GEAR", "DOWN");
-		}
+		public void onDown() { }
 		@Override
-		public void onCancel() { 
-			Log.d("GEAR", "CANCEL");
-		}
-	};		
+		public void onCancel() { }
+	};
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
 		public void onUp() { 
