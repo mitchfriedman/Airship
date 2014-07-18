@@ -15,7 +15,6 @@ public class AirshipGame extends AndroidGame {
 	public static final float MIN_SENSITIVITY = 0.3f;
 	public static final float DEFAULT_SENSITIVITY = 1;
 
-    GoogleAPIManager apiManager;
     String moneyLeaderboardID;
 	
 	@Override
@@ -29,21 +28,10 @@ public class AirshipGame extends AndroidGame {
         Preferences.DEFAULT_SENSITIVITY_PERCENT = (DEFAULT_SENSITIVITY / (max - min));
         Preferences.resetDefaults();
 
-        apiManager = new GoogleAPIManager(this);
-        moneyLeaderboardID = getResources().getString(R.string.leaderboard_money_earned);
-	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Result: " + resultCode, "We need: " + Activity.RESULT_CANCELED);
-        if (requestCode == GoogleAPIManager.CONNECTION_RESOLUTION_REQUEST_CODE
-                && resultCode == Activity.RESULT_OK) {
-            apiManager.connect();
-            Log.d("ActivityResult", "Attempting to reconnect");
-        } else {
-            Log.d("ActivityResult", "Result not okay. Cancelling operation.");
-        }
-    }
+        moneyLeaderboardID = getResources().getString(R.string.leaderboard_money_earned);
+
+	}
 
     @Override
 	public Screen getInitScreen() 
@@ -67,7 +55,7 @@ public class AirshipGame extends AndroidGame {
 		return params;
 	}
 
-    public void pushMoneyScore(int score)
+    public void pushMoneyScore(long score)
     {
         apiManager.pushLeaderboardScore(moneyLeaderboardID, score);
     }

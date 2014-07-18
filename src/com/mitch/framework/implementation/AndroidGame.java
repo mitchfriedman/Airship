@@ -2,6 +2,7 @@ package com.mitch.framework.implementation;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.mitch.flyship.GoogleAPIManager;
 import com.mitch.framework.Audio;
 import com.mitch.framework.FileIO;
 import com.mitch.framework.Game;
@@ -29,6 +31,7 @@ public abstract class AndroidGame extends Activity implements Game {
 	public static final float SCREEN_WIDTH = 201; // assets made for this dont change!!
 	
     public AndroidFastRenderView renderView;
+    protected GoogleAPIManager apiManager;
     Graphics graphics;
     Audio audio;
     Input input;
@@ -75,6 +78,9 @@ public abstract class AndroidGame extends Activity implements Game {
         
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
+
+        apiManager = new GoogleAPIManager(this);
+        apiManager.connect();
     }
     
     /*public int validateGooglePlayServices() {
@@ -104,7 +110,16 @@ public abstract class AndroidGame extends Activity implements Game {
     	graphics = new AndroidGraphics(getAssets(), frameBuffer);
     	input = new AndroidInput(this, renderView, scaleX/SCALE, scaleY/SCALE);
     }
-    
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GoogleAPIManager.CONNECTION_RESOLUTION_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            apiManager.connect();
+        } else {
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();

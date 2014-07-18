@@ -56,6 +56,7 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
     void tryPushScores()
     {
         if (client.isConnected()) {
+            Log.d("Google Api Manager", "Pushing Scores");
             for (LeaderboardScore score : leaderboardScores) {
                 Games.Leaderboards.submitScore(client, score.getLeaderboard(), score.getScore());
                 game.startActivityForResult(Games.Leaderboards.getLeaderboardIntent(client,
@@ -71,25 +72,27 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
 
     public void pushLeaderboardScore(String leaderboardID, long score)
     {
+        leaderboardScores.add(new LeaderboardScore(leaderboardID, score));
         tryPushScores();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("Connection Failed", connectionResult.toString());
         if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(game, CONNECTION_RESOLUTION_REQUEST_CODE);
             } catch(Exception e) {
                 connect();
             }
+        } else {
+            Log.d("Google Api Manager", "No resolution for failed connection.");
         }
     }
 
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d("CONNECTED", "Connected to Google Play. Pushing scores");
+        Log.d("Google Api Manager", "Connected to Google Play.");
         tryPushScores();
 
     }
