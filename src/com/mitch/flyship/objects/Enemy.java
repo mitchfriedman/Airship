@@ -71,7 +71,7 @@ public class Enemy extends GameBody {
             component.onPaint(deltaTime);
         }
 
-        if (AirshipGame.DEBUG) {
+        if (AirshipGame.SHOW_COLLIDER_BOXES) {
             game.getGraphics().drawRect(this.getCollisionBounds(), Color.RED);
         }
     }

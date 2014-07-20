@@ -123,6 +123,9 @@ public class BodySpawner {
 	
 	public boolean canSpawn(int level, double distanceFactor)
 	{
+        //Log.d("BodySpawner", distanceSinceLastSpawn + " " +
+        //        (spawnRangeStart+randomSpawnDistance)*distanceFactor);
+
         return //((level >= levelStart && level < levelEnd) || ignoringLevelRange) &&
                 (distanceSinceLastSpawn > spawnRangeStart*distanceFactor +
                 randomSpawnDistance*distanceFactor);

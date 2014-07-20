@@ -1,5 +1,7 @@
 package com.mitch.flyship.screens;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,27 +62,34 @@ public class Level extends Screen {
         return elapsedTime/1000;
     }
 
-    LevelProperties properties;
+    private LevelProperties properties;
 
-    Music music;
-    Image backgroundImage;
-	int backgroundHeight = 0;
-	double backgroundPos = 0;
+    private Music music;
+    private Image backgroundImage;
+    private int backgroundHeight = 0;
+    private double backgroundPos = 0;
 
-    List<Button> buttons = new ArrayList<Button>();
-    List<Button> pauseButtons = new ArrayList<Button>();
-    ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener;
-    SliderMoveListener sensitivityListener;
+    private List<Button> buttons = new ArrayList<Button>();
+    private List<Button> pauseButtons = new ArrayList<Button>();
+    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener;
+    private SliderMoveListener sensitivityListener;
 
-	LevelBodyManager bm;
-    LevelSpawnerManager sm;
+    private LevelBodyManager bm;
+    private LevelSpawnerManager sm;
 
-    GameState state = GameState.RUNNING;
-	float elapsedTime = 0;
-	boolean isSpawning = true;
+    private GameState state = GameState.RUNNING;
+	private float elapsedTime = 0;
+	private boolean isSpawning = true;
 
-	Popup options;
-    Popup gameOver;
+    private int maxLevel;
+    private double timeToMaxLevel;
+    private double startSpeed;
+    private double endSpeed;
+    private int currentLevel = 1;
+    private boolean maxLevelCap = true;
+
+	private Popup options;
+    private Popup gameOver;
 
     List<EnemyProperties> enemyTypes;
 
@@ -96,13 +105,23 @@ public class Level extends Screen {
         this.properties = properties;
 
         generateListeners();
-        generateLevel(properties);
+        generate(properties);
     }
 
-    private void generateLevel(LevelProperties properties)
+    private void generate(LevelProperties properties)
     {
+        if (AirshipGame.DEBUG) {
+            Log.d("Level", "Generating level " + properties.getName());
+        }
+
         bm = new LevelBodyManager();
         sm = new LevelSpawnerManager(this, true);
+
+        this.currentLevel = 1;
+        this.startSpeed = properties.getStartSpeed();
+        this.endSpeed = properties.getEndSpeed();
+        this.maxLevel = properties.getMaxLevel();
+        this.timeToMaxLevel = properties.getTimeToMaxLevel();
 
         this.enemyTypes = properties.getEnemyTemplates();
         setBackgroundImage(properties.getBackground());
@@ -115,18 +134,18 @@ public class Level extends Screen {
     }
 
 	@Override
-	public void dispose() {}
+	public void dispose() { music.stop(); }
 
     @Override
     public void pause()
     {
-        Assets.getMusic("blue").pause();
+        music.pause();
     }
 
     @Override
     public void resume()
     {
-        Assets.getMusic("blue").play();
+        music.play();
     }
 
     @Override
@@ -138,6 +157,13 @@ public class Level extends Screen {
             options.setEnabled(false);
         } else if (state == GameState.PAUSED) {
             state = GameState.RUNNING;
+        }
+    }
+
+    private void onDifficultyLevelChange()
+    {
+        for (BodySpawner spawner : sm.getSpawners()) {
+            spawner.updateLevel(currentLevel);
         }
     }
 
@@ -207,9 +233,15 @@ public class Level extends Screen {
 
         for (EnemyProperties property : enemyTypes) {
 
-            List<Integer> spawnRange = property.getSpawnRange().subList(0, 6);
+            List<Integer> spawnRange = new ArrayList<Integer>();
+            spawnRange.addAll(property.getSpawnRange());
             for (int i=2;i<6;i++) {
                 spawnRange.set(i, (int) timeToDistance(spawnRange.get(i) * 1000));
+            }
+
+            if (AirshipGame.DEBUG) {
+                Log.d("Level", "Enemy spawner added to level: " + property.getName());
+
             }
 
             sm.addSpawner(new BodySpawner(Enemy.class, property.getName(), spawnRange));
@@ -251,7 +283,9 @@ public class Level extends Screen {
 
 	public double calculateLevelSpeed()
 	{
-		return 1;
+        double progress = (double)currentLevel / (double)maxLevel;
+        progress = progress > 1 && maxLevelCap ? 1 : progress;
+		return (endSpeed - startSpeed) * progress + startSpeed;
 	}
 
     public void onLevelPause()
@@ -279,6 +313,7 @@ public class Level extends Screen {
 
         this.music = Assets.getMusic(music);
         this.music.setLooping(true);
+        this.music.seekBegin();
         this.music.play();
     }
 
@@ -397,6 +432,15 @@ public class Level extends Screen {
 		// Once you've touch somebody's heart, you'll be as cool as 
 		// the rest of the cold hearted murderers out there
 		elapsedTime += deltaTime;
+        int level = (int) ( elapsedTime / (timeToMaxLevel*1000)  * maxLevel );
+        level = level > maxLevel && maxLevelCap ? maxLevel : level;
+
+        if (level > currentLevel) {
+            currentLevel = level;
+            onDifficultyLevelChange();
+        }
+
+        Log.d("LEVEL", currentLevel + " " + calculateLevelSpeed());
 
 		//updates all bodies in body manager (ship, enemies, items)
 		bm.onUpdate(deltaTime);

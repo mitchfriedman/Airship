@@ -100,7 +100,7 @@ public class Ship extends GameBody {
 				propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
 		player.onPaint(deltaTime);
 
-        if (AirshipGame.DEBUG) {
+        if (AirshipGame.SHOW_COLLIDER_BOXES) {
             game.getGraphics().drawRect(this.getCollisionBounds(), Color.BLUE);
         }
 	}

@@ -15,7 +15,8 @@ public class AirshipGame extends AndroidGame {
 	public static final float MAX_SENSITIVITY = 2.0f;
 	public static final float MIN_SENSITIVITY = 0.3f;
 	public static final float DEFAULT_SENSITIVITY = 1;
-    public static final boolean DEBUG = false;
+    public static final boolean SHOW_COLLIDER_BOXES = false;
+    public static final boolean DEBUG = true;
 
     String moneyLeaderboardID;
 	
