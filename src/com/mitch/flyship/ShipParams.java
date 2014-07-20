@@ -53,6 +53,6 @@ public class ShipParams {
 		
 		
 		// 8 from left, ten from top, 8 from right, 3 from bottom
-		this.collisionOffset = new Rect(8,10,8,3);
+		this.collisionOffset = new Rect(8,10,-8,-3);
 	}
 }

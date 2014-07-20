@@ -59,8 +59,8 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
             Log.d("Google Api Manager", "Pushing Scores");
             for (LeaderboardScore score : leaderboardScores) {
                 Games.Leaderboards.submitScore(client, score.getLeaderboard(), score.getScore());
-                game.startActivityForResult(Games.Leaderboards.getLeaderboardIntent(client,
-                        score.getLeaderboard()), REQUEST_LEADERBOARD);
+                /*game.startActivityForResult(Games.Leaderboards.getLeaderboardIntent(client,
+                        score.getLeaderboard()), REQUEST_LEADERBOARD);*/
             }
             leaderboardScores.clear();
 

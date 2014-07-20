@@ -72,6 +72,7 @@ public class LevelBodyManager {
 	
 	public void offsetBodies(Vector2d offset)
 	{
+        ship.setPos(ship.getPos().add(offset));
 		for (GameBody body : bodies) {
 			if (body.affectedByLevelSpeed) {
 				body.setPos(body.getPos().add(offset));

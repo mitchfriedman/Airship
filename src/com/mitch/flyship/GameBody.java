@@ -11,12 +11,12 @@ public abstract class GameBody {
 	public boolean affectedByLevelSpeed = true;
 	protected AirshipGame game;
 	protected Vector2d velocity;
-	protected Vector2d offset;
+	protected Vector2d offset = new Vector2d(0,0);
 	protected Rect collisionOffset = new Rect(0,0,0,0);
 	float depth = 100;
-	Rect bounds;
+    Rect bounds;
 	String name;
-	
+
 	public GameBody(AirshipGame game, String name)
 	{
 		this.game = game;
@@ -62,8 +62,8 @@ public abstract class GameBody {
 		Rect rect = new Rect(bounds);
 		rect.x += collisionOffset.x;
 		rect.y += collisionOffset.y;
-		rect.width  -= collisionOffset.width  + collisionOffset.x;
-		rect.height -= collisionOffset.height + collisionOffset.y;
+		rect.width  += collisionOffset.width  - collisionOffset.x;
+		rect.height += collisionOffset.height - collisionOffset.y;
 		return rect;
 	}
 	
@@ -104,6 +104,7 @@ public abstract class GameBody {
 	{
 		return velocity;
 	}
+    public void setVelocity(Vector2d velocity) { this.velocity = velocity; }
 	
 	public boolean isTouched(Vector2d offset)
 	{
@@ -121,8 +122,8 @@ public abstract class GameBody {
 	
 	public abstract void onUpdate(float deltaTime);
 	public abstract void onPaint(float deltaTime);
-	public abstract void onPause();
-	public abstract void onResume();
+	public void onPause() {}
+	public void onResume() {}
 	
 	
 	public static List<GameBody> spawnObjects(Level level, String type)

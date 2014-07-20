@@ -1,10 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- spawn_rate is per 100 seconds -->
 <levels>
-    <level name="endless">
-	    <speed value="1" />
-	    <background value="level1.png" />
-	    <background value="Background/lvl1" />
-	    <enemy type="bird" spawn_interval="10" spawn_chance="80" />
+    <level name="demo"
+           background="Background/riverterrain"
+           music="blue"
+           ship="interceptor"
+           maxLevel="100"
+           timeToMaxLevel="15"
+           waterValue="30"
+           waterDrainStart="50"
+           waterDrainEnd="40"
+           waterSpawn_RangeStart="30"
+           waterSpawn_RangeEnd="40"
+           speedAtStart="1"
+           speedAtEnd="2">
+
+
+        <enemies>
+
+            <enemy name="bird"
+                   damage="1"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="5"
+                   startSpawnTime_RangeEnd="10"
+                   endSpawnTime_RangeStart="10"
+                   endSpawnTime_RangeEnd="15" >
+
+                <StaticImage image="Enemy/flock_of_gulls" />
+                <VerticalEnemy speed="1"
+                               directionUp="false" />
+
+            </enemy>
+
+        </enemies>
+
+
 	</level>
+
+    <level name="ocean"
+           background="Background/ocean"
+           music="blue"
+           ship="interceptor"
+           maxLevel="100"
+           timeToMaxLevel="15"
+           waterValue="30"
+           waterDrainStart="50"
+           waterDrainEnd="40"
+           waterSpawn_RangeStart="30"
+           waterSpawn_RangeEnd="40"
+           speedAtStart="1"
+           speedAtEnd="2">
+
+
+        <enemies>
+            <enemy name="bird"
+                   damage="1"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="5"
+                   startSpawnTime_RangeEnd="10"
+                   endSpawnTime_RangeStart="10"
+                   endSpawnTime_RangeEnd="15" >
+
+                <StaticImage image="Enemy/flock_of_gulls" />
+                <VerticalEnemy speed="1.5"
+                               directionUp="false" />
+
+            </enemy>
+
+            <enemy name="birdUp"
+                   damage="1"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="2"
+                   startSpawnTime_RangeEnd="5"
+                   endSpawnTime_RangeStart="10"
+                   endSpawnTime_RangeEnd="15" >
+
+                <StaticImage image="Enemy/flock_of_gulls"
+                             invertVertical="true"/>
+                <VerticalEnemy speed="1.5"
+                               directionUp="true" />
+
+            </enemy>
+
+        </enemies>
+
+
+    </level>
 </levels>

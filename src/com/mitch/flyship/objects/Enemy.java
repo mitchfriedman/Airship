@@ -1,73 +1,139 @@
 package com.mitch.flyship.objects;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mitch.flyship.Assets;
+import com.mitch.flyship.AirshipGame;
+import com.mitch.flyship.Enemy.EnemyComponent;
+import com.mitch.flyship.Enemy.EnemyProperties;
 import com.mitch.flyship.GameBody;
-import com.mitch.flyship.objects.enemytypes.HorizontalEnemy;
-import com.mitch.flyship.objects.enemytypes.VerticalEnemy;
 import com.mitch.flyship.screens.Level;
 
-public abstract class Enemy extends GameBody {
-	
-	public static HashMap<String, Enemy> enemies = new HashMap<String, Enemy>();
-	
-	protected Level level;
-	protected int damage = 0;
+public class Enemy extends GameBody {
 
-	public Enemy(Level level) 
+    public static Enemy loadFromProperties(Level level, EnemyProperties properties)
+    {
+        Enemy enemy = new Enemy(level, properties.getName());
+        enemy.setDamage(properties.getDamage());
+        for (EnemyComponent component : properties.getComponents()) {
+            if (!enemy.addComponent(component.clone())) {
+                Log.d("Enemy: " + enemy.getName(), "Component " +
+                        component.getClass().getName() +
+                        " is already on this enemy.");
+            }
+        }
+
+        for (EnemyComponent component : enemy.getComponents()) {
+            component.onObjectCreationCompletion();
+        }
+
+        return enemy;
+    }
+
+    public Level getLevel() { return level; }
+    public int getDamage()
+    {
+        return damage;
+    }
+    public void setDamage(int damage) { this.damage = damage; }
+    public void setDestroyingOnHit(boolean destroyingOnHit) { this.destroyingOnHit = destroyingOnHit; }
+
+    private boolean destroyingOnHit = true;
+    private List<EnemyComponent> components;
+    private int damage = 0;
+	private Level level;
+
+	public Enemy(Level level, String name)
 	{
-		super(level.getAirshipGame(), "Enemy");
+		super(level.getAirshipGame(), name);
+        components = new ArrayList<EnemyComponent>();
 		this.level = level;
 	}
-	
-	public abstract boolean withinBounds();
-	public abstract void onHit();
-	public abstract Enemy spawn();
 	
 	@Override
 	public void onUpdate(float deltaTime)
 	{
-		setPos(getPos().add(velocity));
-		
-		if (!withinBounds()) {
-			level.getBodyManager().removeBody(this);
-		}
-	}
-	
-	@Override
-	public void onPaint(float deltaTime) { }
+        setPos(getPos().add(getVelocity()));
 
+		for (EnemyComponent component : components) {
+            component.onUpdate(deltaTime);
+        }
+	}
+	
 	@Override
-	public void onPause() { }
+	public void onPaint(float deltaTime)
+    {
+        for (EnemyComponent component : components) {
+            component.onPaint(deltaTime);
+        }
 
-	@Override
-	public void onResume() { }
-	
-	public int getDamage() 
-	{
-		return damage;
-	}
-	
-	public static void generateDictionary(Level level)
-	{
-		enemies.put("BIRD", new VerticalEnemy(level, 1, Assets.getImage("Enemy/flock_of_gulls"), 1, true));
-		enemies.put("FIGHTER", new VerticalEnemy(level, 1, Assets.getImage("Enemy/crimson_fighter"), 1.2, true));
-		enemies.put("GUNSHIP", new HorizontalEnemy(level, 1, Assets.getImage("Enemy/gunship"), 1, true));
-	}
-	
+        if (AirshipGame.DEBUG) {
+            game.getGraphics().drawRect(this.getCollisionBounds(), Color.RED);
+        }
+    }
+
+    public void onHit(Ship ship)
+    {
+        for (EnemyComponent component : components) {
+            component.onHit(ship);
+        }
+
+        if (destroyingOnHit) {
+            level.getBodyManager().removeBody(this);
+        }
+    }
+
+    public boolean addComponent(EnemyComponent component)
+    {
+        if (!componentExists(component.getClass())) {
+            component.setEnemy(this);
+            components.add(component);
+            component.onComponentAdded();
+            return true;
+        }
+        return false;
+    }
+
+    public List<EnemyComponent> getComponents()
+    {
+        return components;
+    }
+
+    public EnemyComponent getComponent(Class<? extends EnemyComponent> componentType)
+    {
+        for (EnemyComponent component : components) {
+            if (component.getClass() == componentType) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    public boolean componentExists(Class<? extends EnemyComponent> componentType)
+    {
+        return getComponent(componentType) != null;
+    }
+
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-		if (enemies.containsKey(type)) {
-			
-			List<GameBody> enemyList = new ArrayList<GameBody>();
-			enemyList.add(enemies.get(type).spawn());
-			return enemyList;
-		}
-		else {
-			return null;
-		}
+        List<GameBody> enemyList = new ArrayList<GameBody>();
+        for (EnemyProperties template : level.getEnemyTypes()) {
+            if (template.getName() == type) {
+                // Enemy configurations (multiple enemies spawning in formation)
+                // are possible however you would probably need to
+                // hard code them in here. For a more elegant solution refactoring is required.
+
+                List<GameBody> enemies = new ArrayList<GameBody>();
+                enemies.add(loadFromProperties(level, template));
+                return enemies;
+
+            }
+        }
+
+        return null;
 	}
 }

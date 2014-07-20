@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.graphics.Color;
 
+import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Input;
@@ -17,7 +18,7 @@ public class Player {
 	final double WATER_VALUE_DRAIN_TIME = 50000;
 	final double WATER_VALUE = 30;
 	
-	final int MAX_HEALTH = 2; //9
+	final int MAX_HEALTH = 9; //9
 	final int MAX_WATER = 90;
 	final boolean INVINCIBLE = false;
 	
@@ -38,6 +39,7 @@ public class Player {
 	double tiltSensitivity = 1;
 	Vector2d orientationOffset = new Vector2d(0, 3);
 	AirshipGame game;
+    Level level;
 	long elapsedTime = 0;
 	int currency = 0;
 	boolean vibrateOnDamage = false;
@@ -58,9 +60,10 @@ public class Player {
 	List<Image> hullArrows = new ArrayList<Image>();
 	
 	
-	public Player(AirshipGame game)
+	public Player(Level level)
 	{
-		this.game = game;
+        this.level = level;
+		this.game = level.getAirshipGame();
 		this.hud = Assets.getImage("GUI_BASE");
 		this.hudBorder = Assets.getImage("Menu/bottom border");
 		this.hudCoin = Assets.getImage("hudcoin");
@@ -183,6 +186,8 @@ public class Player {
 	
 	public void applyDamage(int damage)
 	{
+        game.Vibrate(damage*150);
+
 		if (!INVINCIBLE) {
 			health -= damage;
 		}
@@ -203,13 +208,17 @@ public class Player {
 		
 		hudCoinsPercentage.add( 0.0 );
 	}
+
+    public int getCurrency()
+    {
+        return currency;
+    }
 	
 	public void gameOver()
 	{
-        health = MAX_HEALTH;
-        water = MAX_WATER;
+        level.end();
+
         game.pushMoneyScore(currency);
-        currency = 0;
 	}
 	
 	public void drawTime(int msTime)

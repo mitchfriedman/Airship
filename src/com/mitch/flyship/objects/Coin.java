@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
+import com.mitch.flyship.BodySpawner;
 import com.mitch.flyship.GameBody;
-import com.mitch.flyship.ObjectSpawner;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
@@ -128,7 +128,7 @@ public class Coin extends GameBody {
 	
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-		int configID = ObjectSpawner.generateRandomValueFromWeights(spawnWeights);
+		int configID = BodySpawner.generateRandomValueFromWeights(spawnWeights);
 		BodyConfiguration config = getBodyConfiguration(configID);
 		
 		Graphics g = level.getAirshipGame().getGraphics();

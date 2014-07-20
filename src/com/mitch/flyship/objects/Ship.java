@@ -1,8 +1,13 @@
 package com.mitch.flyship.objects;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import java.util.List;
 
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.AnimationImage;
+import com.mitch.flyship.AttractionListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.ShipParams;
@@ -75,17 +80,15 @@ public class Ship extends GameBody {
 	@Override
 	public void onUpdate(float deltaTime) 
 	{
-		
 		propellerAnim.updateTime(deltaTime);
 		
 		Vector2d velocity = player.getInput_Speed();
-		velocity.y += level.getSpeed();
 		
 		addVelocityWithBoundsCheck(velocity);
 		setImageFromVelocity(velocity);
 		checkForCollisions();
-		attractNearbyCoins();
-		attractNearbyWaterDroplets();
+        attractObjects();
+
 		player.onUpdate(deltaTime);
 	}
 
@@ -96,6 +99,10 @@ public class Ship extends GameBody {
 		g.drawImage(propellerAnim.getFrame().image, getPos().add(propellerPos), 
 				propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
 		player.onPaint(deltaTime);
+
+        if (AirshipGame.DEBUG) {
+            game.getGraphics().drawRect(this.getCollisionBounds(), Color.BLUE);
+        }
 	}
 
 	@Override
@@ -137,55 +144,62 @@ public class Ship extends GameBody {
 	
 	void checkForCollisions()
 	{
-		List<Enemy> enemies = level.getBodyManager().getBodiesBySuperClass(Enemy.class);
-		
+		List<Enemy> enemies = level.getBodyManager().getBodiesByClass(Enemy.class);
+
 		for (Enemy enemy : enemies) {
 			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())) {
-				enemy.onHit();
-				player.applyDamage(enemy.damage);
+				enemy.onHit(this);
+				player.applyDamage(enemy.getDamage());
 			}
 		}
 	}
-	
-	void attractNearbyWaterDroplets()
-	{
-		List<Water> waterDrops = level.getBodyManager().getBodiesByClass(Water.class);
-		for (Water water : waterDrops) {
-			
-			Vector2d shipCenter = getPos().add(getSize().scale(0.5));
-			double distance = water.getPos().getDistance(shipCenter);
-			if ( distance < waterCollectionRange ) {
-				player.addWater();
-				level.getBodyManager().removeBody(water);
-			}
-			else if ( distance < waterAttractionRange ) {
-				Vector2d direction = shipCenter.subtract(water.getPos());
-				double distanceDivisor = direction.getLength() / coinAttractionRange;
-				double length = waterAttractionSpeed - distanceDivisor * coinAttractionSpeed;
-				Vector2d coinPos = water.getPos().add(direction.normalize().scale(length));
-				water.setPos(coinPos);
-			}
-		}
-	}
-	
-	void attractNearbyCoins()
-	{
-		List<Coin> coins = level.getBodyManager().getBodiesByClass(Coin.class);
-		for (Coin coin : coins) {
-			
-			Vector2d shipCenter = getPos().add(getSize().scale(0.5));
-			double distance = coin.getPos().getDistance(shipCenter);
-			if ( distance < coinCollectionRange ) {
-				player.addCurrency(coin.value);
-				level.getBodyManager().removeBody(coin);
-			}
-			else if ( distance < coinAttractionRange ) {
-				Vector2d direction = shipCenter.subtract(coin.getPos());
-				double distanceDivisor = direction.getLength() / coinAttractionRange;
-				double length = coinAttractionSpeed - distanceDivisor * coinAttractionSpeed;
-				Vector2d coinPos = coin.getPos().add(direction.normalize().scale(length));
-				coin.setPos(coinPos);
-			}
-		}
-	}
+
+    private void attractObjects()
+    {
+        attractNearbyObject(Coin.class,
+                coinCollectionRange, coinAttractionRange, coinAttractionSpeed,
+                new AttractionListener() {
+                    @Override
+                    public void onCollection(GameBody body) {
+                        player.addCurrency( ((Coin)body).value );
+                        level.getBodyManager().removeBody(body);
+                    }
+                    @Override
+                    public void onAttraction(GameBody body) {}
+                });
+
+        attractNearbyObject(Water.class,
+                waterCollectionRange, waterAttractionRange, waterAttractionSpeed,
+                new AttractionListener() {
+                    @Override
+                    public void onCollection(GameBody body) {
+                        player.addWater();
+                        level.getBodyManager().removeBody(body);
+                    }
+                    @Override
+                    public void onAttraction(GameBody body) {}
+                });
+    }
+
+    private<T extends GameBody> void attractNearbyObject(Class<T> bodyClass, double collectionRange, double attractionRange,
+                             double attractionSpeed, AttractionListener listener)
+    {
+        List<T> bodies = level.getBodyManager().getBodiesByClass(bodyClass);
+        for (T iBody : bodies) {
+            Vector2d shipCenter = getPos().add( getSize().scale(0.5) );
+            double distance = iBody.getPos().getDistance(shipCenter);
+
+            if ( distance < collectionRange ) {
+                listener.onCollection(iBody);
+            }
+            else if (distance < attractionRange) {
+                Vector2d direction = shipCenter.subtract(iBody.getPos());
+                double distanceDivisor = direction.getLength() / attractionRange;
+                double length = attractionSpeed - distanceDivisor * attractionSpeed;
+                Vector2d coinPos = iBody.getPos().add(direction.normalize().scale(length));
+                iBody.setPos(coinPos);
+                listener.onAttraction(iBody);
+            }
+        }
+    }
 }

@@ -9,6 +9,7 @@ import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
+import com.mitch.flyship.LevelProperties;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
@@ -31,8 +32,8 @@ public class Menu extends Screen {
 	};
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
-		public void onUp() { 
-			game.setScreen(new Level(game));
+		public void onUp() {
+            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
 		}
 		@Override
 		public void onDown() { }
@@ -41,7 +42,7 @@ public class Menu extends Screen {
 	};
 	ButtonClickListener missionsListener = new ButtonClickListener () {
 		@Override
-		public void onUp() { }
+		public void onUp() { game.setScreen(new Level(game, LevelProperties.getLevel("ocean"))); }
 		@Override
 		public void onDown() { }
 		@Override
@@ -67,7 +68,6 @@ public class Menu extends Screen {
 		super(game);
 		
 		Graphics g = game.getGraphics();
-		Assets.getMusic("blue").setLooping(true);
 		Assets.getMusic("wind").setLooping(true);
 		Assets.getMusic("wind").setVolume(0.1f);
 		Platform platform = new Platform(game, "Menu/platform");
@@ -100,7 +100,7 @@ public class Menu extends Screen {
 		*/
 		
 	}
-	
+
 	@Override
 	public void update(float deltaTime) 
 	{

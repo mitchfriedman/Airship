@@ -3,27 +3,23 @@ package com.mitch.flyship.levelmanagers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mitch.flyship.ObjectSpawner;
+import com.mitch.flyship.BodySpawner;
 import com.mitch.flyship.screens.Level;
 
 public class LevelSpawnerManager {
 	final Level level;
 	boolean useLevelSpeed = false;
 	
-	List<ObjectSpawner> spawners = new ArrayList<ObjectSpawner>();
+	List<BodySpawner> spawners = new ArrayList<BodySpawner>();
 	
 	public LevelSpawnerManager(Level level, boolean useLevelSpeed) {
 		this.level = level;
 		this.useLevelSpeed = useLevelSpeed;
 	}
 	
-	public boolean addSpawner(ObjectSpawner spawner)
+	public boolean addSpawner(BodySpawner spawner)
 	{
 		if (spawner.getName() == null || getSpawnerByName(spawner.getName()) == null) {
-			if (useLevelSpeed) {
-				spawner.setLevel(level);
-			}
-			
 			spawners.add(spawner);
 			return true;
 		}
@@ -31,14 +27,14 @@ public class LevelSpawnerManager {
 		return false;
 	}
 	
-	public boolean spawnerExists(ObjectSpawner spawner)
+	public boolean spawnerExists(BodySpawner spawner)
 	{
 		return getSpawnerByName(spawner.getName()) != null;
 	}
 	
-	public ObjectSpawner getSpawnerByName(String name)
+	public BodySpawner getSpawnerByName(String name)
 	{
-		for (ObjectSpawner spawner : spawners) {
+		for (BodySpawner spawner : spawners) {
 			if (spawner.getName() == name) {
 				return spawner;
 			}
@@ -47,7 +43,7 @@ public class LevelSpawnerManager {
 		return null;
 	}
 	
-	public List<ObjectSpawner> getSpawners()
+	public List<BodySpawner> getSpawners()
 	{
 		return spawners;
 	}

@@ -25,6 +25,7 @@ public class Popup {
 	Graphics g;
 	
 	boolean enabled;
+    boolean disableOnClick = true;
 	float popupHeight = 160;//= MIN_POPUP_HEIGHT;
 	double currentY;
 	float margin = 0;
@@ -54,7 +55,12 @@ public class Popup {
 		position = new Vector2d((g.getWidth()-topBorder.getWidth())/2, (g.getHeight()-(topBorder.getHeight()*2 + popupHeight))/2);
 		currentY = position.y + topBorder.getHeight();
 	}
-	
+
+    public void setDisableOnClick(boolean disable)
+    {
+        disableOnClick = disable;
+    }
+
 	public void update(float deltaTime) {
 		
 		Input input = game.getInput();
@@ -68,7 +74,7 @@ public class Popup {
 		}
 		
 		
-		if (!input.isTouchDown(0) && screenLastTouched && lastTouchedOutside) {
+		if (disableOnClick && !input.isTouchDown(0) && screenLastTouched && lastTouchedOutside) {
 			setEnabled(false);
 		}
 		
@@ -120,7 +126,23 @@ public class Popup {
 		margins.add(margin);
 		//popupHeight += margin;
 	}
-		
+
+    public void addNumericImage(int value)
+    {
+        final String FONT = "FONT/TIMER/";
+        final int FONT_WIDTH = Assets.getImage(FONT + "0").getWidth();
+
+        String strValue = String.valueOf(value);
+        Vector2d numericImagePos = new Vector2d(g.getWidth() / 2 -
+                FONT_WIDTH * strValue.length() / 2, currentY);
+
+        for (int n = 0; n < strValue.length(); n++) {
+            Vector2d pos = numericImagePos.add(new Vector2d(FONT_WIDTH*n+n, 0));
+            images.put( Assets.getImage(FONT + strValue.charAt(n)) , pos);
+        }
+
+    }
+
 	public void addImage(String name, Align.Horizontal horizontal) {
 		Image image = Assets.getImage(name);
 		Vector2d pos;

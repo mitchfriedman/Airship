@@ -65,10 +65,6 @@ public class LevelEventManager {
 		Events eventType = Events.valueOf(event.name);
 		
 		switch (eventType) {
-		case SPEED_CHANGE:
-			double speed = Double.parseDouble(event.attributes.get(0));
-			level.setSpeed(speed);
-			break;
 		case CHANGE_SMOOTHING:
 			AndroidGame.SCALE = Float.parseFloat(event.attributes.get(0));
 			level.getAirshipGame().createFrameBuffer();
