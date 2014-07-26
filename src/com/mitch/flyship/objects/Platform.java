@@ -25,7 +25,7 @@ public class Platform extends GameBody {
 		this.image = Assets.getImage(image);
 	}
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(double deltaTime) {
 		
 	}
 

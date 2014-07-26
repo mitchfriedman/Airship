@@ -7,13 +7,10 @@
            ship="interceptor"
            maxLevel="100"
            timeToMaxLevel="900"
-           waterValue="30"
-           waterDrainStart="50"
-           waterDrainEnd="40"
            waterSpawn_RangeStart="30"
            waterSpawn_RangeEnd="40"
-           speedAtStart="1"
-           speedAtEnd="2.5">
+           speedAtStart="45"
+           speedAtEnd="65">
 
 
         <enemies>
@@ -28,9 +25,23 @@
                    endSpawnTime_RangeEnd="15" >
 
                 <StaticImage image="Enemy/flock_of_gulls" />
-                <VerticalEnemy speed="1"
+                <VerticalEnemy speed="20"
                                directionUp="false" />
+                <ExplosionAnimation />
+            </enemy>
 
+            <enemy name="heavy gunship"
+                   damage="0"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="5"
+                   startSpawnTime_RangeEnd="10"
+                   endSpawnTime_RangeStart="10"
+                   endSpawnTime_RangeEnd="15" >
+
+                <StaticImage image="Enemy/gunship" />
+                <HorizontalEnemy speed="15"
+                                 directionLeft="true" />
             </enemy>
 
         </enemies>

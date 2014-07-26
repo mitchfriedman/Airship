@@ -52,22 +52,13 @@ public class Level extends Screen {
         return bm;
     }
 
-    public float getElapsedTime_ms()
-    {
-        return elapsedTime;
-    }
-
-    public float getElapsedTime_s()
-    {
-        return elapsedTime/1000;
-    }
-
     private LevelProperties properties;
 
     private Music music;
     private Image backgroundImage;
     private int backgroundHeight = 0;
     private double backgroundPos = 0;
+    private double speed = 0;
 
     private List<Button> buttons = new ArrayList<Button>();
     private List<Button> pauseButtons = new ArrayList<Button>();
@@ -78,7 +69,8 @@ public class Level extends Screen {
     private LevelSpawnerManager sm;
 
     private GameState state = GameState.RUNNING;
-	private float elapsedTime = 0;
+    private long lastUpdate = 0;
+    private long elapsedTime = 0;
 	private boolean isSpawning = true;
 
     private int maxLevel;
@@ -89,7 +81,7 @@ public class Level extends Screen {
     private boolean maxLevelCap = true;
 
 	private Popup options;
-    private Popup gameOver;
+    private Popup endPopup;
 
     List<EnemyProperties> enemyTypes;
 
@@ -122,6 +114,7 @@ public class Level extends Screen {
         this.endSpeed = properties.getEndSpeed();
         this.maxLevel = properties.getMaxLevel();
         this.timeToMaxLevel = properties.getTimeToMaxLevel();
+        calculateLevelSpeed();
 
         this.enemyTypes = properties.getEnemyTemplates();
         setBackgroundImage(properties.getBackground());
@@ -131,6 +124,133 @@ public class Level extends Screen {
         generateShip(properties.getShip());
         generateSpawners(properties);
         generatePauseState();
+
+        lastUpdate = System.nanoTime();
+    }
+
+    private void generateButtons()
+    {
+        Graphics g = game.getGraphics();
+        Align alignment;
+        Vector2d position;
+
+        alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+        position = new Vector2d(g.getWidth()-8, 8);
+        buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
+
+        alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
+        position = new Vector2d(8, 8);
+        buttons.add(new Button(game, "GUI/Pause", alignment, position, muteListener));
+
+    }
+
+    private void generatePauseState()
+    {
+        // This whole thing could be done with an XML file but fuck you.
+        Graphics g = game.getGraphics();
+        Align alignment;
+        Vector2d position;
+
+        alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+        position = new Vector2d(0,0);
+        Button settingsButton = new Button(game, "GUI/Settings Button", alignment, position, settingsListener);
+        settingsButton.setPos(new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()));
+        pauseButtons.add(settingsButton);
+
+        alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+        position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
+        pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
+
+        alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+        position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
+        pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
+
+        options = new Popup(game);
+        options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
+        options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
+        options.setMargin(20);
+        options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
+        options.setMargin(20);
+        options.addButton(calibrateListener, "GUI/Calibrate");
+    }
+
+    private void generateShip(String shipID)
+    {
+        ShipParams params = game.loadMerchantShipParams();
+        Player player = new Player(this);
+        Vector2d centerScreen = game.getGraphics().getSize().scale(0.5);
+        Ship ship = new Ship(this, player, params, centerScreen);
+        bm.setShip(ship);
+    }
+
+    private void generateSpawners(LevelProperties props)
+    {
+
+        sm.addSpawner( new BodySpawner(Coin.class, "COIN",
+                timeToDistance(275),
+                timeToDistance(1250)) );
+        sm.addSpawner( new BodySpawner(Water.class, "WATER",
+                timeToDistance(props.getWaterSpawnTimeStart()*1000),
+                timeToDistance(props.getWaterSpawnTimeEnd()*1000)) );
+        sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
+                timeToDistance(250),
+                timeToDistance(2500)) );
+
+        for (EnemyProperties property : enemyTypes) {
+
+            List<Integer> spawnRange = new ArrayList<Integer>();
+            spawnRange.addAll(property.getSpawnRange());
+            for (int i=2;i<6;i++) {
+                spawnRange.set(i, (int) timeToDistance(spawnRange.get(i) * 1000));
+            }
+
+            if (AirshipGame.DEBUG) {
+                Log.d("Level", "Enemy spawner added to level: " + property.getName());
+
+            }
+
+            sm.addSpawner(new BodySpawner(Enemy.class, property.getName(), spawnRange));
+        }
+
+        // This method IS SO COOL AND ADDICTED TO METH!!!
+        // because method sounds like meth head get it??
+    }
+
+    /**
+     * Calculates the distance that will be travelled
+     * over a certain amount of time based on level speed.
+     * @param time The time in milliseconds
+     * @return distance travelled after a certain amount of time.
+     */
+    public double timeToDistance(float time)
+    {
+        if (getLevelSpeed() == 0) {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        return time/1000 * (AndroidFastRenderView.UPS * getLevelSpeed());
+    }
+
+    public double getLevelSpeed()
+    {
+        return speed;
+    }
+
+    private void calculateLevelSpeed()
+    {
+        double progress = (double)currentLevel / (double)maxLevel;
+        progress = progress > 1 && maxLevelCap ? 1 : progress;
+        speed = (endSpeed - startSpeed) * progress + startSpeed;
+    }
+
+    public void onLevelPause()
+    {
+        bm.getShip().getPlayer().onLevelPause();
+    }
+
+    public void onLevelResume()
+    {
+        bm.getShip().getPlayer().onLevelResume();
     }
 
 	@Override
@@ -160,8 +280,23 @@ public class Level extends Screen {
         }
     }
 
+    private void checkDifficultyLevel()
+    {
+        // Once you've touch somebody's heart, you'll be as cool as
+        // the rest of the cold hearted murderers out there
+        //elapsedTime += deltaTime;
+        int level = (int) ( elapsedTime / (timeToMaxLevel)  * maxLevel );
+        level = level > maxLevel && maxLevelCap ? maxLevel : level;
+
+        if (level > currentLevel) {
+            currentLevel = level;
+            onDifficultyLevelChange();
+        }
+    }
+
     private void onDifficultyLevelChange()
     {
+        calculateLevelSpeed();
         for (BodySpawner spawner : sm.getSpawners()) {
             spawner.updateLevel(currentLevel);
         }
@@ -169,133 +304,9 @@ public class Level extends Screen {
 
     private void buildEndPopup(int score)
     {
-        gameOver = new Popup(game);
-        gameOver.setDisableOnClick(false);
-        gameOver.addNumericImage(score);
-    }
-
-	private void generatePauseState()
-	{
-        // This whole thing could be done with an XML file but fuck you.
-
-		Graphics g = game.getGraphics();
-		Align alignment;
-		Vector2d position;
-
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth()-8, 8);
-		buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
-
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(0,0);
-		Button settingsButton = new Button(game, "GUI/Settings Button", alignment, position, settingsListener);
-		settingsButton.setPos(new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()));
-		pauseButtons.add(settingsButton);
-
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
-		pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
-
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
-		pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
-
-		options = new Popup(game);
-		options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
-		options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
-		options.setMargin(20);
-		options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
-		options.setMargin(20);
-		options.addButton(calibrateListener, "GUI/Calibrate");
-	}
-
-	private void generateShip(String shipID)
-	{
-		ShipParams params = game.loadMerchantShipParams();
-		Player player = new Player(this);
-		Vector2d centerScreen = game.getGraphics().getSize().scale(0.5);
-		Ship ship = new Ship(this, player, params, centerScreen);
-		bm.setShip(ship);
-	}
-
-	private void generateSpawners(LevelProperties props)
-	{
-
-		sm.addSpawner( new BodySpawner(Coin.class, "COIN",
-                       timeToDistance(275),
-                       timeToDistance(1250)) );
-        sm.addSpawner( new BodySpawner(Water.class, "WATER",
-                       timeToDistance(props.getWaterSpawnTimeStart()*1000),
-                       timeToDistance(props.getWaterSpawnTimeEnd()*1000)) );
-        sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
-                       timeToDistance(250),
-                       timeToDistance(2500)) );
-
-        for (EnemyProperties property : enemyTypes) {
-
-            List<Integer> spawnRange = new ArrayList<Integer>();
-            spawnRange.addAll(property.getSpawnRange());
-            for (int i=2;i<6;i++) {
-                spawnRange.set(i, (int) timeToDistance(spawnRange.get(i) * 1000));
-            }
-
-            if (AirshipGame.DEBUG) {
-                Log.d("Level", "Enemy spawner added to level: " + property.getName());
-
-            }
-
-            sm.addSpawner(new BodySpawner(Enemy.class, property.getName(), spawnRange));
-        }
-
-        // This method IS SO COOL AND ADDICTED TO METH!!!
-        // because method sounds like meth head get it??
-	}
-
-    /**
-     * Calculates the distance that will be travelled
-     * over a certain amount of time based on level speed.
-     * @param time The time in milliseconds
-     * @return distance travelled after a certain amount of time.
-     */
-    public double timeToDistance(float time)
-    {
-        if (calculateLevelSpeed() == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-
-        return time/1000 * (AndroidFastRenderView.UPS * calculateLevelSpeed());
-    }
-
-    /**
-     * Calculates the amount of time that it will take to travel
-     * a certain distance based on the level speed.
-     * @param distance the distance in pixels
-     * @return amount of time it takes to travel distance.
-     */
-    public double distanceToTime(double distance)
-    {
-        if (calculateLevelSpeed() == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-
-        return distance / (calculateLevelSpeed() * AndroidFastRenderView.UPS);
-    }
-
-	public double calculateLevelSpeed()
-	{
-        double progress = (double)currentLevel / (double)maxLevel;
-        progress = progress > 1 && maxLevelCap ? 1 : progress;
-		return (endSpeed - startSpeed) * progress + startSpeed;
-	}
-
-    public void onLevelPause()
-    {
-        bm.getShip().getPlayer().onLevelPause();
-    }
-
-    public void onLevelResume()
-    {
-        bm.getShip().getPlayer().onLevelResume();
+        endPopup = new Popup(game);
+        endPopup.setDisableOnClick(false);
+        endPopup.addNumericImage(score);
     }
 
 	public void setBackgroundImage(String image) 
@@ -321,7 +332,7 @@ public class Level extends Screen {
     {
         buildEndPopup(bm.getShip().getPlayer().getCurrency());
         state = GameState.OVER;
-        gameOver.setEnabled(true);
+        endPopup.setEnabled(true);
     }
 
 	public void toggleLevelPauseState()
@@ -335,6 +346,26 @@ public class Level extends Screen {
 			onLevelPause();
 		}
 	}
+
+    private void updateSpawners()
+    {
+        // Spawns objects from LevelSpawningManager. Iterates through all spawners,
+        // checks if spawner can spawn, Instantiates however that object spawns and
+        // adds them to LevelBodyManager.
+        for (BodySpawner spawner : sm.getSpawners()) {
+            spawner.updateDistance(getLevelSpeed());
+
+            if (spawner.canSpawn( currentLevel, 1.0 ) && isSpawning) {
+                List<GameBody> bodyList = spawner.trySpawnObjects(this);
+
+                for (GameBody body : bodyList) {
+                    getBodyManager().addBody(body);
+                }
+
+                spawner.resetSpawnDistance();
+            }
+        }
+    }
 
     @Override
     public void paint(float deltaTime)
@@ -357,7 +388,7 @@ public class Level extends Screen {
 
     private void paintOver(float deltaTime)
     {
-        gameOver.paint(deltaTime);
+        endPopup.paint(deltaTime);
     }
 
     private void paintPaused(float deltaTime)
@@ -387,27 +418,34 @@ public class Level extends Screen {
     }
 
 	@Override
-	public void update(float deltaTime) 
+	public void update(float deltaTime)
 	{
+        // Level handles this as it needs to be precise.
+        // It takes too long for the time to get from AndroidFastRenderView
+        // to this method. This causes jerky movements and overall a crappy game.
+        long now = System.nanoTime();
+        double deltaSeconds = (now - lastUpdate)/1000000000.0;
+        lastUpdate = now;
+
 		switch(state) {
 		case RUNNING:
-			updateRunning(deltaTime);
+			updateRunning((double)deltaSeconds);
 			break;
 		case PAUSED:
-			updatePaused(deltaTime);
+			updatePaused((double)deltaTime);
 			break;
 		case OVER:
-			updateOver(deltaTime);
+			updateOver((double)deltaTime);
 			break;
 		}
 	}
 
-	public void updateOver(float deltaTime)
+	public void updateOver(double deltaTime)
 	{
-        gameOver.update(deltaTime);
+        endPopup.update(deltaTime);
 	}
 
-	private void updatePaused(float deltaTime)
+	private void updatePaused(double deltaTime)
 	{
 
 		options.update(deltaTime);
@@ -423,59 +461,32 @@ public class Level extends Screen {
 		}
 	}
 
-	private void updateRunning(float deltaTime) 
+	private void updateRunning(double deltaSeconds)
 	{
+        elapsedTime += deltaSeconds;
+
+        // Checks difficulty level and updates if needed.
+        checkDifficultyLevel();
+
+        //updates all bodies in body manager (ship, enemies, items)
+        bm.onUpdate(deltaSeconds);
+        bm.offsetBodies(new Vector2d( 0, deltaSeconds * getLevelSpeed() ));
+
+        // Updates menu buttons (options gear)
 		for (Button button : buttons) {
-			button.onUpdate(deltaTime);
+			button.onUpdate(deltaSeconds);
 		}
-
-		// Once you've touch somebody's heart, you'll be as cool as 
-		// the rest of the cold hearted murderers out there
-		elapsedTime += deltaTime;
-        int level = (int) ( elapsedTime / (timeToMaxLevel*1000)  * maxLevel );
-        level = level > maxLevel && maxLevelCap ? maxLevel : level;
-
-        if (level > currentLevel) {
-            currentLevel = level;
-            onDifficultyLevelChange();
-        }
-
-        Log.d("LEVEL", currentLevel + " " + calculateLevelSpeed());
-
-		//updates all bodies in body manager (ship, enemies, items)
-		bm.onUpdate(deltaTime);
-		bm.offsetBodies(new Vector2d(0, calculateLevelSpeed()));
 
 		// Updates background position
-		backgroundPos += calculateLevelSpeed();
+		backgroundPos += deltaSeconds * getLevelSpeed();
 		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
 
-		// Spawns objects from LevelSpawningManager. Iterates through all spawners, 
-		// checks if spawner can spawn, Instantiates however that object spawns and
-		// adds them to LevelBodyManager.
-		for (BodySpawner spawner : sm.getSpawners()) {
-			spawner.updateDistance(calculateLevelSpeed());
-            //spawner.updateLevel(currentLevel); ONLEVELUPDATE
-
-			if (spawner.canSpawn(1, 1.0/calculateLevelSpeed() ) && isSpawning) {
-				List<GameBody> bodyList = spawner.trySpawnObjects(this);
-
-				for (GameBody body : bodyList) {
-					getBodyManager().addBody(body);
-				}
-
-				spawner.resetSpawnDistance();
-			}
-		}
+        updateSpawners();
 	}
 
     private void generateListeners()
     {
         calibrateListener = new ButtonClickListener() {
-            @Override
-            public void onCancel() { }
-            @Override
-            public void onDown() { }
             @Override
             public void onUp()
             {
@@ -484,31 +495,17 @@ public class Level extends Screen {
         };
         resumeListener = new ButtonClickListener() {
             @Override
-            public void onCancel() { }
-            @Override
-            public void onDown() { }
-            @Override
             public void onUp() {
                 state = GameState.RUNNING;
             }
         };
-
         sensitivityListener = new SliderMoveListener() {
-            @Override
-            public void onDown() {}
             @Override
             public void onPositionChanged(float position) {
                 Preferences.putSensitivityInPercent(position);
             }
-            @Override
-            public void onUp() {}
         };
-
         settingsListener = new ButtonClickListener() {
-            @Override
-            public void onCancel() { }
-            @Override
-            public void onDown() { }
             @Override
             public void onUp() {
                 options.setEnabled(true);
@@ -516,19 +513,11 @@ public class Level extends Screen {
         };
         gearListener = new ButtonClickListener() {
             @Override
-            public void onCancel() { }
-            @Override
-            public void onDown() { }
-            @Override
             public void onUp() {
                 toggleLevelPauseState();
             }
         };
         hangarListener = new ButtonClickListener() {
-            @Override
-            public void onCancel() { }
-            @Override
-            public void onDown() { }
             @Override
             public void onUp() { backButton(); }
         };

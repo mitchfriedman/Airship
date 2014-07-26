@@ -22,7 +22,7 @@ public abstract class EnemyComponent {
     public void onComponentAdded() {}
     public void onObjectCreationCompletion() {}
     public void onPaint(float deltaTime) {}
-    public void onUpdate(float deltaTime) {}
+    public void onUpdate(double deltaTime) {}
     public void onHit(Ship ship) {}
 
 }

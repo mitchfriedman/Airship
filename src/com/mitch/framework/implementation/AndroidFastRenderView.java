@@ -16,7 +16,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     volatile boolean running = false;
     
     public static final float FPS = 35.0f;
-    public static final float UPS = 35.0f;
+    public static final float UPS = 60.0f;
     
     final double TIME_BETWEEN_UPDATES = 1000000000/UPS;
     final double TIME_BETWEEN_RENDERS = 1000000000/FPS;
@@ -95,10 +95,10 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
             frameCount++;
             
             while (now - lastRender < TIME_BETWEEN_RENDERS && now - lastUpdate < TIME_BETWEEN_RENDERS) {
-            	Thread.yield();
+            	//Thread.yield();
             	
             	// This stops the app from consuming lots of CPU. Might cause stuttering.
-            	try {Thread.sleep(1);} catch(Exception e) {}
+            	//try {Thread.sleep(1);} catch(Exception e) {}
             	now = System.nanoTime();
             }
         }

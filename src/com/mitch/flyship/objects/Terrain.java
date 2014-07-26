@@ -40,7 +40,7 @@ public class Terrain extends GameBody {
 		this.image = Assets.getImage(image);
 	}
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(double deltaTime) {
 		spawnClouds();
 		calculateTerrainSway(deltaTime);
 		
@@ -70,7 +70,7 @@ public class Terrain extends GameBody {
 			cloud.onPaint(deltaTime);
 		}
 	}
-	void calculateTerrainSway(float deltaTime)
+	void calculateTerrainSway(double deltaTime)
 	{
 		sway += (swayLength/swayTime)*deltaTime*swayDirection;
 		sway = sway > swayLength/2 ? swayLength/2 : sway;

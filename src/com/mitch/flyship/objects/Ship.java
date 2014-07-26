@@ -1,7 +1,6 @@
 package com.mitch.flyship.objects;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import java.util.List;
 
@@ -32,6 +31,8 @@ public class Ship extends GameBody {
 	double coinAttractionSpeed;
 	
 	boolean imageReversed = false;
+    final float maxPropellerFPS;
+
 	AnimationImage propellerAnim;
 	Vector2d propellerPos;
 	Image tilt0;
@@ -44,6 +45,7 @@ public class Ship extends GameBody {
 	{
 		super(level.getAirshipGame(), "PlayerShip", pos);
 		super.affectedByLevelSpeed = false;
+        this.maxPropellerFPS = params.animation_fps;
 		this.player = player;
 		this.level = level;
 		setDepth(150);
@@ -78,14 +80,26 @@ public class Ship extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(float deltaTime) 
+	public void onUpdate(double deltaTime)
 	{
 		propellerAnim.updateTime(deltaTime);
-		
-		Vector2d velocity = player.getInput_Speed();
-		
+
+        Vector2d velocity = player.getInput_Speed(deltaTime);
+
+        propellerAnim.resume();
+        if (velocity.y != 0) {
+            double maxSpeed = velocity.y > 0 ? player.getMaxSpeedDown(deltaTime) : player.getMaxSpeedUp(deltaTime);
+            float animationSpeedRatio = (float) (-velocity.y / maxSpeed);
+            propellerAnim.setSpeed( animationSpeedRatio * maxPropellerFPS );
+
+        } else {
+            propellerAnim.pause();
+        }
+
+        //velocity = velocity.add( new Vector2d(0, level.getLevelSpeed()) );
+
 		addVelocityWithBoundsCheck(velocity);
-		setImageFromVelocity(velocity);
+		setImageFromVelocity(velocity, deltaTime);
 		checkForCollisions();
         attractObjects();
 
@@ -117,23 +131,25 @@ public class Ship extends GameBody {
 		Vector2d newPos = getPos().add(velocity);
 		
 		// Checks x bounds.
-		if (newPos.x > player.getShipBounds().x && newPos.x < player.getShipBounds().width - getSize().x) {
+		if (newPos.x > player.getShipBounds().x &&
+                newPos.x < player.getShipBounds().width - getSize().x) {
 			setPos(new Vector2d(newPos.x, getPos().y));
 		}
 		
 		// Checks y bounds
-		if (newPos.y > player.getShipBounds().y && newPos.y < player.getShipBounds().height - getSize().y) {
+		if (newPos.y > player.getShipBounds().y &&
+                newPos.y < player.getShipBounds().height - getSize().y) {
 			setPos(new Vector2d(getPos().x, newPos.y));
 		}
 	}
 	
-	void setImageFromVelocity(Vector2d velocity)
+	void setImageFromVelocity(Vector2d velocity, double deltaTime)
 	{
 		imageReversed = velocity.x < 0;
-		if (Math.abs(velocity.x) >= player.MAX_SPEED_HORIZONTAL) {
+		if (Math.abs(velocity.x) >= player.getMaxSpeedHorizontal(deltaTime)) {
 			image = tilt2;
 		}
-		else if (Math.abs(velocity.x) > player.MAX_SPEED_HORIZONTAL/3) {
+		else if (Math.abs(velocity.x) > player.getMaxSpeedHorizontal(deltaTime)/3) {
 			image = tilt1;
 		}
 		else {
@@ -144,10 +160,9 @@ public class Ship extends GameBody {
 	
 	void checkForCollisions()
 	{
-		List<Enemy> enemies = level.getBodyManager().getBodiesByClass(Enemy.class);
-
-		for (Enemy enemy : enemies) {
-			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())) {
+		for ( Enemy enemy : level.getBodyManager().getEnemies() ) {
+			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())
+                    && enemy.isColliding()) {
 				enemy.onHit(this);
 				player.applyDamage(enemy.getDamage());
 			}

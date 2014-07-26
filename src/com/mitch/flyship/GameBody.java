@@ -120,7 +120,7 @@ public abstract class GameBody {
 		}
 	}
 	
-	public abstract void onUpdate(float deltaTime);
+	public abstract void onUpdate(double deltaTime);
 	public abstract void onPaint(float deltaTime);
 	public void onPause() {}
 	public void onResume() {}

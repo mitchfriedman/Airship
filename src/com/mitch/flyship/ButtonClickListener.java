@@ -1,8 +1,8 @@
 package com.mitch.flyship;
 
-public interface ButtonClickListener {
+public abstract class ButtonClickListener {
 	
-	public void onDown();
-	public void onUp();
-	public void onCancel();
+	public void onDown() {}
+	public void onUp() {}
+	public void onCancel() {}
 }

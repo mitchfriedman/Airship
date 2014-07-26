@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.mitch.flyship.AirshipGame;
@@ -12,6 +11,8 @@ import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.Enemy.EnemyProperties;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.screens.Level;
+import com.mitch.framework.containers.Vector2d;
+import com.mitch.framework.implementation.AndroidFastRenderView;
 
 public class Enemy extends GameBody {
 
@@ -39,9 +40,16 @@ public class Enemy extends GameBody {
     {
         return damage;
     }
+    public void setColliding(boolean colliding) {
+        this.colliding = colliding;
+    }
+    public boolean isColliding() {
+        return colliding;
+    }
     public void setDamage(int damage) { this.damage = damage; }
     public void setDestroyingOnHit(boolean destroyingOnHit) { this.destroyingOnHit = destroyingOnHit; }
 
+    private boolean colliding = true;
     private boolean destroyingOnHit = true;
     private List<EnemyComponent> components;
     private int damage = 0;
@@ -55,9 +63,10 @@ public class Enemy extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(float deltaTime)
+	public void onUpdate(double deltaTime)
 	{
-        setPos(getPos().add(getVelocity()));
+        Vector2d velocity = getVelocity().scale( deltaTime );
+        setPos(getPos().add( velocity ));
 
 		for (EnemyComponent component : components) {
             component.onUpdate(deltaTime);
@@ -103,11 +112,11 @@ public class Enemy extends GameBody {
         return components;
     }
 
-    public EnemyComponent getComponent(Class<? extends EnemyComponent> componentType)
+    public<T extends EnemyComponent> T getComponent(Class<T> cls)
     {
         for (EnemyComponent component : components) {
-            if (component.getClass() == componentType) {
-                return component;
+            if (component.getClass() == cls) {
+                return (T)component;
             }
         }
         return null;
@@ -136,4 +145,5 @@ public class Enemy extends GameBody {
 
         return null;
 	}
+
 }

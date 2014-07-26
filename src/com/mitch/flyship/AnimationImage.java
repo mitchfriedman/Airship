@@ -8,9 +8,11 @@ import com.mitch.framework.containers.Frame;
 public class AnimationImage {
 	
 	List<Frame> frames = new ArrayList<Frame>();
+    boolean playingInReverse = false;
+    boolean paused = false;
 	int currentFrame = 0;
 	float time = 0;
-	float deltaFrameTime = 1000;
+	float deltaFrameTime = 1/30;
 	
 	public AnimationImage(float fps)
 	{
@@ -19,9 +21,26 @@ public class AnimationImage {
 	
 	public void setSpeed(float fps)
 	{
-		deltaFrameTime = 1000/fps;
+        if (fps == 0) {
+            deltaFrameTime = Float.POSITIVE_INFINITY;
+        } else {
+            playingInReverse = fps < 0;
+            deltaFrameTime = Math.abs(1/fps);
+        }
 	}
-	
+
+    public boolean isPaused() { return paused; }
+
+    public void pause()
+    {
+        paused = true;
+    }
+
+    public void resume()
+    {
+        paused = false;
+    }
+
 	public Frame getFrame(int index)
 	{
 		if (index < frames.size()) {
@@ -47,17 +66,24 @@ public class AnimationImage {
 		return currentFrame;
 	}
 	
-	public void updateTime(float deltaTime)
+	public void updateTime(double deltaTime)
 	{
-		this.time += deltaTime;
+        if (!paused) {
+            this.time += deltaTime;
+        }
+
 		if (time > deltaFrameTime) {
-			currentFrame++;
+			currentFrame += playingInReverse ? -1 : 1;
 			time = 0;
 		}
 		
 		if (currentFrame >= getAnimationSize()) {
 			currentFrame = 0;
 		}
+
+        if (currentFrame < 0) {
+            currentFrame = getAnimationSize()-1;
+        }
 	}
 	
 	public void addFrame(Frame frame)

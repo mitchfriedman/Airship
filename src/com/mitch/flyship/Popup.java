@@ -61,7 +61,7 @@ public class Popup {
         disableOnClick = disable;
     }
 
-	public void update(float deltaTime) {
+	public void update(double deltaTime) {
 		
 		Input input = game.getInput();
 		

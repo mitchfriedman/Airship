@@ -10,6 +10,7 @@ import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
+import com.mitch.framework.implementation.AndroidFastRenderView;
 
 public class Cloud extends GameBody {
 	
@@ -31,7 +32,8 @@ public class Cloud extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(double deltaTime) {
+        Vector2d velocity = this.velocity.scale( 1000 / (AndroidFastRenderView.UPS * deltaTime) );
 		setPos(getPos().add(velocity));
 		
 		Graphics g = game.getGraphics();

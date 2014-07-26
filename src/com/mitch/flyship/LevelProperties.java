@@ -84,9 +84,6 @@ public class LevelProperties {
                 levelProperties.endSpeed = Double.valueOf(xrp.getAttributeValue(null, "speedAtEnd"));
 
                 // Water
-                levelProperties.waterValue = Integer.valueOf(xrp.getAttributeValue(null, "waterValue"));
-                levelProperties.waterDrainTimeStart = Integer.valueOf(xrp.getAttributeValue(null, "waterDrainStart"));
-                levelProperties.waterDrainTimeEnd = Integer.valueOf(xrp.getAttributeValue(null, "waterDrainEnd"));
                 levelProperties.waterSpawnTimeStart = Integer.valueOf(xrp.getAttributeValue(null, "waterSpawn_RangeStart"));
                 levelProperties.waterSpawnTimeEnd = Integer.valueOf(xrp.getAttributeValue(null, "waterSpawn_RangeEnd"));
 
@@ -166,13 +163,13 @@ public class LevelProperties {
                 Log.d("LevelPropertiesLoader", tagName + " is not a component. Does it have " +
                       "an XmlResourceParser constructor?");
             } catch (InvocationTargetException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.d("LevelPropertiesLoader", tagName + " could not be created.");
             } catch (InstantiationException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.d("LevelPropertiesLoader", tagName + " could not be created.");
             } catch (IllegalAccessException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 Log.d("LevelPropertiesLoader", tagName + " could not be created.");
             }
         }
@@ -225,18 +222,6 @@ public class LevelProperties {
         return waterSpawnTimeEnd;
     }
 
-    public int getWaterValue() {
-        return waterValue;
-    }
-
-    public int getWaterDrainTimeStart() {
-        return waterDrainTimeStart;
-    }
-
-    public int getWaterDrainTimeEnd() {
-        return waterDrainTimeEnd;
-    }
-
 
     private String name;
 	private String background, music, ship;
@@ -244,7 +229,6 @@ public class LevelProperties {
     private double timeToMaxLevel;
 	private double startSpeed, endSpeed;
 	private int waterSpawnTimeStart, waterSpawnTimeEnd;
-	private int waterValue, waterDrainTimeStart, waterDrainTimeEnd;
     private List<EnemyProperties> enemyTemplates = new ArrayList<EnemyProperties>();
 
 	public LevelProperties() {}

@@ -15,6 +15,7 @@ public class StaticImage extends EnemyComponent {
     Image image;
     boolean invertHorizontal;
     boolean invertVertical;
+    boolean drawing = true;
 
     public StaticImage() {}
 
@@ -27,6 +28,11 @@ public class StaticImage extends EnemyComponent {
         invertVertical = parser.getAttributeBooleanValue(null, "invertVertical", false);
     }
 
+    public void setDrawing(boolean drawing)
+    {
+        this.drawing = drawing;
+    }
+
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
@@ -36,8 +42,11 @@ public class StaticImage extends EnemyComponent {
     @Override
     public void onPaint(float deltaTime) {
         super.onPaint(deltaTime);
-        Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
-        g.drawImage(image, enemy.getPos(), invertHorizontal, invertVertical);
+        if (drawing) {
+            Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
+            g.drawImage(image, enemy.getPos(), invertHorizontal, invertVertical);
+        }
+
     }
 
     @Override

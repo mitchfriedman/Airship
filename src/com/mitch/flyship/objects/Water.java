@@ -27,7 +27,7 @@ public class Water extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(double deltaTime) {
 		
 		if (getPos().y > game.getGraphics().getHeight()) {
 			level.getBodyManager().removeBody(this);

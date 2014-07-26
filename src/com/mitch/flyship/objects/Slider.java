@@ -42,7 +42,7 @@ public class Slider extends GameBody {
 	}
 
 	@Override
-	public void onUpdate(float deltaTime) {
+	public void onUpdate(double deltaTime) {
 		
 		//TODO: touching slider bar should put notch under finger
 		if (!lastTouchedOnScreen && !lastTouched && isSliderTouched()) {

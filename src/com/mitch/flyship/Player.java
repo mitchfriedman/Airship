@@ -2,6 +2,7 @@ package com.mitch.flyship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import android.graphics.Color;
 
@@ -15,32 +16,32 @@ import com.mitch.framework.implementation.AndroidGame;
 
 public class Player {
 	
-	final double WATER_VALUE_DRAIN_TIME = 50000;
+	final double WATER_VALUE_DRAIN_TIME = 50;
 	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9; //9
 	final int MAX_WATER = 90;
-	final boolean INVINCIBLE = false;
+	final boolean INVINCIBLE = true;
 	
-	final double MAX_TILT_UP = 1.5;
+	final double MAX_TILT_UP = 2.5;
 	final double MAX_TILT_DOWN = 2.3;
 	final double MAX_TILT_HORIZONTAL = 3;
 	
-	final double MAX_SPEED_UP = 2.2;
-	final double MAX_SPEED_DOWN = 0.4;
-	public final double MAX_SPEED_HORIZONTAL = 1.4;
+	private final double MAX_SPEED_UP = 80;
+	private final double MAX_SPEED_DOWN = 60;
+	private final double MAX_SPEED_HORIZONTAL = 60;
 	
 	final double UP_TILT_LIMITER = 0.2;
 	final double DOWN_TILT_LIMITER = 0.2;
 	final double HORIZONTAL_TILT_LIMITER = 0.4;
 	
-	final double hudCoinSpeed = 0.001;
+	final double hudCoinSpeed = 2;
 	
 	double tiltSensitivity = 1;
 	Vector2d orientationOffset = new Vector2d(0, 3);
 	AirshipGame game;
     Level level;
-	long elapsedTime = 0;
+	float elapsedTime = 0;
 	int currency = 0;
 	boolean vibrateOnDamage = false;
 	int health = MAX_HEALTH;
@@ -49,15 +50,23 @@ public class Player {
 	Image hud;
 	Image hudBorder;
 	Image hudCoin;
-	Vector2d hudCoinStartPosRelHud = new Vector2d(5,7);
+    double hudStart;
+
 	Rect waterPositionRelHud = new Rect(191,45, 6,32);
+    Rect waterPosition = new Rect(0,0,0,0);
 	int waterColor = Color.rgb(67, 173, 195);
-	
+
+    Vector2d hudCoinWorldPos;
+    int coinTubeHeight;
+    Vector2d hudCoinStartPosRelHud = new Vector2d(5,7);
 	List<Double> hudCoinsPercentage = new ArrayList<Double>();
-	
+    List<Vector2d> hudCoinsPos = new ArrayList<Vector2d>();
+
 	Vector2d hullArrowOriginRelHud = new Vector2d(102, 42);
 	List<Vector2d> hullArrowOrigins = new ArrayList<Vector2d>();
 	List<Image> hullArrows = new ArrayList<Image>();
+    Image hullArrowImage;
+    Vector2d hullArrowPosition;
 	
 	
 	public Player(Level level)
@@ -86,6 +95,12 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
 		
 		resetTiltSensitivityToPreference();
+
+        Graphics g = game.getGraphics();
+        hudStart = g.getHeight() - hud.getHeight() - hudBorder.getHeight();
+
+        this.hudCoinWorldPos = new Vector2d( 0,hudStart ).add(hudCoinStartPosRelHud);
+        this.coinTubeHeight = (int) (hud.getHeight() - hudCoinStartPosRelHud.y);
 	}
 	
 	void resetTiltSensitivityToPreference()
@@ -121,44 +136,61 @@ public class Player {
 	{
 		return getOrientation().subtract(orientationOffset);
 	}
-	
-	public Vector2d getInput_Speed()
+
+    public double getMaxSpeedHorizontal(double deltaTime)
+    {
+        return MAX_SPEED_HORIZONTAL * deltaTime;
+    }
+
+    public double getMaxSpeedDown(double deltaTime)
+    {
+        return MAX_SPEED_DOWN * deltaTime;
+    }
+
+    public double getMaxSpeedUp(double deltaTime)
+    {
+        return MAX_SPEED_UP * deltaTime;
+    }
+
+    public Vector2d getInput_Speed(double deltaTime)
+    {
+        return getInput_Speed(deltaTime, false, false);
+    }
+
+	public Vector2d getInput_Speed(double deltaTime, boolean invertVertical, boolean invertHorizontal)
 	{
 		Vector2d orientation = getCenteredOrientation();
 		final double ts = tiltSensitivity;
-		
-		double ih = 1;
-		
+
+        orientation.y *= invertVertical ? -1 : 1;
+        orientation.x *= invertHorizontal ? -1 : 1;
+
 		if (orientation.x < -MAX_TILT_HORIZONTAL*ts) {
-			orientation.x = -MAX_SPEED_HORIZONTAL;
+			orientation.x = -MAX_SPEED_HORIZONTAL*deltaTime;
 		}
 		else if (orientation.x > MAX_TILT_HORIZONTAL*ts) {
-			orientation.x = MAX_SPEED_HORIZONTAL;
+			orientation.x = MAX_SPEED_HORIZONTAL*deltaTime;
 		} 
 		else if(orientation.x > HORIZONTAL_TILT_LIMITER*ts || orientation.x < -HORIZONTAL_TILT_LIMITER*ts) {
-			orientation.x *= MAX_SPEED_HORIZONTAL / (MAX_TILT_HORIZONTAL*ts-HORIZONTAL_TILT_LIMITER*ts);
+			orientation.x *= (MAX_SPEED_HORIZONTAL*deltaTime) / (MAX_TILT_HORIZONTAL*ts-HORIZONTAL_TILT_LIMITER*ts);
 		} 
 		else {
 			orientation.x = 0;
 		}
-		
-		orientation.x *= ih;
-		
-		double iv = 1;
-		
+
 		if (orientation.y > MAX_TILT_DOWN*ts) {
-			orientation.y = MAX_SPEED_DOWN;
+			orientation.y = MAX_SPEED_DOWN*deltaTime;
 		}
 		else if (orientation.y > DOWN_TILT_LIMITER*ts) {
-			orientation.y *= MAX_SPEED_DOWN / (MAX_TILT_DOWN*ts-DOWN_TILT_LIMITER*ts);
+			orientation.y *= (MAX_SPEED_DOWN*deltaTime) / (MAX_TILT_DOWN*ts-DOWN_TILT_LIMITER*ts);
 		}
 		
 		
 		else if (orientation.y < -MAX_TILT_UP*ts) {
-			orientation.y = -MAX_SPEED_UP;
+			orientation.y = -MAX_SPEED_UP*deltaTime;
 		}
 		else if (orientation.y < -UP_TILT_LIMITER*ts) {
-			orientation.y *= MAX_SPEED_UP / (MAX_TILT_UP*ts-UP_TILT_LIMITER*ts);
+			orientation.y *= (MAX_SPEED_UP*deltaTime) / (MAX_TILT_UP*ts-UP_TILT_LIMITER*ts);
 		}
 		
 		if (orientation.y > -UP_TILT_LIMITER*ts && orientation.y < DOWN_TILT_LIMITER*ts) {
@@ -221,9 +253,9 @@ public class Player {
         game.pushMoneyScore(currency);
 	}
 	
-	public void drawTime(int msTime)
+	public void drawTime(int time)
 	{
-		int elapsedSeconds = msTime/1000;
+		int elapsedSeconds = time;
 		int minutes = (int) (elapsedSeconds / 60);
 		int seconds = (int) (elapsedSeconds % 60);
 
@@ -258,40 +290,23 @@ public class Player {
 	
 	public void drawWater()
 	{
-		Rect waterPosition = new Rect(waterPositionRelHud);
-		double waterPercentage = water/MAX_WATER;
-		
 		Graphics g = game.getGraphics();
-		waterPosition.height = waterPosition.height * waterPercentage;
-		waterPosition.y += g.getHeight() - hud.getHeight() - hudBorder.getHeight() - waterPosition.height;
-		
 		g.drawRect(waterPosition, waterColor);
-		
 	}
 	
 	public void drawHudCoins()
 	{
 		Graphics g = game.getGraphics();
-		int tubeHeight = (int) (hud.getHeight() - hudCoinStartPosRelHud.y);
-		
-		for (Double coinPercentage : hudCoinsPercentage) {
-			Vector2d coinPos = new Vector2d( 0,g.getHeight()-hud.getHeight() ).add(hudCoinStartPosRelHud);
-			
-			int distancePX = (int)(tubeHeight * coinPercentage);
-			g.drawImage( hudCoin, coinPos.add( new Vector2d(0, distancePX) ) );
+		for (Vector2d hudCoinPos : hudCoinsPos) {
+			g.drawImage( hudCoin, hudCoinPos);
 		}
 	}
 	
 	public void drawHullArrow()
 	{
 		Graphics g = game.getGraphics();
-		// "Math.abs(health-9)" uses the opposite images it would normally use from health 5 to health 9
-		// This gives us the arrows past the center that we need to flip.
-		Image image = hullArrows.get( health > 5 ? Math.abs(health-9) : health-1 );
-		Vector2d pos = new Vector2d(0,g.getHeight() - hudBorder.getHeight() - hud.getHeight() );
-		pos = pos.add( hullArrowOriginRelHud.subtract(hullArrowOrigins.get(health-1)) );
 		
-		g.drawImage(image, pos, health > 5, false);
+		g.drawImage(hullArrowImage, hullArrowPosition, health > 5, false);
 	}
 	
 	public void onPaint(float deltaTime)
@@ -308,7 +323,7 @@ public class Player {
 		drawHullArrow();
 	}
 	
-	public void onUpdate(float deltaTime)
+	public void onUpdate(double deltaTime)
 	{
 		elapsedTime += deltaTime;
 		
@@ -325,16 +340,34 @@ public class Player {
 			health = 0;
 			gameOver();
 		}
-		
+
+        waterPosition = new Rect(waterPositionRelHud);
+        double waterPercentage = water/MAX_WATER;
+
+        Graphics g = game.getGraphics();
+        waterPosition.height = waterPosition.height * waterPercentage;
+        waterPosition.y += g.getHeight() - hud.getHeight() - hudBorder.getHeight() - waterPosition.height;
+
+        hudCoinsPos.clear();
 		for (int i = 0; i < hudCoinsPercentage.size(); i++) {
 			double percentage = hudCoinsPercentage.get(i);
 			percentage += hudCoinSpeed * deltaTime;
 			hudCoinsPercentage.set(i, percentage);
+
+            int distancePX = (int)(coinTubeHeight * hudCoinsPercentage.get(i));
+            hudCoinsPos.add(hudCoinWorldPos.add( new Vector2d(0, distancePX) ));
 		}
 		
 		if (hudCoinsPercentage.size() > 0 && hudCoinsPercentage.get(0) >= 1) {
 			hudCoinsPercentage.remove(0);
 		}
+
+        hullArrowImage = hullArrows.get( health > 5 ? Math.abs(health-9) : health-1 );
+        Vector2d hullArrowOrigin = hullArrowOrigins.get(health-1);
+        hullArrowPosition =
+                new Vector2d(0, hudStart)       // Start of hud
+                .add(hullArrowOriginRelHud)     // Center of hull arrow relative hud
+                .subtract(hullArrowOrigin);     // Center of arrow image relative top left
 	}
 	
 	public void onLevelResume()

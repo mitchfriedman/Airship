@@ -99,7 +99,13 @@
 	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />
 	<image key="Enemy/crimson_fighter" path="Enemies/Crimson Fighter.png" />
 	<image key="Enemy/gunship" path="Enemies/Heavy Gunship.png" />
-	
+
+    <image key="Explosion/original/1" path="Explosions/explosion 1.png" />
+    <image key="Explosion/original/2" path="Explosions/explosion 2.png" />
+    <image key="Explosion/original/3" path="Explosions/explosion 3.png" />
+    <image key="Explosion/original/4" path="Explosions/explosion 4.png" />
+    <image key="Explosion/original/5" path="Explosions/explosion 5.png" />
+
 	<!-- Clouds -->
 	<image key="Clouds/cloud 0" path="Clouds/cloud 0.png" />
 	<image key="Clouds/cloud 1" path="Clouds/cloud 1.png" />
