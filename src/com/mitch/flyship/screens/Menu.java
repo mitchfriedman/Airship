@@ -19,8 +19,15 @@ import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
 
 public class Menu extends Screen {
-	
+
+    private static final int ANIMATION_DURATION = 5000;
+
 	List<GameBody> bodies = new ArrayList<GameBody>();
+    List<Vector2d> bodiesStartPos = new ArrayList<Vector2d>();
+    private Platform platform;
+
+    private int timeTostart;
+    private int elapsedTime;
 
 	ButtonClickListener gearListener = new ButtonClickListener() {
 		@Override
@@ -33,7 +40,9 @@ public class Menu extends Screen {
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
 		public void onUp() {
-            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
+            //game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
+            platform.startGame();
+
 		}
 		@Override
 		public void onDown() { }
@@ -62,7 +71,7 @@ public class Menu extends Screen {
 		public void onDown() { }
 		public void onCancel() { }
 	};
-	
+
 	public Menu(AirshipGame game)
 	{
 		super(game);
@@ -70,10 +79,12 @@ public class Menu extends Screen {
 		Graphics g = game.getGraphics();
 		Assets.getMusic("wind").setLooping(true);
 		Assets.getMusic("wind").setVolume(0.1f);
-		Platform platform = new Platform(game, "Menu/platform");
+		platform = new Platform(game, "Menu/platform");
 		bodies.add(new Terrain(game, "Menu/terrain"));
 		bodies.add(platform);
-		
+
+        elapsedTime = 0;
+        timeTostart = platform.getAnimationDuration();
 		
 		Align alignment;
 		Vector2d position;
@@ -93,11 +104,10 @@ public class Menu extends Screen {
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Shop", alignment, position, shopListener));
-		
-		/*alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth()-8, platform.getPos().y+10);
-		bodies.add(new Button(game, "GUI/Instructions Button", alignment, position, instructionsListener));
-		*/
+
+        for(GameBody body: bodies) {
+            bodiesStartPos.add(body.getPos());
+        }
 		
 	}
 
@@ -107,6 +117,16 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onUpdate(deltaTime);
 		}
+        if(platform.getStartingGame()) {
+            clearButtonsToStart();
+        }
+        elapsedTime += deltaTime;
+        if(platform.readyToStart()) {
+            //if(elapsedTime >= timeTostart) {
+            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
+            //}
+            elapsedTime += deltaTime;
+        }
 	}
 
 	@Override
@@ -138,5 +158,16 @@ public class Menu extends Screen {
 	public void backButton() {
 		
 	}
+
+    private void clearButtonsToStart() {
+        for(int i=0;i<bodies.size();i++) {
+            float endPosY = game.getGraphics().getHeight();
+            float positionDifference = endPosY - (float)bodiesStartPos.get(i).y;
+            float tweenPositionRatio = elapsedTime / ANIMATION_DURATION;
+            GameBody body = bodies.get(i);
+            body.setPos(new Vector2d(body.getPos().x, body.getPos().y + positionDifference * tweenPositionRatio));
+        }
+    }
+
 
 }
