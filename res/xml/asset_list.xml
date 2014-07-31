@@ -61,6 +61,8 @@
 	<!-- HUD -->
 	<image key="GUI_BASE" path="GUI/base hull.png" />
 	<image key="hudcoin" path="GUI/HUD coin.png" />
+	<image key="GUI/mute-active" path="GUI/mute.png" />
+	<image key="GUI/mute-hover" path="GUI/mute.png" />
 	
 	<!-- HULL ARROWS -->
 	<image key="HULL_ARROW 1" path="GUI/hull arrows/hull arrow 1.png" />

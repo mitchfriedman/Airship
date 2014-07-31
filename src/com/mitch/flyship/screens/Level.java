@@ -62,7 +62,7 @@ public class Level extends Screen {
 
     private List<Button> buttons = new ArrayList<Button>();
     private List<Button> pauseButtons = new ArrayList<Button>();
-    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener;
+    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener, muteListener;
     private SliderMoveListener sensitivityListener;
 
     private LevelBodyManager bm;
@@ -97,6 +97,7 @@ public class Level extends Screen {
         this.properties = properties;
 
         generateListeners();
+        generateButtons();
         generate(properties);
     }
 
@@ -140,7 +141,7 @@ public class Level extends Screen {
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
         position = new Vector2d(8, 8);
-        buttons.add(new Button(game, "GUI/Pause", alignment, position, muteListener));
+        buttons.add(new Button(game, "GUI/mute", alignment, position, muteListener));
 
     }
 
@@ -255,7 +256,12 @@ public class Level extends Screen {
 
 	@Override
 	public void dispose() { music.stop(); }
-
+	
+	public void restart()
+	{
+		generate(properties);
+	}
+	
     @Override
     public void pause()
     {
@@ -520,6 +526,17 @@ public class Level extends Screen {
         hangarListener = new ButtonClickListener() {
             @Override
             public void onUp() { backButton(); }
+        };
+        muteListener = new ButtonClickListener() {
+            @Override
+            public void onUp() { 
+            	if (music.isPlaying()) {
+            		music.pause();
+            	} else {
+            		music.play();
+            	}
+            	
+            }
         };
     }
 }
