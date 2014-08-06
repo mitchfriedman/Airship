@@ -15,27 +15,26 @@ public class Popup {
 	
 	private static final int TOUCH_OFFSET = 5;
 	private static final float DEFAULT_MARGIN = 10;
-	//private static final float MIN_POPUP_HEIGHT = 250;
 	
-	boolean screenLastTouched = false;
-	boolean lastTouchedOutside = false;
+	private boolean screenLastTouched = false;
+	private boolean lastTouchedOutside = false;
 	
-	Vector2d position;
-	AirshipGame game;
-	Graphics g;
+	private Vector2d position;
+	private AirshipGame game;
+	private Graphics g;
 	
-	boolean enabled;
+	private boolean enabled;
     boolean disableOnClick = true;
-	float popupHeight = 160;//= MIN_POPUP_HEIGHT;
-	double currentY;
-	float margin = 0;
+	private float popupHeight = 160;
+	private double currentY;
+	private float margin = 0;
 	
-	Image topBorder, center;
+	private Image topBorder, center;
 	
-	HashMap<Image, Vector2d> images;
-	ArrayList<Button> buttons;
-	ArrayList<Slider> sliders;
-	ArrayList<Float> margins;
+	private HashMap<Image, Vector2d> images;
+	private ArrayList<Button> buttons;
+	private ArrayList<Slider> sliders;
+	private ArrayList<Float> margins;
 	
 	public Popup(AirshipGame game) {
 		/* At the time of writing this code, I am the only one who knows what I am doing.
@@ -124,7 +123,6 @@ public class Popup {
 	public void setMargin(float margin) {
 		this.margin = margin;
 		margins.add(margin);
-		//popupHeight += margin;
 	}
 
     public void addNumericImage(int value)

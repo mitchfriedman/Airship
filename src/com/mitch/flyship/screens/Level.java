@@ -525,7 +525,7 @@ public class Level extends Screen {
         };
         hangarListener = new ButtonClickListener() {
             @Override
-            public void onUp() { backButton(); }
+            public void onUp() { game.setScreen(new Menu(game)); }
         };
         muteListener = new ButtonClickListener() {
             @Override

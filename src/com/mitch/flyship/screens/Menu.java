@@ -3,13 +3,14 @@ package com.mitch.flyship.screens;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.LevelProperties;
+import com.mitch.flyship.Popup;
+import com.mitch.flyship.Preferences;
+import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
@@ -20,29 +21,14 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Menu extends Screen {
 
-    private static final int ANIMATION_DURATION = 5000;
-
 	List<GameBody> bodies = new ArrayList<GameBody>();
     List<Vector2d> bodiesStartPos = new ArrayList<Vector2d>();
     private Platform platform;
-
-    private int timeTostart;
-    private int elapsedTime;
-
-	ButtonClickListener gearListener = new ButtonClickListener() {
-		@Override
-		public void onUp() { }
-		@Override
-		public void onDown() { }
-		@Override
-		public void onCancel() { }
-	};
+    
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
 		public void onUp() {
-            //game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
-            platform.startGame();
-
+            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
 		}
 		@Override
 		public void onDown() { }
@@ -71,6 +57,12 @@ public class Menu extends Screen {
 		public void onDown() { }
 		public void onCancel() { }
 	};
+	SliderMoveListener sensitivityListener = new SliderMoveListener() {
+        @Override
+        public void onPositionChanged(float position) {
+            Preferences.putSensitivityInPercent(position);
+        }
+    };
 
 	public Menu(AirshipGame game)
 	{
@@ -82,16 +74,9 @@ public class Menu extends Screen {
 		platform = new Platform(game, "Menu/platform");
 		bodies.add(new Terrain(game, "Menu/terrain"));
 		bodies.add(platform);
-
-        elapsedTime = 0;
-        timeTostart = platform.getAnimationDuration();
 		
 		Align alignment;
 		Vector2d position;
-		
-		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
-		position = new Vector2d(g.getWidth()-8, 8);
-		bodies.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
 		
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.LEFT);
 		position = new Vector2d(0, g.getHeight()-3);
@@ -108,7 +93,6 @@ public class Menu extends Screen {
         for(GameBody body: bodies) {
             bodiesStartPos.add(body.getPos());
         }
-		
 	}
 
 	@Override
@@ -117,16 +101,6 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onUpdate(deltaTime);
 		}
-        if(platform.getStartingGame()) {
-            clearButtonsToStart();
-        }
-        elapsedTime += deltaTime;
-        if(platform.readyToStart()) {
-            //if(elapsedTime >= timeTostart) {
-            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
-            //}
-            elapsedTime += deltaTime;
-        }
 	}
 
 	@Override
@@ -135,7 +109,6 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onPaint(deltaTime);
 		}
-		
 	}
 	
 	@Override
@@ -158,16 +131,4 @@ public class Menu extends Screen {
 	public void backButton() {
 		
 	}
-
-    private void clearButtonsToStart() {
-        for(int i=0;i<bodies.size();i++) {
-            float endPosY = game.getGraphics().getHeight();
-            float positionDifference = endPosY - (float)bodiesStartPos.get(i).y;
-            float tweenPositionRatio = elapsedTime / ANIMATION_DURATION;
-            GameBody body = bodies.get(i);
-            body.setPos(new Vector2d(body.getPos().x, body.getPos().y + positionDifference * tweenPositionRatio));
-        }
-    }
-
-
 }
