@@ -4,6 +4,7 @@ package com.mitch.flyship.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.screens.Level;
@@ -20,15 +21,20 @@ public class Cloud extends GameBody {
 	Image image;
 	int cloudType;
 	
-	public Cloud(Level level, Vector2d vel)
+	public Cloud(AirshipGame game, Vector2d vel)
 	{
-		super(level.getAirshipGame(), "Cloud");
-		super.velocity = vel;
-		this.level = level;
+		super(game, "Cloud");
 		
 		cloudType = (int) (Math.random() * N_CLOUDS);
 		image = Assets.getImage("Clouds/cloud " + cloudType);
+		setVelocity(vel);
 		setSize(image.getSize());
+	}
+	
+	public Cloud(Level level, Vector2d vel)
+	{
+		this(level.getAirshipGame(), vel);
+		this.level = level;
 	}
 	
 	@Override
@@ -37,7 +43,7 @@ public class Cloud extends GameBody {
 		setPos(getPos().add(velocity));
 		
 		Graphics g = game.getGraphics();
-		if (getPos().x > g.getWidth() || getPos().y > g.getHeight()) {
+		if (level != null && getPos().x > g.getWidth() || getPos().y > g.getHeight()) {
 			level.getBodyManager().removeBody(this);
 		}
 	}

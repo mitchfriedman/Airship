@@ -1,10 +1,6 @@
 package com.mitch.flyship;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.mitch.flyship.screens.Loading;
 import com.mitch.framework.Screen;

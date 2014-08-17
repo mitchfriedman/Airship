@@ -14,7 +14,7 @@
 	
 	<!-- Menu -->
 	<image key="Menu/platform" path="Menu/platform.png" />
-	<image key="Menu/terrain" path="Menu/riverterrain.png" />
+	<image key="Menu/terrain" path="Menu/Menu Background.png" />
 	<image key="Menu/cargo" path="Menu/Cargo.png" />
 	<image key="Menu/bottom border" path="Menu/Bottom Border.png" />
 	

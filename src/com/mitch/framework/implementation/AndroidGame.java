@@ -68,19 +68,12 @@ public abstract class AndroidGame extends Activity implements Game {
         screen = getInitScreen();
         setContentView(renderView);
         
-        /*validateGooglePlayServices();
-        clientBuilder = new GoogleApiClientBuilder(this);
-        if(!clientBuilder.connected) {
-        	clientBuilder.connect();
-        }
-		pushHighScore(10);*/
-
         
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
 
         apiManager = new GoogleAPIManager(this);
-        apiManager.connect();
+        //apiManager.connect();
     }
     
     /*public int validateGooglePlayServices() {

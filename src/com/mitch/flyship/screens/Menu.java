@@ -8,9 +8,6 @@ import com.mitch.flyship.Assets;
 import com.mitch.flyship.ButtonClickListener;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.LevelProperties;
-import com.mitch.flyship.Popup;
-import com.mitch.flyship.Preferences;
-import com.mitch.flyship.SliderMoveListener;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
@@ -22,9 +19,7 @@ import com.mitch.framework.containers.Vector2d;
 public class Menu extends Screen {
 
 	List<GameBody> bodies = new ArrayList<GameBody>();
-    List<Vector2d> bodiesStartPos = new ArrayList<Vector2d>();
-    private Platform platform;
-    
+
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
 		public void onUp() {
@@ -35,9 +30,10 @@ public class Menu extends Screen {
 		@Override
 		public void onCancel() { }
 	};
+	
 	ButtonClickListener missionsListener = new ButtonClickListener () {
 		@Override
-		public void onUp() { game.setScreen(new Level(game, LevelProperties.getLevel("ocean"))); }
+		public void onUp() { }
 		@Override
 		public void onDown() { }
 		@Override
@@ -51,18 +47,6 @@ public class Menu extends Screen {
 		@Override
 		public void onCancel() { }
 	};
-	ButtonClickListener instructionsListener = new ButtonClickListener() {
-		@Override
-		public void onUp() { }
-		public void onDown() { }
-		public void onCancel() { }
-	};
-	SliderMoveListener sensitivityListener = new SliderMoveListener() {
-        @Override
-        public void onPositionChanged(float position) {
-            Preferences.putSensitivityInPercent(position);
-        }
-    };
 
 	public Menu(AirshipGame game)
 	{
@@ -71,9 +55,8 @@ public class Menu extends Screen {
 		Graphics g = game.getGraphics();
 		Assets.getMusic("wind").setLooping(true);
 		Assets.getMusic("wind").setVolume(0.1f);
-		platform = new Platform(game, "Menu/platform");
 		bodies.add(new Terrain(game, "Menu/terrain"));
-		bodies.add(platform);
+		bodies.add(new Platform(game, "Menu/platform"));
 		
 		Align alignment;
 		Vector2d position;
@@ -89,10 +72,7 @@ public class Menu extends Screen {
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Shop", alignment, position, shopListener));
-
-        for(GameBody body: bodies) {
-            bodiesStartPos.add(body.getPos());
-        }
+		
 	}
 
 	@Override
@@ -101,6 +81,7 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onUpdate(deltaTime);
 		}
+		
 	}
 
 	@Override
@@ -109,6 +90,7 @@ public class Menu extends Screen {
 		for (GameBody body : bodies) {
 			body.onPaint(deltaTime);
 		}
+		
 	}
 	
 	@Override
@@ -131,4 +113,6 @@ public class Menu extends Screen {
 	public void backButton() {
 		
 	}
+
+
 }
