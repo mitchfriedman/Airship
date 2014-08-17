@@ -12,6 +12,7 @@ import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Platform;
 import com.mitch.flyship.objects.Terrain;
 import com.mitch.framework.Graphics;
+import com.mitch.framework.Music;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Vector2d;
@@ -19,7 +20,9 @@ import com.mitch.framework.containers.Vector2d;
 public class Menu extends Screen {
 
 	List<GameBody> bodies = new ArrayList<GameBody>();
-
+	
+	Music music;
+	
 	ButtonClickListener endlessListener = new ButtonClickListener() {
 		@Override
 		public void onUp() {
@@ -47,19 +50,36 @@ public class Menu extends Screen {
 		@Override
 		public void onCancel() { }
 	};
+	ButtonClickListener muteListener = new ButtonClickListener() {
+        @Override
+        public void onUp() { 
+        	if (music.isPlaying()) {
+        		AirshipGame.muted = true;
+        		music.pause();
+        	} else {
+        		AirshipGame.muted = false;
+        		music.play();
+        	}
+        	
+        }
+    };
 
 	public Menu(AirshipGame game)
 	{
 		super(game);
 		
-		Graphics g = game.getGraphics();
-		Assets.getMusic("wind").setLooping(true);
-		Assets.getMusic("wind").setVolume(0.1f);
+		
+		music = Assets.getMusic("wind");
+		music.setLooping(true);
+		music.setVolume(0.1f);
+		
 		bodies.add(new Terrain(game, "Menu/terrain"));
 		bodies.add(new Platform(game, "Menu/platform"));
 		
 		Align alignment;
 		Vector2d position;
+		
+		Graphics g = game.getGraphics();
 		
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.LEFT);
 		position = new Vector2d(0, g.getHeight()-3);
@@ -72,6 +92,10 @@ public class Menu extends Screen {
 		alignment = new Align(Align.Vertical.BOTTOM, Align.Horizontal.RIGHT);
 		position = new Vector2d(g.getWidth(), g.getHeight()-3);
 		bodies.add(new Button(game, "Menu/Buttons/Shop", alignment, position, shopListener));
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
+        position = new Vector2d(g.getWidth()-8, 8);
+        bodies.add(new Button(game, "GUI/mute", alignment, position, muteListener));
 		
 	}
 
@@ -96,12 +120,16 @@ public class Menu extends Screen {
 	@Override
 	public void pause() 
 	{
-		Assets.getMusic("wind").pause();
+		music.pause();
 	}
 
 	@Override
 	public void resume() {
-		Assets.getMusic("wind").play();
+		if (AirshipGame.muted) {
+			music.pause();
+		} else {
+			music.play();
+		}
 	}
 
 	@Override

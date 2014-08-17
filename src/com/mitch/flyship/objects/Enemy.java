@@ -1,18 +1,17 @@
 package com.mitch.flyship.objects;
 
-import android.graphics.Color;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import com.mitch.flyship.AirshipGame;
+import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.Enemy.EnemyProperties;
-import com.mitch.flyship.GameBody;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidFastRenderView;
 
 public class Enemy extends GameBody {
 
@@ -112,7 +111,8 @@ public class Enemy extends GameBody {
         return components;
     }
 
-    public<T extends EnemyComponent> T getComponent(Class<T> cls)
+    @SuppressWarnings("unchecked")
+	public<T extends EnemyComponent> T getComponent(Class<T> cls)
     {
         for (EnemyComponent component : components) {
             if (component.getClass() == cls) {
@@ -129,7 +129,6 @@ public class Enemy extends GameBody {
 
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-        List<GameBody> enemyList = new ArrayList<GameBody>();
         for (EnemyProperties template : level.getEnemyTypes()) {
             if (template.getName() == type) {
                 // Enemy configurations (multiple enemies spawning in formation)

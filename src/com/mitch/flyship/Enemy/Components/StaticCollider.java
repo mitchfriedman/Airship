@@ -8,10 +8,6 @@ import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
 /**
  * A blank Enemy Component.
  */

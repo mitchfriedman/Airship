@@ -1,7 +1,6 @@
 package com.mitch.flyship.Enemy.Components;
 
 import android.content.res.XmlResourceParser;
-import android.util.Log;
 
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.framework.Graphics;

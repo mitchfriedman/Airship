@@ -13,6 +13,7 @@ public class AirshipGame extends AndroidGame {
 	public static final float DEFAULT_SENSITIVITY = 1;
     public static final boolean SHOW_COLLIDER_BOXES = false;
     public static final boolean DEBUG = true;
+    public static boolean muted = false;
 
     String moneyLeaderboardID;
 	

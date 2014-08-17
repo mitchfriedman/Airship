@@ -140,8 +140,8 @@ public class Level extends Screen {
         buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
-        position = new Vector2d(8, 8);
-        buttons.add(new Button(game, "GUI/mute", alignment, position, muteListener));
+        position = new Vector2d(g.getWidth()-50, 8);
+        pauseButtons.add(new Button(game, "GUI/mute", alignment, position, muteListener));
 
     }
 
@@ -271,7 +271,11 @@ public class Level extends Screen {
     @Override
     public void resume()
     {
-        music.play();
+    	if (AirshipGame.muted) {
+			music.pause();
+		} else {
+			music.play();
+		}
     }
 
     @Override
@@ -331,7 +335,12 @@ public class Level extends Screen {
         this.music = Assets.getMusic(music);
         this.music.setLooping(true);
         this.music.seekBegin();
-        this.music.play();
+        
+        if (AirshipGame.muted) {
+			this.music.pause();
+		} else {
+			this.music.play();
+		}
     }
 
     public void end()
@@ -531,8 +540,10 @@ public class Level extends Screen {
             @Override
             public void onUp() { 
             	if (music.isPlaying()) {
+            		AirshipGame.muted = true;
             		music.pause();
             	} else {
+            		AirshipGame.muted = false;
             		music.play();
             	}
             	

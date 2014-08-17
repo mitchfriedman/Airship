@@ -2,7 +2,6 @@ package com.mitch.flyship;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import android.graphics.Color;
 
@@ -12,7 +11,6 @@ import com.mitch.framework.Image;
 import com.mitch.framework.Input;
 import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidGame;
 
 public class Player {
 	
@@ -261,13 +259,13 @@ public class Player {
 
 		int width = 8;
 		Graphics g = game.getGraphics();
-		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes / 10) ), new Vector2d( width*0 + 4, 5));
-		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes % 10) ), new Vector2d( width*1 + 4, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes / 10) ), new Vector2d( width*0 + 5, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes % 10) ), new Vector2d( width*1 + 5, 5));
 		
 		g.drawImage(Assets.getImage("FONT/TIMER/colon"), new Vector2d(width*2+6,8));
 		
-		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds / 10) ), new Vector2d( width*3 + 4, 5));
-		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds % 10) ), new Vector2d( width*4 + 4, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds / 10) ), new Vector2d( width*3 + 5, 5));
+		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds % 10) ), new Vector2d( width*4 + 5, 5));
 	}
 	
 	public void drawCurrency()

@@ -1,7 +1,5 @@
 package com.mitch.flyship.Enemy;
 
-import android.content.res.XmlResourceParser;
-
 import com.mitch.flyship.objects.Enemy;
 import com.mitch.flyship.objects.Ship;
 

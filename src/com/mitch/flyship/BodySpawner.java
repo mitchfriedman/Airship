@@ -1,7 +1,5 @@
 package com.mitch.flyship;
 
-import android.util.Log;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
