@@ -4,6 +4,8 @@ package com.mitch.flyship.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
@@ -11,7 +13,6 @@ import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidFastRenderView;
 
 public class Cloud extends GameBody {
 	
@@ -24,6 +25,8 @@ public class Cloud extends GameBody {
 	public Cloud(AirshipGame game, Vector2d vel)
 	{
 		super(game, "Cloud");
+		
+		Log.d("Cloud", "cloud created");
 		
 		cloudType = (int) (Math.random() * N_CLOUDS);
 		image = Assets.getImage("Clouds/cloud " + cloudType);
@@ -38,14 +41,16 @@ public class Cloud extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(double deltaTime) {
-        Vector2d velocity = this.velocity.scale( 1000 / (AndroidFastRenderView.UPS * deltaTime) );
-		setPos(getPos().add(velocity));
+	public void onUpdate(double deltaSeconds) {;
+		setPos(getPos().add(velocity.scale(deltaSeconds)));
 		
 		Graphics g = game.getGraphics();
-		if (level != null && getPos().x > g.getWidth() || getPos().y > g.getHeight()) {
+		if ( (level != null) && (getPos().x > g.getWidth() || getPos().y > g.getHeight()) ) {
 			level.getBodyManager().removeBody(this);
 		}
+		
+
+		Log.d("Cloud", this.getPos().y + "");
 	}
 
 	@Override
@@ -66,8 +71,9 @@ public class Cloud extends GameBody {
 	
 	public static List<GameBody> spawnObjects(Level level, String type)
 	{
-		Cloud cloud = new Cloud(level, new Vector2d(0,1));
+		Cloud cloud = new Cloud(level, new Vector2d(0,8));
 		cloud.setDepth( 149 + (int) (Math.random()*2) );
+		
 		
 		Graphics g = level.getAirshipGame().getGraphics();
 		Vector2d cloudSize = cloud.getSize();

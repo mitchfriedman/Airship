@@ -103,7 +103,7 @@ public class Menu extends Screen {
 	public void update(float deltaTime) 
 	{
 		for (GameBody body : bodies) {
-			body.onUpdate(deltaTime);
+			body.onUpdate(deltaTime / 1000);
 		}
 		
 	}
@@ -112,7 +112,7 @@ public class Menu extends Screen {
 	public void paint(float deltaTime)
 	{	
 		for (GameBody body : bodies) {
-			body.onPaint(deltaTime);
+			body.onPaint(deltaTime / 1000);
 		}
 		
 	}

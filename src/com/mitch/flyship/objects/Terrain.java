@@ -17,11 +17,11 @@ public class Terrain extends GameBody {
 	double swayLength = 0; // This is set in the constructor
 	double sway = 0;
 	double elapsedTime = 0;
-	double swayTime = 50000;
+	double swayTime = 50;
 	
 	List<Cloud> clouds;
 	int cloudSpawnRate = 300;
-	double cloudSpeed = 0.6;
+	double cloudSpeed = 8;
 	int cloudMinY;
 	int cloudMaxY;
 	
@@ -46,10 +46,10 @@ public class Terrain extends GameBody {
 	}
 	
 	@Override
-	public void onUpdate(double deltaTime) {
+	public void onUpdate(double deltaSeconds) {
 		
-		elapsedTime += deltaTime;
-		calculateTerrainSway(deltaTime);
+		elapsedTime += deltaSeconds;
+		calculateTerrainSway(deltaSeconds);
 
 		spawnClouds();
 		
@@ -68,19 +68,19 @@ public class Terrain extends GameBody {
 		}
 		
 		for (Cloud cloud : clouds) {
-			cloud.onUpdate(deltaTime);
+			cloud.onUpdate(deltaSeconds);
 		}
 	}
 
 	@Override
-	public void onPaint(float deltaTime) {
+	public void onPaint(float deltaSeconds) {
 		Graphics g = game.getGraphics();
 		
 		
 		g.drawImage(image, getPos().x-sway, getPos().y);
 		
 		for (Cloud cloud : clouds) {
-			cloud.onPaint(deltaTime);
+			cloud.onPaint(deltaSeconds);
 		}
 	}
 	

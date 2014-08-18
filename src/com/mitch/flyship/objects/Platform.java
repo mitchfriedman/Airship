@@ -54,12 +54,12 @@ public class Platform extends GameBody {
 	}
 
 	@Override
-	public void onUpdate(double deltaTime) {
+	public void onUpdate(double deltaSeconds) {
 		
 	}
 
 	@Override
-	public void onPaint(float deltaTime) {
+	public void onPaint(float deltaSeconds) {
 		
 		Graphics g = game.getGraphics();
 		g.drawImage(getImage(), getPos());
