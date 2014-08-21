@@ -177,6 +177,11 @@ public abstract class AndroidGame extends Activity implements Game {
     	return screen;
     }
     
+    public GoogleAPIManager getGoogleAPIManager()
+    {
+    	return apiManager;
+    }
+    
 // keep these methods for reference
     
     /*@SuppressWarnings("rawtypes")

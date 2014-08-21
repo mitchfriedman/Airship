@@ -14,8 +14,6 @@ public class AirshipGame extends AndroidGame {
     public static final boolean SHOW_COLLIDER_BOXES = false;
     public static final boolean DEBUG = true;
     public static boolean muted = false;
-
-    String moneyLeaderboardID;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +25,6 @@ public class AirshipGame extends AndroidGame {
 		float min = MIN_SENSITIVITY;
         Preferences.DEFAULT_SENSITIVITY_PERCENT = (DEFAULT_SENSITIVITY / (max - min));
         Preferences.resetDefaults();
-
-
-        moneyLeaderboardID = getResources().getString(R.string.leaderboard_money_earned);
 
 	}
 
@@ -55,9 +50,14 @@ public class AirshipGame extends AndroidGame {
 		return params;
 	}
 
-    public void pushMoneyScore(long score)
+    public void pushScore(String leaderboard, long score)
     {
-        apiManager.pushLeaderboardScore(moneyLeaderboardID, score);
+        apiManager.pushLeaderboardScore(leaderboard, score);
+    }
+    
+    public void loadBoard(String leaderboard)
+    {
+    	apiManager.loadBoard(leaderboard);
     }
 
 }

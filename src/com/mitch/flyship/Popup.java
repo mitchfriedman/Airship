@@ -1,7 +1,6 @@
 package com.mitch.flyship;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Slider;
@@ -14,7 +13,8 @@ import com.mitch.framework.containers.Vector2d;
 public class Popup {
 	
 	private static final int TOUCH_OFFSET = 5;
-	private static final float DEFAULT_MARGIN = 10;
+	
+	public float marginTop = 0;
 	
 	private boolean screenLastTouched = false;
 	private boolean lastTouchedOutside = false;
@@ -25,16 +25,16 @@ public class Popup {
 	
 	private boolean enabled;
     boolean disableOnClick = true;
-	private float popupHeight = 160;
-	private double currentY;
-	private float margin = 0;
+	private double currentY = 0;
+	private int popupHeight = 0;
 	
-	private Image topBorder, center;
+	public Image topBorder, center;
 	
-	private HashMap<Image, Vector2d> images;
+	//private HashMap<Image, Vector2d> images;
+	private ArrayList<Image> images;
+	private ArrayList<Vector2d> imagePositions;
 	private ArrayList<Button> buttons;
 	private ArrayList<Slider> sliders;
-	private ArrayList<Float> margins;
 	
 	public Popup(AirshipGame game) {
 		/* At the time of writing this code, I am the only one who knows what I am doing.
@@ -46,15 +46,33 @@ public class Popup {
 		topBorder = Assets.getImage("GUI/menu border");
 		center = Assets.getImage("GUI/menu center");
 		
-		images = new HashMap<Image, Vector2d>();
+		images = new ArrayList<Image>();
+		imagePositions = new ArrayList<Vector2d>();
 		buttons = new ArrayList<Button>();
 		sliders = new ArrayList<Slider>();
-		margins = new ArrayList<Float>();
-
-		position = new Vector2d((g.getWidth()-topBorder.getWidth())/2, (g.getHeight()-(topBorder.getHeight()*2 + popupHeight))/2);
-		currentY = position.y + topBorder.getHeight();
+		position = new Vector2d(0,0);
 	}
-
+	
+	public void build()
+	{
+		popupHeight = (int) currentY;
+		
+		position = new Vector2d( g.getWidth()/2 - topBorder.getWidth()/2, 
+				g.getHeight()/2 - popupHeight / 2 + marginTop);
+		
+		for (Vector2d imagePos : imagePositions) {
+			imagePos.y += position.y - marginTop;
+		}
+		
+		for (Button button : buttons) {
+			button.setPos(button.getPos().add(new Vector2d(0, position.y - marginTop)));
+		}
+		
+		for (Slider slider : sliders) {
+			slider.setPos(slider.getPos().add(new Vector2d(0, position.y - marginTop)));
+		}
+	}
+	
     public void setDisableOnClick(boolean disable)
     {
         disableOnClick = disable;
@@ -90,23 +108,24 @@ public class Popup {
 				input.getTouchX(0) < position.x - TOUCH_OFFSET || input.getTouchX(0) > position.x + topBorder.getWidth() + TOUCH_OFFSET);
 	}
 	
-	public void paint(float deltaTime) {
-		
-		position = new Vector2d((g.getWidth()-topBorder.getWidth())/2, (g.getHeight()-(topBorder.getHeight()*2 + popupHeight))/2);
+	public void paint(float deltaTime) 
+	{
 		
 		if(enabled) {
+			
 			g.drawImage(topBorder, position);
 						
-			for(double i=position.y + topBorder.getHeight(); i < popupHeight + position.y; i++) {
-				g.drawImage(center, new Vector2d(position.x, i));
+			for(int i = 0; i < popupHeight - marginTop - topBorder.getHeight(); i++) {
+				int yPos = (int) (position.y + topBorder.getHeight() + i);
+				g.drawImage(center, new Vector2d(position.x, yPos));
 			}
-			g.drawImage(topBorder, new Vector2d(position.x, position.y + popupHeight), false, true);
-
-			for (HashMap.Entry<Image, Vector2d> image : images.entrySet()) {
-			    Image temp = image.getKey();
-			    Vector2d pos = image.getValue();
-			    
-			    g.drawImage(temp, pos);
+			
+			g.drawImage(topBorder, new Vector2d(position.x, position.y + popupHeight-marginTop), false, true);
+			
+			for (int i = 0; i < images.size(); i++) {
+				Image image = images.get(i);
+				Vector2d pos = imagePositions.get(i);
+				g.drawImage(image, pos);
 			}
 			
 			for(Button button : buttons) {
@@ -120,11 +139,45 @@ public class Popup {
 		
 	}
 	
-	public void setMargin(float margin) {
-		this.margin = margin;
-		margins.add(margin);
+	public void addHeightMargin(int margin) {
+		currentY += margin;
 	}
+	
+	public void addTimerImage(final double timeInSeconds, final String FONT)
+	{
+		
+		String strMinutes = String.valueOf( (int) (timeInSeconds / 60) );
+		String strSeconds = String.valueOf( (int) (timeInSeconds % 60) );
+		
+		if (strMinutes.length() == 1) {
+			strMinutes = "0" + strMinutes;
+		}
+		
+		if (strSeconds.length() == 1) {
+			strSeconds = "0" + strSeconds;
+		}
+		
+		String strTime = strMinutes + ":" + strSeconds;
+		
+		final int WIDTH = Assets.getImage(FONT + "0").getWidth() * (2 + strMinutes.length()) + 
+				Assets.getImage(FONT + ":").getWidth();
+		final int HEIGHT = Assets.getImage(FONT + "0").getHeight();;
+		final int CHARACTER_SPACING = 0;
+		
+		int currentX = 0;
+		Vector2d timerPos = new Vector2d( g.getWidth()/2 - WIDTH/2, 0 );
+		for (int c = 0; c < strTime.length(); c++) {
 
+			Image charImage = Assets.getImage(FONT + strTime.charAt(c));
+			Vector2d charPos = timerPos.add(new Vector2d(currentX, currentY + HEIGHT/2 - charImage.getHeight()/2));
+			images.add(charImage);
+			imagePositions.add(charPos);
+			currentX += charImage.getWidth() + CHARACTER_SPACING;
+		}
+		
+		currentY += HEIGHT;
+	}
+	
     public void addNumericImage(int value)
     {
         final String FONT = "FONT/TIMER/";
@@ -135,79 +188,56 @@ public class Popup {
                 FONT_WIDTH * strValue.length() / 2, currentY);
 
         for (int n = 0; n < strValue.length(); n++) {
-            Vector2d pos = numericImagePos.add(new Vector2d(FONT_WIDTH*n+n, 0));
-            images.put( Assets.getImage(FONT + strValue.charAt(n)) , pos);
+            images.add(Assets.getImage(FONT + strValue.charAt(n)));
+			imagePositions.add( numericImagePos.add( new Vector2d(FONT_WIDTH * n + n, 0) ) );
         }
 
     }
 
 	public void addImage(String name, Align.Horizontal horizontal) {
+		
 		Image image = Assets.getImage(name);
-		Vector2d pos;
+		Vector2d pos = new Vector2d(0, currentY);
+		
 		switch(horizontal) {
 		case LEFT:
-			pos = centerImage(image);
+			pos.x = g.getWidth() / 2 - center.getWidth() / 2 + topBorder.getHeight();
 			break;
 		case CENTER:
-			pos = centerImage(image);
+			pos.x = g.getWidth() / 2 - image.getWidth() / 2;
 			break;
 		case RIGHT:
-			pos = centerImage(image);
+			pos.x = g.getWidth() / 2 + center.getWidth() / 2 - topBorder.getHeight();
 			break;
-		default: 
-			pos = centerImage(image);
 		}
 		
-		pos = addMargin(pos);
-		
-		images.put(image, pos);
-		//popupHeight += image.getHeight();
+		images.add(image);
+		imagePositions.add(pos);
 		currentY += image.getHeight();
 	}
 	
 	public void addSlider(float defaultValue, SliderMoveListener listener) {
 
-		Vector2d pos = new Vector2d(0,0);//new Vector2d((g.getWidth() - )/2,currentY);
+		Vector2d pos = new Vector2d(0,0);
 		
 		Slider slider = new Slider(game, "GUI/Slider bar", pos, defaultValue, listener);
-		pos = new Vector2d((g.getWidth() - slider.getWidth())/2, currentY);
-		setMargin(30);
-		pos = addMargin(pos);
+		pos = new Vector2d(g.getWidth()/2 - slider.getWidth()/2, currentY);
 		slider.setPos(pos);
-		
-		//popupHeight += slider.getHeight();
 		sliders.add(slider);
+		
 		currentY += slider.getHeight();
 		
 	}
 	
-	private Vector2d addMargin(Vector2d pos) {
-		if(margin == 0) {
-			pos.y += DEFAULT_MARGIN;
-		} else {
-			pos.y += margin;
-			margin = 0;
-		}
-		return pos;
-	}
-	
-	private Vector2d centerImage(Image image) {
-		Vector2d pos = new Vector2d((g.getWidth() - image.getWidth())/2, currentY);
-		return pos;
-	}
-	
 	public void addButton(ButtonClickListener listener, String name) {
-		Vector2d pos = new Vector2d((g.getWidth() - Assets.getImage(name+"-active").getWidth())/2, currentY);
-		pos = addMargin(pos);
+		
+		Vector2d pos = new Vector2d(0,0);
 		Button button = new Button(game, name, new Align(Align.Vertical.TOP, Align.Horizontal.LEFT), pos, listener);
-		
-		position = addMargin(position);
-		
-		
+		pos = new Vector2d((g.getWidth() - Assets.getImage(name+"-active").getWidth())/2, currentY);
+		button.setPos(pos);
 		buttons.add(button);
-		//popupHeight += button.getImage().getHeight();
-		currentY += button.getImage().getHeight();
 		
+		currentY += button.getImage().getHeight();
 	}
 
 	

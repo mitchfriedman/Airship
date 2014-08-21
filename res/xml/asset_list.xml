@@ -41,6 +41,18 @@
 	<image key="GUI/Hangar Button-active" path="GUI/pause n settings/Pause Buttons/Hangar Button.png" />
 	<image key="GUI/Hangar Button-hover" path="GUI/pause n settings/Pause Buttons/Hangar Button Hover.png" />
 	
+	<!-- End Game GUI -->
+	<image key="END/CRASHED" path="GUI/endgame/crashed ending text.png" />
+	<image key="END/WATER" path="GUI/endgame/water ending text.png" />
+	<image key="END/ENDING" path="GUI/endgame/generic ending text.png" />
+	<image key="END/HANGAR-active" path="GUI/endgame/end screen hangar button.png" />
+	<image key="END/HANGAR-hover" path="GUI/endgame/end screen hangar button.png" />
+	<image key="END/RETRY-active" path="GUI/endgame/end screen retry button.png" />
+	<image key="END/RETRY-hover" path="GUI/endgame/end screen retry button.png" />
+	<image key="END/LEADERBOARDS-active" path="GUI/endgame/leaderboard button.png" />
+	<image key="END/LEADERBOARDS-hover" path="GUI/endgame/leaderboard button.png" />
+	
+	
 	<!-- Slider -->
 	<image key="GUI/Slider bar" path="GUI/pause n settings/Popup/slider bar.png"/>
 	<image key="GUI/Slider notch" path="GUI/pause n settings/Popup/Settings Slider.png" />
@@ -95,7 +107,7 @@
 	<image key="FONT/TIMER/7" path="Fonts/Timer/7.png" />
 	<image key="FONT/TIMER/8" path="Fonts/Timer/8.png" />
 	<image key="FONT/TIMER/9" path="Fonts/Timer/9.png" />
-	<image key="FONT/TIMER/colon" path="Fonts/Timer/colon.png" />
+	<image key="FONT/TIMER/:" path="Fonts/Timer/colon.png" />
 	
 	<!-- Enemies -->
 	<image key="Enemy/flock_of_gulls" path="Enemies/Flock of Gulls.png" />

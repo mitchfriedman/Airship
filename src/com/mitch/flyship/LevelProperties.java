@@ -76,6 +76,7 @@ public class LevelProperties {
                 levelProperties.background = xrp.getAttributeValue(null, "background");
                 levelProperties.music = xrp.getAttributeValue(null, "music");
                 levelProperties.ship = xrp.getAttributeValue(null, "ship");
+                levelProperties.leaderboardID = xrp.getAttributeValue(null, "leaderboard_id");
 
                 // Level Speed / Max Level (for water, etc.)
                 levelProperties.maxLevel = Integer.valueOf(xrp.getAttributeValue(null, "maxLevel"));
@@ -221,9 +222,14 @@ public class LevelProperties {
     public int getWaterSpawnTimeEnd() {
         return waterSpawnTimeEnd;
     }
+    
+    public String getLeaderboardID()
+    {
+    	return leaderboardID;
+    }
 
 
-    private String name;
+    private String name, leaderboardID;
 	private String background, music, ship;
 	private int maxLevel;
     private double timeToMaxLevel;

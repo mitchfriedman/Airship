@@ -30,6 +30,7 @@ import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
+import com.mitch.framework.containers.Align.Horizontal;
 import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidFastRenderView;
 
@@ -40,6 +41,11 @@ public class Level extends Screen {
 		OVER,
 		PAUSED,
 		RUNNING
+	}
+	
+	enum DeathReason {
+		CRASH,
+		LACK_OF_WATER
 	}
 
     public List<EnemyProperties> getEnemyTypes()
@@ -62,7 +68,7 @@ public class Level extends Screen {
 
     private List<Button> buttons = new ArrayList<Button>();
     private List<Button> pauseButtons = new ArrayList<Button>();
-    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener, muteListener;
+    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener, muteListener, leaderboardsListener, restartListener;
     private SliderMoveListener sensitivityListener;
 
     private LevelBodyManager bm;
@@ -167,12 +173,20 @@ public class Level extends Screen {
         pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
 
         options = new Popup(game);
+        
+        options.addHeightMargin(options.topBorder.getHeight() + 4);
+        
         options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
+        options.addHeightMargin(3);
         options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
-        options.setMargin(20);
+        options.addHeightMargin(10);
+        
         options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
-        options.setMargin(20);
+        options.addHeightMargin(3);
         options.addButton(calibrateListener, "GUI/Calibrate");
+        options.addHeightMargin(4);
+        
+        options.build();
     }
 
     private void generateShip(String shipID)
@@ -231,7 +245,12 @@ public class Level extends Screen {
 
         return time/1000 * (AndroidFastRenderView.UPS * getLevelSpeed());
     }
-
+    
+    public String getLeaderboardID()
+    {
+    	return properties.getLeaderboardID();
+    }
+    
     public double getLevelSpeed()
     {
         return speed;
@@ -315,8 +334,25 @@ public class Level extends Screen {
     private void buildEndPopup(int score)
     {
         endPopup = new Popup(game);
+        endPopup.addImage("END/ENDING", Horizontal.CENTER);
+        endPopup.marginTop = Assets.getImage("END/ENDING").getHeight() + endPopup.topBorder.getHeight();
+        
+        endPopup.addHeightMargin(endPopup.topBorder.getHeight() * 2 + 2);
+        
+        endPopup.addImage("END/CRASHED", Horizontal.CENTER);
+        endPopup.addHeightMargin(5);
+        endPopup.addTimerImage(elapsedTime, "FONT/TIMER/");
+        endPopup.addHeightMargin(10);
+        
+        endPopup.addButton(leaderboardsListener, "END/LEADERBOARDS");
+        endPopup.addHeightMargin(3);
+        endPopup.addButton(hangarListener, "END/HANGAR");
+        endPopup.addHeightMargin(3);
+        endPopup.addButton(restartListener, "END/RETRY");
+        endPopup.addHeightMargin(3);
+        
         endPopup.setDisableOnClick(false);
-        endPopup.addNumericImage(score);
+        endPopup.build();
     }
 
 	public void setBackgroundImage(String image) 
@@ -546,6 +582,18 @@ public class Level extends Screen {
             		AirshipGame.muted = false;
             		music.play();
             	}
+            	
+            }
+        };
+        leaderboardsListener = new ButtonClickListener() {
+            @Override
+            public void onUp() { 
+            	game.loadBoard(getLeaderboardID());
+            }
+        };
+        restartListener = new ButtonClickListener() {
+            @Override
+            public void onUp() { 
             	
             }
         };

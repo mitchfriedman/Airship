@@ -4,8 +4,6 @@ package com.mitch.flyship.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.GameBody;
@@ -25,8 +23,6 @@ public class Cloud extends GameBody {
 	public Cloud(AirshipGame game, Vector2d vel)
 	{
 		super(game, "Cloud");
-		
-		Log.d("Cloud", "cloud created");
 		
 		cloudType = (int) (Math.random() * N_CLOUDS);
 		image = Assets.getImage("Clouds/cloud " + cloudType);
@@ -50,7 +46,6 @@ public class Cloud extends GameBody {
 		}
 		
 
-		Log.d("Cloud", this.getPos().y + "");
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Player {
 	
-	final double WATER_VALUE_DRAIN_TIME = 50;
+	final double WATER_VALUE_DRAIN_TIME = 1;
 	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9; //9
@@ -246,9 +246,9 @@ public class Player {
 	
 	public void gameOver()
 	{
+        game.getGoogleAPIManager().connect();
+        game.pushScore(level.getLeaderboardID(), (long) elapsedTime);
         level.end();
-
-        game.pushMoneyScore(currency);
 	}
 	
 	public void drawTime(int time)
@@ -262,7 +262,7 @@ public class Player {
 		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes / 10) ), new Vector2d( width*0 + 5, 5));
 		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (minutes % 10) ), new Vector2d( width*1 + 5, 5));
 		
-		g.drawImage(Assets.getImage("FONT/TIMER/colon"), new Vector2d(width*2+6,8));
+		g.drawImage(Assets.getImage("FONT/TIMER/:"), new Vector2d(width*2+6,8));
 		
 		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds / 10) ), new Vector2d( width*3 + 5, 5));
 		g.drawImage(Assets.getImage("FONT/TIMER/" + (int) (seconds % 10) ), new Vector2d( width*4 + 5, 5));

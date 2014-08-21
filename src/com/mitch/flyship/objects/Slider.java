@@ -24,7 +24,7 @@ public class Slider extends GameBody {
 	
 	public Slider(AirshipGame game, String name, Vector2d pos, float defaultValue, SliderMoveListener listener) {
 		super(game, name);
-		slider = Assets.getImage(name);
+		slider = Assets.getImage("GUI/Slider bar");
 		low = Assets.getImage("GUI/low");
 		high = Assets.getImage("GUI/high");
 		notch = Assets.getImage("GUI/Slider notch");
@@ -95,7 +95,7 @@ public class Slider extends GameBody {
 
 	
 	public float getHeight() {
-		return notch.getHeight() + 20;
+		return notch.getHeight();
 	}
 	
 	public float getWidth() {
@@ -106,10 +106,10 @@ public class Slider extends GameBody {
 	public void onPaint(float deltaTime) {
 		// TODO Auto-generated method stub
 		Graphics g = game.getGraphics();
-		g.drawImage(low, getPos().add(new Vector2d(3,0)));
-		g.drawImage(slider, new Vector2d(getPos().x + 7 + low.getWidth(), getPos().y));
-		g.drawImage(high, new Vector2d(getPos().x + 11 + low.getWidth() + slider.getWidth(), getPos().y));
-		g.drawImage(notch, new Vector2d(getPos().x + 7 + low.getWidth() + sliderPosition*(maxX-minX), getPos().y - notch.getHeight()/2 + slider.getHeight()/2));
+		g.drawImage(low, getPos().add(new Vector2d(3,notch.getHeight()/2 - low.getHeight()/2)));
+		g.drawImage(slider, new Vector2d(getPos().x + 7 + low.getWidth(), getPos().y + notch.getHeight()/2 - slider.getHeight()/2));
+		g.drawImage(high, new Vector2d(getPos().x + 11 + low.getWidth() + slider.getWidth(), getPos().y + notch.getHeight()/2 - high.getHeight()/2));
+		g.drawImage(notch, new Vector2d(getPos().x + 7 + low.getWidth() + sliderPosition*(maxX-minX), getPos().y));
 	}
 
 	@Override

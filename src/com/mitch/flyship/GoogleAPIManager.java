@@ -1,10 +1,12 @@
 package com.mitch.flyship;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 
-import java.util.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -74,6 +76,17 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
     {
         leaderboardScores.add(new LeaderboardScore(leaderboardID, score));
         tryPushScores();
+    }
+    
+    public void loadBoard(String leaderboard)
+    {
+    	if (client.isConnected()) {
+    		game.startActivityForResult(Games.Leaderboards.getLeaderboardIntent(client,
+    	        leaderboard), REQUEST_LEADERBOARD);
+    	} else {
+    		client.connect();
+    	}
+
     }
 
     @Override
