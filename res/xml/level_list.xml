@@ -15,10 +15,25 @@
 
 
         <enemies>
+			
+            <enemy name="crimson_fighter"
+                   damage="2"
+                   startLevel="0"
+                   endLevel="100"
+                   startSpawnTime_RangeStart="10"
+                   startSpawnTime_RangeEnd="20"
+                   endSpawnTime_RangeStart="10"
+                   endSpawnTime_RangeEnd="20" >
 
+                <StaticImage image="Enemy/crimson_fighter" />
+                <VerticalEnemy speed="20"
+                               directionUp="false" />
+                <ExplosionAnimation />
+            </enemy>
+            
             <enemy name="bird"
                    damage="1"
-                   startLevel="1"
+                   startLevel="0"
                    endLevel="25"
                    startSpawnTime_RangeStart="5"
                    startSpawnTime_RangeEnd="10"
@@ -28,12 +43,11 @@
                 <StaticImage image="Enemy/flock_of_gulls" />
                 <VerticalEnemy speed="20"
                                directionUp="false" />
-                <ExplosionAnimation />
             </enemy>
 
-            <enemy name="heavy gunship"
-                   damage="0"
-                   startLevel="1"
+            <enemy name="gunship"
+                   damage="3"
+                   startLevel="0"
                    endLevel="25"
                    startSpawnTime_RangeStart="5"
                    startSpawnTime_RangeEnd="10"
@@ -43,6 +57,40 @@
                 <StaticImage image="Enemy/gunship" />
                 <HorizontalEnemy speed="15"
                                  directionLeft="true" />
+            </enemy>
+            
+            <enemy name="graf zeppelin from right"
+                   damage="5"
+                   startLevel="13"
+                   endLevel="100"
+                   startSpawnTime_RangeStart="240"
+                   startSpawnTime_RangeEnd="240"
+                   endSpawnTime_RangeStart="240"
+                   endSpawnTime_RangeEnd="240" >
+
+                <StaticImage image="Enemy/graf_zeppelin" />
+                <HorizontalEnemy speed="30"
+                                 directionLeft="true"
+                                 spawningPositionStart="0"
+                                 spawningPositionEnd="0.2" />
+            </enemy>
+            
+            <enemy name="graf zeppelin from left"
+                   damage="5"
+                   startLevel="0"
+                   endLevel="100"
+                   startSpawnTime_RangeStart="240"
+                   startSpawnTime_RangeEnd="240"
+                   endSpawnTime_RangeStart="240"
+                   endSpawnTime_RangeEnd="240" >
+
+                <StaticImage image="Enemy/graf_zeppelin"
+                    		 invertHorizontal="true" />
+                <HorizontalEnemy speed="30"
+                                 directionLeft="false"
+                                 includingSpawnFromTop="false"
+                                 spawningPositionStart="0"
+                                 spawningPositionEnd="0.2" />
             </enemy>
 
         </enemies>

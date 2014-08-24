@@ -14,7 +14,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Player {
 	
-	final double WATER_VALUE_DRAIN_TIME = 1;
+	final double WATER_VALUE_DRAIN_TIME = 10000000;
 	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9; //9
@@ -64,7 +64,7 @@ public class Player {
 	List<Vector2d> hullArrowOrigins = new ArrayList<Vector2d>();
 	List<Image> hullArrows = new ArrayList<Image>();
     Image hullArrowImage;
-    Vector2d hullArrowPosition;
+    Vector2d hullArrowPosition = new Vector2d(0,0);
 	
 	
 	public Player(Level level)
@@ -91,6 +91,8 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,5)); // 3 | 7 | true
 		hullArrowOrigins.add(new Vector2d(0,3)); // 2 | 8 | true
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
+		
+		hullArrowImage = hullArrows.get(0);
 		
 		resetTiltSensitivityToPreference();
 

@@ -14,6 +14,8 @@ public class HorizontalEnemy extends EnemyComponent {
     double speed;
     boolean directionLeft = false;
     boolean includingSpawnFromTop = true;
+    float spawningPositionStart = 0;
+    float spawningPositionEnd = 1;
 
     public HorizontalEnemy() {}
 
@@ -23,6 +25,16 @@ public class HorizontalEnemy extends EnemyComponent {
         speed = Double.valueOf(xrp.getAttributeValue(null, "speed"));
         directionLeft = xrp.getAttributeBooleanValue(null, "directionLeft", false);
         includingSpawnFromTop = xrp.getAttributeBooleanValue(null, "includingSpawnFromTop", true);
+        
+        String sps = xrp.getAttributeValue(null, "spawningPositionStart");
+        if (sps != null) {
+            spawningPositionStart = Float.valueOf(sps);
+        }
+        
+        String spe = xrp.getAttributeValue(null, "spawningPositionEnd");
+        if (spe != null) {
+            spawningPositionEnd = Float.valueOf(spe);
+        }
     }
 
     @Override
@@ -36,10 +48,12 @@ public class HorizontalEnemy extends EnemyComponent {
         super.onObjectCreationCompletion();
 
         Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
-        double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
+        
         double yModifier = includingSpawnFromTop ? Math.abs(g.getWidth()/enemy.getVelocity().x) : 0;
-        double y = Math.random() * (g.getHeight()+yModifier) - enemy.getSize().y - yModifier;
-
+        double spawningPositionStartFinal = g.getHeight() * spawningPositionStart - yModifier;
+        double spawningPositionEndFinal = (g.getHeight() - enemy.getSize().y + yModifier) * spawningPositionEnd ;
+        double y = Math.random() * spawningPositionEndFinal - spawningPositionStartFinal;
+        double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
         enemy.setPos(new Vector2d(x, y));
     }
 
@@ -61,6 +75,8 @@ public class HorizontalEnemy extends EnemyComponent {
         enemy.directionLeft = directionLeft;
         enemy.speed = speed;
         enemy.includingSpawnFromTop = includingSpawnFromTop;
+        enemy.spawningPositionStart = spawningPositionStart;
+        enemy.spawningPositionEnd = spawningPositionEnd;
 
         return enemy;
     }

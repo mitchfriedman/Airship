@@ -49,8 +49,8 @@ public class BodySpawner {
     double spawnRangeEnd;
     double spawnRangeProgress;
 
-    boolean cappedAtMaxLevel = false;
-    boolean ignoringLevelRange = true;
+    boolean cappedAtMaxLevel = true;
+    boolean ignoringLevelRange = false;
 	
 	double distanceSinceLastSpawn = 0;
 	double randomSpawnDistance = 0;
@@ -108,9 +108,11 @@ public class BodySpawner {
                 (spawnEnd_Range2 - spawnStart_Range2) * (spawnRangeProgress+1);
     }
 
-	public void updateDistance(double distance)
+	public void updateDistance(int level, double distance)
 	{
-        distanceSinceLastSpawn += distance;
+		if (level >= levelStart) {
+	        distanceSinceLastSpawn += distance;
+		}
 	}
 	
 	public void resetSpawnDistance()
@@ -121,10 +123,7 @@ public class BodySpawner {
 	
 	public boolean canSpawn(int level, double distanceFactor)
 	{
-        //Log.d("BodySpawner", distanceSinceLastSpawn + " " +
-        //        (spawnRangeStart+randomSpawnDistance)*distanceFactor);
-
-        return //((level >= levelStart && level < levelEnd) || ignoringLevelRange) &&
+        return ((level >= levelStart) || ignoringLevelRange) &&
                 (distanceSinceLastSpawn > spawnRangeStart*distanceFactor +
                 randomSpawnDistance*distanceFactor);
 	}

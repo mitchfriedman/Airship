@@ -68,22 +68,24 @@ public class Level extends Screen {
 
     private List<Button> buttons = new ArrayList<Button>();
     private List<Button> pauseButtons = new ArrayList<Button>();
-    private ButtonClickListener gearListener, hangarListener, settingsListener, resumeListener, calibrateListener, muteListener, leaderboardsListener, restartListener;
+    private ButtonClickListener pauseListener, endGameListener, hangarListener, 
+    							settingsListener, resumeListener, calibrateListener, 
+    							muteListener, leaderboardsListener, restartListener;
     private SliderMoveListener sensitivityListener;
 
     private LevelBodyManager bm;
     private LevelSpawnerManager sm;
 
     private GameState state = GameState.RUNNING;
-    private long lastUpdate = 0;
-    private long elapsedTime = 0;
+    private double lastUpdate = 0;
+    private double elapsedTime = 0;
 	private boolean isSpawning = true;
 
     private int maxLevel;
     private double timeToMaxLevel;
     private double startSpeed;
     private double endSpeed;
-    private int currentLevel = 1;
+    private int currentLevel = 0;
     private boolean maxLevelCap = true;
 
 	private Popup options;
@@ -143,7 +145,7 @@ public class Level extends Screen {
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth()-8, 8);
-        buttons.add(new Button(game, "GUI/Gear", alignment, position, gearListener));
+        buttons.add(new Button(game, "GUI/Gear", alignment, position, pauseListener));
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
         position = new Vector2d(g.getWidth()-50, 8);
@@ -166,7 +168,7 @@ public class Level extends Screen {
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
-        pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
+        pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, endGameListener));
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
@@ -285,6 +287,9 @@ public class Level extends Screen {
     public void pause()
     {
         music.pause();
+        if (state != GameState.OVER) {
+            state = GameState.PAUSED;
+        }
     }
 
     @Override
@@ -313,10 +318,9 @@ public class Level extends Screen {
     {
         // Once you've touch somebody's heart, you'll be as cool as
         // the rest of the cold hearted murderers out there
-        //elapsedTime += deltaTime;
-        int level = (int) ( elapsedTime / (timeToMaxLevel)  * maxLevel );
+        int level = (int) ((elapsedTime / timeToMaxLevel) * maxLevel);
         level = level > maxLevel && maxLevelCap ? maxLevel : level;
-
+        
         if (level > currentLevel) {
             currentLevel = level;
             onDifficultyLevelChange();
@@ -362,19 +366,18 @@ public class Level extends Screen {
 		backgroundHeight = backgroundImage.getHeight();
 	}
 
-    public void setMusic(String music)
+    public void setMusic(String musicName)
     {
-        if (this.music != null && this.music.isPlaying()) {
-            this.music.stop();
-        }
-
-        this.music = Assets.getMusic(music);
-        this.music.setLooping(true);
-        this.music.seekBegin();
+    	Music newMusic = Assets.getMusic(musicName);
+    	if (this.music == null || (this.music != newMusic && !this.music.isPlaying())) {
+    		this.music = newMusic;
+    		this.music.setLooping(true);
+            this.music.seekBegin();
+    	}
         
         if (AirshipGame.muted) {
 			this.music.pause();
-		} else {
+		} else if (!this.music.isPlaying()) {
 			this.music.play();
 		}
     }
@@ -404,7 +407,7 @@ public class Level extends Screen {
         // checks if spawner can spawn, Instantiates however that object spawns and
         // adds them to LevelBodyManager.
         for (BodySpawner spawner : sm.getSpawners()) {
-            spawner.updateDistance(getLevelSpeed());
+            spawner.updateDistance(currentLevel, getLevelSpeed());
 
             if (spawner.canSpawn( currentLevel, 1.0 ) && isSpawning) {
                 List<GameBody> bodyList = spawner.trySpawnObjects(this);
@@ -562,10 +565,16 @@ public class Level extends Screen {
                 options.setEnabled(true);
             }
         };
-        gearListener = new ButtonClickListener() {
+        pauseListener = new ButtonClickListener() {
             @Override
             public void onUp() {
                 toggleLevelPauseState();
+            }
+        };
+        endGameListener = new ButtonClickListener() {
+            @Override
+            public void onUp() {
+                bm.getShip().getPlayer().gameOver();
             }
         };
         hangarListener = new ButtonClickListener() {
