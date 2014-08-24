@@ -10,11 +10,19 @@ import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.Enemy.EnemyProperties;
+import com.mitch.flyship.Enemy.Components.VerticalEnemy;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.containers.Vector2d;
 
 public class Enemy extends GameBody {
 
+    private boolean colliding = true;
+    private boolean destroyingOnHit = true;
+    private List<EnemyComponent> components;
+    private int damage = 0;
+	private Level level;
+	
+	
     public static Enemy loadFromProperties(Level level, EnemyProperties properties)
     {
         Enemy enemy = new Enemy(level, properties.getName());
@@ -47,12 +55,6 @@ public class Enemy extends GameBody {
     }
     public void setDamage(int damage) { this.damage = damage; }
     public void setDestroyingOnHit(boolean destroyingOnHit) { this.destroyingOnHit = destroyingOnHit; }
-
-    private boolean colliding = true;
-    private boolean destroyingOnHit = true;
-    private List<EnemyComponent> components;
-    private int damage = 0;
-	private Level level;
 
 	public Enemy(Level level, String name)
 	{
@@ -104,6 +106,16 @@ public class Enemy extends GameBody {
             return true;
         }
         return false;
+    }
+    
+    public void removeComponent(Class<? extends EnemyComponent> clazz) {
+    	if(componentExists(clazz)) {
+			for(EnemyComponent component : components) {
+				if(component.getClass().equals(clazz.getClass())) {
+					components.remove(component);
+				}
+			}
+    	}
     }
 
     public List<EnemyComponent> getComponents()

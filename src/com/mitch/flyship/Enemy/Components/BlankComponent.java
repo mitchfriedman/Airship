@@ -7,7 +7,7 @@ import com.mitch.flyship.Enemy.EnemyComponent;
 /**
  * A blank Enemy Component.
  */
-class BlankComponent extends EnemyComponent {
+public class BlankComponent extends EnemyComponent {
 
     public BlankComponent() {}
 

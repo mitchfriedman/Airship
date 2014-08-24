@@ -338,7 +338,7 @@ public class Player {
 		
 		if (water <= 0) {
 			water = 0;
-			gameOver();
+			//gameOver();
 		}
 		
 		if (health <= 0) {

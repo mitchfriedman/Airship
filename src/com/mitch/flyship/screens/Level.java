@@ -368,12 +368,17 @@ public class Level extends Screen {
 
     public void setMusic(String musicName)
     {
+
     	Music newMusic = Assets.getMusic(musicName);
     	if (this.music == null || (this.music != newMusic && !this.music.isPlaying())) {
     		this.music = newMusic;
     		this.music.setLooping(true);
             this.music.seekBegin();
     	}
+
+        if (this.music != null && this.music.isPlaying()) {
+            this.music.stop(); 
+        }
         
         if (AirshipGame.muted) {
 			this.music.pause();

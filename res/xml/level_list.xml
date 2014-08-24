@@ -59,6 +59,7 @@
                                  directionLeft="true" />
             </enemy>
             
+
             <enemy name="graf zeppelin from right"
                    damage="5"
                    startLevel="13"
@@ -92,6 +93,23 @@
                                  spawningPositionStart="0"
                                  spawningPositionEnd="0.2" />
             </enemy>
+
+            <enemy name="bomber" 
+                   damage="0"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="2"
+                   startSpawnTime_RangeEnd="5"
+                   endSpawnTime_RangeStart="5"
+                   endSpawnTime_RangeEnd="15" >
+                
+                <StaticImage image="Enemy/mine" />
+                <HorizontalEnemy speed="35" />
+                    			 <!-- randomDirection="true"  -->
+                <MineDropper ship="Enemy/saphire_bomber"></MineDropper>
+                
+			</enemy>
+
 
         </enemies>
 

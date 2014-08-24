@@ -1,5 +1,7 @@
 package com.mitch.flyship.Enemy.Components;
 
+import java.util.Random;
+
 import android.content.res.XmlResourceParser;
 
 import com.mitch.flyship.Enemy.EnemyComponent;
@@ -17,12 +19,18 @@ public class HorizontalEnemy extends EnemyComponent {
     float spawningPositionStart = 0;
     float spawningPositionEnd = 1;
 
-    public HorizontalEnemy() {}
+
+    private Random random;
+    
+    public HorizontalEnemy() {
+    	random = new Random();
+    }
 
     public HorizontalEnemy(XmlResourceParser xrp) //xml stuff here
     {
         this();
         speed = Double.valueOf(xrp.getAttributeValue(null, "speed"));
+        //randomDirection = xrp.getAttributeBooleanValue(null, "randomDirection", false);
         directionLeft = xrp.getAttributeBooleanValue(null, "directionLeft", false);
         includingSpawnFromTop = xrp.getAttributeBooleanValue(null, "includingSpawnFromTop", true);
         
@@ -40,7 +48,10 @@ public class HorizontalEnemy extends EnemyComponent {
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
-        enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
+        //if(randomDirection) {
+        	//directionLeft = random.nextBoolean();
+       // }
+        enemy.setVelocity(new Vector2d(directionLeft ? -speed : speed, 0) );
     }
 
     @Override
