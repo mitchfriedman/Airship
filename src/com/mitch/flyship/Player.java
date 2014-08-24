@@ -243,6 +243,11 @@ public class Player {
     {
         return currency;
     }
+    
+    public double getElapsedTime_s()
+    {
+    	return elapsedTime;
+    }
 	
 	public void gameOver()
 	{

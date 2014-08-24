@@ -331,7 +331,7 @@ public class Level extends Screen {
         }
     }
 
-    private void buildEndPopup(int score)
+    private void buildEndPopup(double elapsedTime)
     {
         endPopup = new Popup(game);
         endPopup.addImage("END/ENDING", Horizontal.CENTER);
@@ -346,9 +346,9 @@ public class Level extends Screen {
         
         endPopup.addButton(leaderboardsListener, "END/LEADERBOARDS");
         endPopup.addHeightMargin(3);
-        endPopup.addButton(hangarListener, "END/HANGAR");
-        endPopup.addHeightMargin(3);
         endPopup.addButton(restartListener, "END/RETRY");
+        endPopup.addHeightMargin(3);
+        endPopup.addButton(hangarListener, "END/HANGAR");
         endPopup.addHeightMargin(3);
         
         endPopup.setDisableOnClick(false);
@@ -381,7 +381,7 @@ public class Level extends Screen {
 
     public void end()
     {
-        buildEndPopup(bm.getShip().getPlayer().getCurrency());
+        buildEndPopup(bm.getShip().getPlayer().getElapsedTime_s());
         state = GameState.OVER;
         endPopup.setEnabled(true);
     }
@@ -594,7 +594,8 @@ public class Level extends Screen {
         restartListener = new ButtonClickListener() {
             @Override
             public void onUp() { 
-            	
+            	generate(properties);
+            	state = GameState.RUNNING;
             }
         };
     }
