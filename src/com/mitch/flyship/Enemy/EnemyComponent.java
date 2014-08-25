@@ -9,6 +9,7 @@ import com.mitch.flyship.objects.Ship;
 public abstract class EnemyComponent {
 
     protected Enemy enemy;
+    public boolean mustBeUnique = true;
 
     public EnemyComponent() {}
     public void setEnemy(Enemy enemy)

@@ -1,7 +1,5 @@
 package com.mitch.flyship.Enemy.Components;
 
-import java.util.Random;
-
 import android.content.res.XmlResourceParser;
 
 import com.mitch.flyship.Enemy.EnemyComponent;
@@ -15,24 +13,25 @@ public class HorizontalEnemy extends EnemyComponent {
 
     double speed;
     boolean directionLeft = false;
+    boolean randomDirection = false;
     boolean includingSpawnFromTop = true;
     float spawningPositionStart = 0;
     float spawningPositionEnd = 1;
-
-
-    private Random random;
     
-    public HorizontalEnemy() {
-    	random = new Random();
+    public HorizontalEnemy() {}
+    
+    public HorizontalEnemy(double speed, boolean directionLeft) 
+    {
+    	this.speed = speed;
+    	this.directionLeft = directionLeft;
     }
 
     public HorizontalEnemy(XmlResourceParser xrp) //xml stuff here
     {
-        this();
         speed = Double.valueOf(xrp.getAttributeValue(null, "speed"));
-        //randomDirection = xrp.getAttributeBooleanValue(null, "randomDirection", false);
         directionLeft = xrp.getAttributeBooleanValue(null, "directionLeft", false);
         includingSpawnFromTop = xrp.getAttributeBooleanValue(null, "includingSpawnFromTop", true);
+        randomDirection = xrp.getAttributeBooleanValue(null, "randomDirection", false);
         
         String sps = xrp.getAttributeValue(null, "spawningPositionStart");
         if (sps != null) {
@@ -48,10 +47,8 @@ public class HorizontalEnemy extends EnemyComponent {
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
-        //if(randomDirection) {
-        	//directionLeft = random.nextBoolean();
-       // }
-        enemy.setVelocity(new Vector2d(directionLeft ? -speed : speed, 0) );
+        enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
+        directionLeft = randomDirection ? Math.floor(Math.random() * 2) == 0 : directionLeft;
     }
 
     @Override
@@ -62,7 +59,7 @@ public class HorizontalEnemy extends EnemyComponent {
         
         double yModifier = includingSpawnFromTop ? Math.abs(g.getWidth()/enemy.getVelocity().x) : 0;
         double spawningPositionStartFinal = g.getHeight() * spawningPositionStart - yModifier;
-        double spawningPositionEndFinal = (g.getHeight() - enemy.getSize().y + yModifier) * spawningPositionEnd ;
+        double spawningPositionEndFinal = (g.getHeight() - enemy.getSize().y + yModifier) * spawningPositionEnd;
         double y = Math.random() * spawningPositionEndFinal - spawningPositionStartFinal;
         double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
         enemy.setPos(new Vector2d(x, y));

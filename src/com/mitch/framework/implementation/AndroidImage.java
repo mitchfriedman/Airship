@@ -16,6 +16,11 @@ public class AndroidImage implements Image {
     }
     
     @Override
+    public Bitmap getBitmap() {
+    	return bitmap;
+    }
+    
+    @Override
     public Vector2d getSize() {
     	return new Vector2d(getWidth(), getHeight());
     }

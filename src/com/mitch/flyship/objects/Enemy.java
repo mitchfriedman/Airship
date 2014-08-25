@@ -99,7 +99,7 @@ public class Enemy extends GameBody {
 
     public boolean addComponent(EnemyComponent component)
     {
-        if (!componentExists(component.getClass())) {
+        if (!componentExists(component.getClass()) || !component.mustBeUnique) {
             component.setEnemy(this);
             components.add(component);
             component.onComponentAdded();

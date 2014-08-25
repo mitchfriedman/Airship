@@ -20,7 +20,7 @@ public class VerticalEnemy extends EnemyComponent {
     {
         this();
         speed = Double.valueOf(xrp.getAttributeValue(null, "speed"));
-        directionDown = !xrp.getAttributeValue(null, "directionUp").equals("true");
+        directionDown = xrp.getAttributeBooleanValue(null, "directionDown", true);
     }
 
     @Override

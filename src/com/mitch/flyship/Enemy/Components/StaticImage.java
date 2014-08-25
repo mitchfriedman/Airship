@@ -18,7 +18,14 @@ public class StaticImage extends EnemyComponent {
     boolean drawing = true;
 
     public StaticImage() {}
-
+    
+    public StaticImage(String imageID, boolean invertHorizontal, boolean invertVertical)
+    {
+    	this.image = Assets.getImage(imageID);
+    	this.invertHorizontal = invertHorizontal;
+    	this.invertVertical = invertVertical;
+    }
+    
     public StaticImage(XmlResourceParser parser) //xml stuff here
     {
         this();

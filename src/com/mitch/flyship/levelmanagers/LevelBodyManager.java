@@ -10,9 +10,10 @@ import com.mitch.framework.containers.Vector2d;
 
 public class LevelBodyManager {
 	
-	Ship ship;
+	private Ship ship;
 	final List<GameBody> bodies = new ArrayList<GameBody>();
 	final List<GameBody> removeQueue = new ArrayList<GameBody>();
+	final List<GameBody> addQueue = new ArrayList<GameBody>();
 	
 	public LevelBodyManager()
 	{
@@ -22,6 +23,7 @@ public class LevelBodyManager {
 	public void onUpdate(double deltaTime)
 	{
 		removeBodies();
+		addBodies();
 		for (GameBody body : bodies) {
 			body.onUpdate(deltaTime);
 		}
@@ -108,16 +110,29 @@ public class LevelBodyManager {
 		return itemsOfType;
 	}
 	
+	public void addBodyDuringUpdate(GameBody body)
+	{
+		addQueue.add(body);
+	}
+	
 	public void removeBody(GameBody body)
 	{
 		removeQueue.add(body);
 	}
 	
-	void removeBodies()
+	private void removeBodies()
 	{
 		for (GameBody body : removeQueue) {
 			bodies.remove(body);
 		}
 		removeQueue.clear();
+	}
+	
+	private void addBodies()
+	{
+		for (GameBody body : addQueue) {
+			addBody(body);
+		}
+		addQueue.clear();
 	}
 }

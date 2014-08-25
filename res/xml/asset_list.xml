@@ -115,6 +115,9 @@
 	<image key="Enemy/gunship" path="Enemies/Heavy Gunship.png" />
 
 	<image key="Enemy/graf_zeppelin" path="Enemies/graf zeppelin.png" />
+	<image key="Enemy/open_air_hauler" path="Enemies/Open Air Hauler.png" />
+	<image key="Enemy/cannon" path="Enemies/Cannon Shot.png" />
+	
 
 	<image key="Enemy/saphire_bomber" path="Enemies/Saphire Bomber.png" />
 	<image key="Enemy/mine" path="Enemies/Floating Mine.png" />
@@ -147,8 +150,10 @@
 	<image key="ship/Interceptor-prop2" path="Ships/Interceptor/prop2.png" />
 	
 	<!-- Items -->
-	<image key="silver_coin" path="Items/Coin.png" />
-	<image key="gold_coin" path="Items/Gold Coin.png" />
+	<image key="coin-1" path="Items/coin-1.png" />
+	<image key="coin-5" path="Items/coin-5.png" />
+	<image key="coin-10" path="Items/coin-10.png" />
+	<image key="star_coin_map" path="Items/star_coin_map.png" />
 	<image key="water" path="Items/Water Droplet.png" />
 	
 </assets>

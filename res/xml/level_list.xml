@@ -27,7 +27,7 @@
 
                 <StaticImage image="Enemy/crimson_fighter" />
                 <VerticalEnemy speed="20"
-                               directionUp="false" />
+                               directionDown="true" />
                 <ExplosionAnimation />
             </enemy>
             
@@ -42,7 +42,7 @@
 
                 <StaticImage image="Enemy/flock_of_gulls" />
                 <VerticalEnemy speed="20"
-                               directionUp="false" />
+                               directionDown="true" />
             </enemy>
 
             <enemy name="gunship"
@@ -59,7 +59,52 @@
                                  directionLeft="true" />
             </enemy>
             
+            <enemy name="Open Air Hauler"
+                   damage="2"
+                   startLevel="0"
+                   endLevel="100"
+                   startSpawnTime_RangeStart="10"
+                   startSpawnTime_RangeEnd="15"
+                   endSpawnTime_RangeStart="15"
+                   endSpawnTime_RangeEnd="20" >
 
+                <StaticImage image="Enemy/open_air_hauler" />
+                
+                <VerticalEnemy speed="10"
+                               directionDown="true" />
+                
+                <CannonNode x="16"
+                    		y="41"
+                    		directionLeft="true"
+                    		interval="1.4" />
+                
+                <CannonNode x="29"
+                    		y="41"
+                    		directionLeft="false"
+                    		interval="1.6" />
+            </enemy>
+            
+            <enemy name="bomber" 
+               damage="4"
+               startLevel="1"
+               endLevel="25"
+               startSpawnTime_RangeStart="2"
+               startSpawnTime_RangeEnd="5"
+               endSpawnTime_RangeStart="5"
+               endSpawnTime_RangeEnd="15" >
+            
+	            <StaticImage image="Enemy/saphire_bomber" />
+	            <HorizontalEnemy speed="35"
+	                			 directionLeft="true"
+	                			 spawningPositionStart="0"
+	                			 spawningPositionEnd="0.1" />
+	            <MineNode mine="Enemy/mine"
+	                	  x="16"
+	                	  y="1" />
+	            <ExplosionAnimation />
+            </enemy>
+            
+            
             <enemy name="graf zeppelin from right"
                    damage="5"
                    startLevel="13"
@@ -93,23 +138,6 @@
                                  spawningPositionStart="0"
                                  spawningPositionEnd="0.2" />
             </enemy>
-
-            <enemy name="bomber" 
-                   damage="0"
-                   startLevel="1"
-                   endLevel="25"
-                   startSpawnTime_RangeStart="2"
-                   startSpawnTime_RangeEnd="5"
-                   endSpawnTime_RangeStart="5"
-                   endSpawnTime_RangeEnd="15" >
-                
-                <StaticImage image="Enemy/mine" />
-                <HorizontalEnemy speed="35" />
-                    			 <!-- randomDirection="true"  -->
-                <MineDropper ship="Enemy/saphire_bomber"></MineDropper>
-                
-			</enemy>
-
 
         </enemies>
 
