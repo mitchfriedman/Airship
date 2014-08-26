@@ -57,14 +57,7 @@ public class Button extends GameBody {
 	public Image getImage() {
 		return currentImage;
 	}
-	/* FUNCTION LIMITATION:
-	 *  - function only sets the current image which is useless, 
-	 *    need a function for active and pressed images if it is to be used properly
-	*/
-	public void setImage(String image) {
-		
-		currentImage = Assets.getImage(image);
-	}
+
 	@Override
 	public void onUpdate(double deltaTime)
 	{

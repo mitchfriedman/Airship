@@ -18,6 +18,10 @@ import com.mitch.framework.containers.Vector2d;
 public class Coin extends GameBody {
 	static List<BodyConfiguration> configurations;
 	
+	private final static String ONE = "ONE";
+	private final static String FIVE = "FIVE";
+	private final static String TEN = "TEN";
+	
 	final Image image;
 	public final int value;
 	public static List<Float> spawnWeights = new ArrayList<Float>();
@@ -108,72 +112,72 @@ public class Coin extends GameBody {
 		
 		// SINGLE TEN COIN  
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size10.divide(2), "TEN");
+		config.addConfigurationObject(size10.divide(2), TEN);
 		config.setSize(size10);
 		configurations.add(config);
 		spawnWeights.add(85f);
 		
 		// SINGLE FIVE COIN
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size1.divide(2), "FIVE");
+		config.addConfigurationObject(size1.divide(2), FIVE);
 		config.setSize(size5);
 		configurations.add(config);
 		spawnWeights.add(93f);
 		
 		// SINGLE ONE COIN
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size1.divide(2), "ONE");
+		config.addConfigurationObject(size1.divide(2), ONE);
 		config.setSize(size1);
 		configurations.add(config);
 		spawnWeights.add(115f);
 		
 		// SLIDE DOWN ONES WITH FIVE CENTER
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size10.scale(0).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(1).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(2).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(3).add(size1), "FIVE");
-		config.addConfigurationObject(size10.scale(4).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(5).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(6).add(size1), "ONE");
+		config.addConfigurationObject(size10.scale(0).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(1).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(2).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(3).add(size1), FIVE);
+		config.addConfigurationObject(size10.scale(4).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(5).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(6).add(size1), ONE);
 		config.setSize(size10.scale(6).add(size1.scale(2)));
 		configurations.add(config);
 		spawnWeights.add(90f);
 		
 		// SLIDE DOWN ONES WITH TEN CENTER
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size10.scale(0).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(1).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(2).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(3).add(size1), "TEN");
-		config.addConfigurationObject(size10.scale(4).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(5).add(size1), "ONE");
-		config.addConfigurationObject(size10.scale(6).add(size1), "ONE");
+		config.addConfigurationObject(size10.scale(0).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(1).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(2).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(3).add(size1), TEN);
+		config.addConfigurationObject(size10.scale(4).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(5).add(size1), ONE);
+		config.addConfigurationObject(size10.scale(6).add(size1), ONE);
 		config.setSize(size10.scale(6).add(size1.scale(2)));
 		configurations.add(config);
 		spawnWeights.add(80f);
 		
 		// SLIDE DOWN FIVES WITH TEN CENTER
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size10.scaleY(6).scaleX(0), "FIVE");
-		config.addConfigurationObject(size10.scaleY(5).scaleX(1), "FIVE");
-		config.addConfigurationObject(size10.scaleY(4).scaleX(2), "FIVE");
-		config.addConfigurationObject(size10.scaleY(3).scaleX(3), "TEN");
-		config.addConfigurationObject(size10.scaleY(2).scaleX(4), "FIVE");
-		config.addConfigurationObject(size10.scaleY(1).scaleX(5), "FIVE");
-		config.addConfigurationObject(size10.scaleY(0).scaleX(6), "FIVE");
+		config.addConfigurationObject(size10.scaleY(6).scaleX(0), FIVE);
+		config.addConfigurationObject(size10.scaleY(5).scaleX(1), FIVE);
+		config.addConfigurationObject(size10.scaleY(4).scaleX(2), FIVE);
+		config.addConfigurationObject(size10.scaleY(3).scaleX(3), TEN);
+		config.addConfigurationObject(size10.scaleY(2).scaleX(4), FIVE);
+		config.addConfigurationObject(size10.scaleY(1).scaleX(5), FIVE);
+		config.addConfigurationObject(size10.scaleY(0).scaleX(6), FIVE);
 		config.setSize(size10.scale(7));
 		configurations.add(config);
 		spawnWeights.add(45f);
 		
 		// HORIZONTAL ONES
 		config = new BodyConfiguration();
-		config.addConfigurationObject(size10.scale(1).scaleX(1), "ONE");
-		config.addConfigurationObject(size10.scale(1).scaleX(2), "ONE");
-		config.addConfigurationObject(size10.scale(1).scaleX(3), "ONE");
-		config.addConfigurationObject(size10.scale(1).scaleX(4), "ONE");
-		config.addConfigurationObject(size10.scale(1).scaleX(5), "ONE");
-		config.addConfigurationObject(size10.scale(1).scaleX(6), "ONE");
+		config.addConfigurationObject(size10.scale(1).scaleX(1), ONE);
+		config.addConfigurationObject(size10.scale(1).scaleX(2), ONE);
+		config.addConfigurationObject(size10.scale(1).scaleX(3), ONE);
+		config.addConfigurationObject(size10.scale(1).scaleX(4), ONE);
+		config.addConfigurationObject(size10.scale(1).scaleX(5), ONE);
+		config.addConfigurationObject(size10.scale(1).scaleX(6), ONE);
 		config.setSize(new Vector2d(size10.x*6.5+size1.x, size10.y*1.5));
 		configurations.add(config);
 		spawnWeights.add(94f);
@@ -184,7 +188,7 @@ public class Coin extends GameBody {
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
 				if (image.getPixel(x, y) == Color.BLACK) {
-					config.addConfigurationObject(new Vector2d(x,y).scale(size5.x), "ONE");
+					config.addConfigurationObject(new Vector2d(x,y).scale(size5.x), ONE);
 				}
 			}
 		}
@@ -215,6 +219,10 @@ public class Coin extends GameBody {
 		}
 		
 		return configurations.get(configID);
+	}
+	
+	public Image getImage() {
+		return image;
 	}
 	
 	public static List<GameBody> getBodiesFromConfiguration(BodyConfiguration config,

@@ -85,23 +85,40 @@
             </enemy>
             
             <enemy name="bomber" 
-               damage="4"
-               startLevel="1"
-               endLevel="25"
-               startSpawnTime_RangeStart="2"
-               startSpawnTime_RangeEnd="5"
-               endSpawnTime_RangeStart="5"
-               endSpawnTime_RangeEnd="15" >
+	               damage="4"
+	               startLevel="1"
+	               endLevel="25"
+	               startSpawnTime_RangeStart="2"
+	               startSpawnTime_RangeEnd="5"
+	               endSpawnTime_RangeStart="5"
+	               endSpawnTime_RangeEnd="15" >
             
-	            <StaticImage image="Enemy/saphire_bomber" />
-	            <HorizontalEnemy speed="35"
-	                			 directionLeft="true"
-	                			 spawningPositionStart="0"
-	                			 spawningPositionEnd="0.1" />
-	            <MineNode mine="Enemy/mine"
-	                	  x="16"
-	                	  y="1" />
-	            <ExplosionAnimation />
+	           <StaticImage image="Enemy/saphire_bomber" />
+	           <HorizontalEnemy speed="35"
+	                			directionLeft="true"
+	                			spawningPositionStart="0"
+	                			spawningPositionEnd="0.1" />
+	           <MineNode mine="Enemy/mine"
+	                	 x="16"
+	                	 y="1" />
+	           <ExplosionAnimation />
+            </enemy>
+            
+            <enemy name="crate"
+                   damage="0"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="2"
+	               startSpawnTime_RangeEnd="15"
+	               endSpawnTime_RangeStart="5"
+	               endSpawnTime_RangeEnd="15" >
+	            
+                <StaticImage image="crate" />
+                <VerticalEnemy speed="15"
+                               directionDown="true" />
+                
+                <TouchDestroyable health="1" />
+                <ItemContainer />
             </enemy>
             
             

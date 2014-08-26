@@ -23,5 +23,6 @@ public abstract class EnemyComponent {
     public void onPaint(float deltaTime) {}
     public void onUpdate(double deltaTime) {}
     public void onHit(Ship ship) {}
+    public void onTouch() {}
 
 }

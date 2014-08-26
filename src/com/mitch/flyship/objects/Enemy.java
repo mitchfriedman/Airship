@@ -10,7 +10,6 @@ import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.Enemy.EnemyProperties;
-import com.mitch.flyship.Enemy.Components.VerticalEnemy;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.containers.Vector2d;
 
@@ -95,6 +94,12 @@ public class Enemy extends GameBody {
         if (destroyingOnHit) {
             level.getBodyManager().removeBody(this);
         }
+    }
+    
+    public void onTouch() {
+    	for(EnemyComponent component : components) {
+    		component.onTouch();
+    	}
     }
 
     public boolean addComponent(EnemyComponent component)

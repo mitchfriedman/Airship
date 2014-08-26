@@ -75,8 +75,8 @@ public class MineNode extends EnemyComponent {
 	public void onPaint(float deltaTime) {
 		super.onPaint(deltaTime);
 		
-		Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
 		if (!hasDropped) {
+			Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
 			g.drawImage(mine, enemy.getPos().add(minePosition));
 		}
 	}

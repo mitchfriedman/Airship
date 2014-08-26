@@ -155,5 +155,6 @@
 	<image key="coin-10" path="Items/coin-10.png" />
 	<image key="star_coin_map" path="Items/star_coin_map.png" />
 	<image key="water" path="Items/Water Droplet.png" />
+	<image key="crate" path="Items/Mystery Crate.png" />
 	
 </assets>
