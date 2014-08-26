@@ -10,7 +10,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Platform extends GameBody {
 	
-	Image image;
+	private Image image;
 
     private static final int ANIMATION_DURATION = 10000;
 
@@ -21,6 +21,8 @@ public class Platform extends GameBody {
     private Image ship;
     private Image shipProp;
     private Image cargo;
+    
+    private Image logo;
 
 	public Platform(AirshipGame game, String name) {
 		super(game, name);
@@ -29,6 +31,7 @@ public class Platform extends GameBody {
         ship 	   = Assets.getImage("ship/Interceptor-normal");
         shipProp   = Assets.getImage("ship/Interceptor-prop1");
         cargo 	   = Assets.getImage("Menu/cargo");
+        logo 	   = Assets.getImage("Menu/logo");
         
         Graphics g = game.getGraphics();
         
@@ -66,7 +69,8 @@ public class Platform extends GameBody {
 		g.drawImage(cargo, getPos().add(cargoPos));
 		g.drawImage(ship, getPos().add(shipPos));
 		g.drawImage(shipProp, getPos().add(propellorPos));
-		
+		g.drawImage(logo, new Vector2d(g.getWidth()/2 - logo.getWidth() / 2,
+				g.getHeight() - getPos().y - logo.getHeight() - logo.getHeight() / 5));
 	}
 
 	@Override

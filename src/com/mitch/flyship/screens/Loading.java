@@ -8,8 +8,8 @@ import com.mitch.framework.Screen;
 
 public class Loading extends Screen {
 	
-	double splashFadoutTime = 1000; //180 works best
-	double splashFadeoutAt = 1200;
+	private final static double SPLASH_FADE_OUT_TIME = 1500; //180 works best
+	private final static double SPLASH_FADE_OUT_AT = 1800;
 	double elapsedTime = 0;
 	double opacity = 0;
 	Image splash;
@@ -28,13 +28,13 @@ public class Loading extends Screen {
 	{
 		elapsedTime += deltaTime;
 		
-		if (elapsedTime > splashFadeoutAt) {
-			double percentage = (elapsedTime-splashFadeoutAt) / splashFadoutTime;
+		if (elapsedTime > SPLASH_FADE_OUT_AT) {
+			double percentage = (elapsedTime-SPLASH_FADE_OUT_AT) / SPLASH_FADE_OUT_TIME;
 			percentage = percentage > 1 ? 1 : percentage;
 			opacity = 255 * percentage;
 		}
 		
-		if (Assets.isLoaded() && elapsedTime > splashFadeoutAt + splashFadoutTime) {
+		if (Assets.isLoaded() && elapsedTime > SPLASH_FADE_OUT_AT + SPLASH_FADE_OUT_TIME) {
 			game.setScreen(new Menu(game));
 			//game.setScreen(new Level(game));
 		}

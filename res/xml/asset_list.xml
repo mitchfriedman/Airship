@@ -17,6 +17,7 @@
 	<image key="Menu/terrain" path="Menu/Menu Background.png" />
 	<image key="Menu/cargo" path="Menu/Cargo.png" />
 	<image key="Menu/bottom border" path="Menu/Bottom Border.png" />
+	<image key="Menu/logo" path="Menu/new_logo_big.png" />
 	
 	<!-- Menu Buttons -->
 	<image key="Menu/Buttons/Endless-hover" path="Menu/Buttons/endless-hover.png" />
