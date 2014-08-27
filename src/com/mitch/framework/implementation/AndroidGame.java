@@ -119,7 +119,7 @@ public abstract class AndroidGame extends Activity implements Game {
         wakeLock.acquire();
         screen.resume();
         renderView.resume();
-        
+        input.onResume();
         /*validateGooglePlayServices();
         if(!clientBuilder.connected) {
         	clientBuilder.connect();
@@ -132,6 +132,7 @@ public abstract class AndroidGame extends Activity implements Game {
         wakeLock.release();
         renderView.pause();
         screen.pause();
+        input.onPause();
         
         if (isFinishing())
             screen.dispose();

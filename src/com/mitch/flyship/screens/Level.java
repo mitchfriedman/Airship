@@ -43,9 +43,10 @@ public class Level extends Screen {
 		RUNNING
 	}
 	
-	enum DeathReason {
+	public enum DeathReason {
 		CRASH,
-		LACK_OF_WATER
+		LACK_OF_WATER,
+		QUIT
 	}
 
     public List<EnemyProperties> getEnemyTypes()
@@ -87,6 +88,7 @@ public class Level extends Screen {
     private double endSpeed;
     private int currentLevel = 0;
     private boolean maxLevelCap = true;
+    private boolean includeCloudAtEnd = true;
 
 	private Popup options;
     private Popup endPopup;
@@ -149,7 +151,9 @@ public class Level extends Screen {
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
         position = new Vector2d(g.getWidth()-50, 8);
-        pauseButtons.add(new Button(game, "GUI/mute", alignment, position, muteListener));
+        Button button = new Button(game, "GUI/mute", alignment, position, muteListener);
+        //button.setToggled(AirshipGame.muted);
+        pauseButtons.add(button);
 
     }
 
@@ -183,9 +187,9 @@ public class Level extends Screen {
         options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
         options.addHeightMargin(10);
         
-        options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
+        /*options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
         options.addHeightMargin(3);
-        options.addButton(calibrateListener, "GUI/Calibrate");
+        options.addButton(calibrateListener, "GUI/Calibrate");*/
         options.addHeightMargin(4);
         
         options.build();
@@ -305,12 +309,17 @@ public class Level extends Screen {
     @Override
     public void backButton()
     {
-        if (state == GameState.RUNNING || state == GameState.OVER) {
-            game.setScreen(new Menu(game));
+    	// im a shit joke maker. 
+    	// What did the guy with diarrhea say to the guy without a home?
+    	// "Hey man, at least you have a good, solid stool."
+        if (state == GameState.RUNNING) {
+            state = GameState.PAUSED;
         } else if (state == GameState.PAUSED && options.isEnabled()) {
             options.setEnabled(false);
         } else if (state == GameState.PAUSED) {
             state = GameState.RUNNING;
+        } else if (state == GameState.OVER) {
+        	game.setScreen(new Menu(game));
         }
     }
 
@@ -335,17 +344,33 @@ public class Level extends Screen {
         }
     }
 
-    private void buildEndPopup(double elapsedTime)
+    private void buildEndPopup(int score, DeathReason deathReason)
     {
         endPopup = new Popup(game);
+        
+        
         endPopup.addImage("END/ENDING", Horizontal.CENTER);
         endPopup.marginTop = Assets.getImage("END/ENDING").getHeight() + endPopup.topBorder.getHeight();
         
         endPopup.addHeightMargin(endPopup.topBorder.getHeight() * 2 + 2);
         
-        endPopup.addImage("END/CRASHED", Horizontal.CENTER);
+        String deathMessageImage = "END/CRASHED";
+        
+        switch (deathReason) {
+        case CRASH:
+        	deathMessageImage = "END/CRASHED";
+        	break;
+        case LACK_OF_WATER:
+        	deathMessageImage = "END/WATER";
+        	break;
+        case QUIT:
+        	deathMessageImage = "END/CRASHED";
+        	break;
+        }
+        
+        endPopup.addImage(deathMessageImage, Horizontal.CENTER);
         endPopup.addHeightMargin(5);
-        endPopup.addTimerImage(elapsedTime, "FONT/TIMER/");
+        endPopup.addNumericImage(score);
         endPopup.addHeightMargin(10);
         
         endPopup.addButton(leaderboardsListener, "END/LEADERBOARDS");
@@ -355,8 +380,17 @@ public class Level extends Screen {
         endPopup.addButton(hangarListener, "END/HANGAR");
         endPopup.addHeightMargin(3);
         
-        endPopup.setDisableOnClick(false);
+        if (deathReason != DeathReason.QUIT) {
+            endPopup.setDisableOnClick(false);
+        }
+        
         endPopup.build();
+        
+        Graphics g = game.getGraphics();
+        if (includeCloudAtEnd && endPopup.getHeight() > g.getHeight()) {
+        	includeCloudAtEnd = false;
+        	buildEndPopup(score, deathReason);
+        }
     }
 
 	public void setBackgroundImage(String image) 
@@ -387,9 +421,9 @@ public class Level extends Screen {
 		}
     }
 
-    public void end()
+    public void end(DeathReason deathReason)
     {
-        buildEndPopup(bm.getShip().getPlayer().getElapsedTime_s());
+        buildEndPopup(bm.getShip().getPlayer().getCurrency(), deathReason);
         state = GameState.OVER;
         endPopup.setEnabled(true);
     }
@@ -473,6 +507,8 @@ public class Level extends Screen {
         for(Button button: buttons) {
             button.onPaint(deltaTime);
         }
+        
+        bm.getShip().getPlayer().onPaint(deltaTime);
 
     }
 
@@ -502,6 +538,10 @@ public class Level extends Screen {
 	public void updateOver(double deltaTime)
 	{
         endPopup.update(deltaTime);
+        
+        if (!endPopup.isEnabled()) {
+        	state = GameState.PAUSED;
+        }
 	}
 
 	private void updatePaused(double deltaTime)
@@ -579,7 +619,7 @@ public class Level extends Screen {
         endGameListener = new ButtonClickListener() {
             @Override
             public void onUp() {
-                bm.getShip().getPlayer().gameOver();
+                bm.getShip().getPlayer().gameOver(DeathReason.QUIT);
             }
         };
         hangarListener = new ButtonClickListener() {

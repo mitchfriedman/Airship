@@ -74,8 +74,9 @@
 	<!-- HUD -->
 	<image key="GUI_BASE" path="GUI/base hull.png" />
 	<image key="hudcoin" path="GUI/HUD coin.png" />
-	<image key="GUI/mute-active" path="GUI/mute.png" />
-	<image key="GUI/mute-hover" path="GUI/mute.png" />
+	<image key="GUI/mute-active" path="GUI/sound button mute.png" />
+	<image key="GUI/mute-hover" path="GUI/sound button mute.png" />
+	<image key="GUI/mute-toggled" path="GUI/sound button.png" />
 	
 	<!-- HULL ARROWS -->
 	<image key="HULL_ARROW 1" path="GUI/hull arrows/hull arrow 1.png" />
@@ -141,7 +142,6 @@
 	<image key="Clouds/cloud 5" path="Clouds/cloud 5.png" />
 	<image key="Clouds/cloud 6" path="Clouds/cloud 6.png" />
 	<image key="Clouds/cloud 7" path="Clouds/cloud 7.png" />
-	<image key="Clouds/cloud 8" path="Clouds/cloud 8.png" />
 	
 	<!-- Ships -->
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />

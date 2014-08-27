@@ -19,14 +19,13 @@ public class Player {
 	
 	final int MAX_HEALTH = 9; //9
 	final int MAX_WATER = 90;
-	final boolean INVINCIBLE = true;
 	
-	final double MAX_TILT_UP = 2.5;
-	final double MAX_TILT_DOWN = 2.3;
-	final double MAX_TILT_HORIZONTAL = 3;
+	final double MAX_TILT_UP = 35;
+	final double MAX_TILT_DOWN = 35;
+	final double MAX_TILT_HORIZONTAL = 50;
 	
 	private final double MAX_SPEED_UP = 80;
-	private final double MAX_SPEED_DOWN = 60;
+	private final double MAX_SPEED_DOWN = 80;
 	private final double MAX_SPEED_HORIZONTAL = 60;
 	
 	final double UP_TILT_LIMITER = 0.2;
@@ -35,8 +34,9 @@ public class Player {
 	
 	final double hudCoinSpeed = 2;
 	
+	boolean invulnerable = false;
 	double tiltSensitivity = 1;
-	Vector2d orientationOffset = new Vector2d(0, 3);
+	Vector2d orientationOffset = new Vector2d(0, 40);
 	AirshipGame game;
     Level level;
 	float elapsedTime = 0;
@@ -134,7 +134,14 @@ public class Player {
 	
 	public Vector2d getCenteredOrientation()
 	{
-		return getOrientation().subtract(orientationOffset);
+		Vector2d orientation = getOrientation();
+		//Log.d("Phone Orientation", Math.round(orientation.x) + ", " + Math.round(orientation.y));
+		
+		double xDifference = degreeDifference(orientation.x, orientationOffset.x);
+		double yDifference = degreeDifference(orientation.y, orientationOffset.y);
+
+        //Log.d("Player Tilt", Math.round(xDifference) + ", " + Math.round(yDifference));
+		return new Vector2d(xDifference, yDifference);
 	}
 
     public double getMaxSpeedHorizontal(double deltaTime)
@@ -156,7 +163,12 @@ public class Player {
     {
         return getInput_Speed(deltaTime, false, false);
     }
-
+    
+    private double degreeDifference(double a, double b)
+    {
+    	return (a - b) % 180;
+    }
+    
 	public Vector2d getInput_Speed(double deltaTime, boolean invertVertical, boolean invertHorizontal)
 	{
 		Vector2d orientation = getCenteredOrientation();
@@ -178,13 +190,13 @@ public class Player {
 			orientation.x = 0;
 		}
 
+		
 		if (orientation.y > MAX_TILT_DOWN*ts) {
 			orientation.y = MAX_SPEED_DOWN*deltaTime;
 		}
 		else if (orientation.y > DOWN_TILT_LIMITER*ts) {
 			orientation.y *= (MAX_SPEED_DOWN*deltaTime) / (MAX_TILT_DOWN*ts-DOWN_TILT_LIMITER*ts);
 		}
-		
 		
 		else if (orientation.y < -MAX_TILT_UP*ts) {
 			orientation.y = -MAX_SPEED_UP*deltaTime;
@@ -193,9 +205,9 @@ public class Player {
 			orientation.y *= (MAX_SPEED_UP*deltaTime) / (MAX_TILT_UP*ts-UP_TILT_LIMITER*ts);
 		}
 		
-		if (orientation.y > -UP_TILT_LIMITER*ts && orientation.y < DOWN_TILT_LIMITER*ts) {
+		/*if (orientation.y > -UP_TILT_LIMITER*ts && orientation.y < DOWN_TILT_LIMITER*ts) {
 			orientation.y = 0;
-		}
+		}*/
 		
 		return orientation;
 	}
@@ -216,17 +228,22 @@ public class Player {
 		health += amount;
 	}
 	
+	public void setInvulnerable(boolean invulnerable)
+	{
+		this.invulnerable = invulnerable;
+	}
+	
 	public void applyDamage(int damage)
 	{
         game.Vibrate(damage*150);
 
-		if (!INVINCIBLE) {
+		if (!invulnerable) {
 			health -= damage;
 		}
 		
 		if (health <= 1) {
 			health = 1;
-			gameOver();
+			gameOver(Level.DeathReason.CRASH);
 		}
 	}
 	
@@ -251,11 +268,11 @@ public class Player {
     	return elapsedTime;
     }
 	
-	public void gameOver()
+	public void gameOver(Level.DeathReason deathReason)
 	{
         game.getGoogleAPIManager().connect();
         game.pushScore(level.getLeaderboardID(), (long) elapsedTime);
-        level.end();
+        level.end(deathReason);
 	}
 	
 	public void drawTime(int time)
@@ -323,7 +340,7 @@ public class Player {
 		g.drawImage(hud, new Vector2d(0, g.getHeight()-hud.getHeight()-2));
 		g.drawImage(hudBorder, new Vector2d(0, g.getHeight()-2));
 		
-		drawTime( (int)elapsedTime );
+		//drawTime( (int)elapsedTime );
 		drawCurrency();
 		drawHullArrow();
 	}
@@ -338,12 +355,12 @@ public class Player {
 		
 		if (water <= 0) {
 			water = 0;
-			//gameOver();
+			gameOver(Level.DeathReason.LACK_OF_WATER);
 		}
 		
 		if (health <= 0) {
 			health = 0;
-			gameOver();
+			gameOver(Level.DeathReason.CRASH);
 		}
 
         waterPosition = new Rect(waterPositionRelHud);

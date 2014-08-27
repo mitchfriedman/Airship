@@ -71,7 +71,7 @@ public class Menu extends Screen {
 		
 		music = Assets.getMusic("wind");
 		music.setLooping(true);
-		music.setVolume(0.1f);
+		music.setVolume(0.25f);
 		
 		bodies.add(new Terrain(game, "Menu/terrain"));
 		bodies.add(new Platform(game, "Menu/platform"));
@@ -95,7 +95,9 @@ public class Menu extends Screen {
 		
 		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth()-8, 8);
-        bodies.add(new Button(game, "GUI/mute", alignment, position, muteListener));
+        Button button = new Button(game, "GUI/mute", alignment, position, muteListener);
+        button.setToggled(AirshipGame.muted);
+        bodies.add(button);
 		
 	}
 

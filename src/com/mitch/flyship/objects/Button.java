@@ -18,9 +18,12 @@ public class Button extends GameBody {
 	Vector2d offset = new Vector2d(0,0);
 	ButtonClickListener listener;
 
+	Image toggledImage;
 	Image pressedImage;
 	Image activeImage;
 	Image currentImage;
+	
+	private boolean toggled = false;
 	
 	
 	public Button(AirshipGame game, String name, Align align, Vector2d pos, ButtonClickListener listener)
@@ -30,7 +33,13 @@ public class Button extends GameBody {
 		
 		activeImage  = Assets.getImage(name+"-active");
 		pressedImage = Assets.getImage(name+"-hover");
-		currentImage = activeImage;
+		toggledImage = Assets.getImage(name+"-toggled");
+		
+		if (toggledImage == null) {
+			toggledImage = activeImage;
+		}
+		
+		resetImage();
 		setSize(currentImage.getSize());
 		
 		switch(align.getHorizontal()) {
@@ -57,7 +66,17 @@ public class Button extends GameBody {
 	public Image getImage() {
 		return currentImage;
 	}
-
+	
+	public void setToggled(boolean toggled)
+	{
+		this.toggled = toggled;
+	}
+	
+	public void resetImage()
+	{
+		currentImage = toggled ? toggledImage : activeImage;
+	}
+	
 	@Override
 	public void onUpdate(double deltaTime)
 	{
@@ -110,7 +129,8 @@ public class Button extends GameBody {
 	
 	void onUp()
 	{
-		currentImage = activeImage;
+		setToggled(!toggled);
+		resetImage();
 	}
 	
 	void onCancel()

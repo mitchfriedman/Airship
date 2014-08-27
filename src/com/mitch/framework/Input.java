@@ -23,5 +23,7 @@ public interface Input {
     public List<TouchEvent> getTouchEvents();
 	public float GetTiltY();
 	public float GetTiltX();
+	public void onResume();
+	public void onPause();
 }
  

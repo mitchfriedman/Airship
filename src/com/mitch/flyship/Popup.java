@@ -2,6 +2,8 @@ package com.mitch.flyship;
 
 import java.util.ArrayList;
 
+import android.graphics.Rect;
+
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Slider;
 import com.mitch.framework.Graphics;
@@ -12,7 +14,6 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Popup {
 	
-	private static final int TOUCH_OFFSET = 5;
 	
 	public float marginTop = 0;
 	
@@ -73,6 +74,11 @@ public class Popup {
 		}
 	}
 	
+	public int getHeight()
+	{
+		return (int) (popupHeight + marginTop);
+	}
+	
     public void setDisableOnClick(boolean disable)
     {
         disableOnClick = disable;
@@ -101,17 +107,32 @@ public class Popup {
 		}
 		else {
 			screenLastTouched = false;
+			lastTouchedOutside = false;
 		}
 	}
 	private boolean touchedOutside(Input input) {
-		return (input.getTouchY(0) < position.y - TOUCH_OFFSET|| input.getTouchY(0) > currentY + TOUCH_OFFSET + topBorder.getHeight() + 5 ||
-				input.getTouchX(0) < position.x - TOUCH_OFFSET || input.getTouchX(0) > position.x + topBorder.getWidth() + TOUCH_OFFSET);
+		Rect bounds = getBounds();
+		Vector2d touch = new Vector2d(input.getTouchX(0), input.getTouchY(0));
+		
+		return touch.y < bounds.top || touch.y > bounds.bottom || touch.x < bounds.left || touch.x > bounds.right;
+	}
+	
+	public Rect getBounds() {
+		
+		Rect bounds = new Rect(0,0,0,0);
+		bounds.top = (int)position.y;
+		bounds.left = (int)position.x;
+		bounds.right = bounds.left + topBorder.getWidth();
+		bounds.bottom = bounds.top + popupHeight;
+		return bounds;
 	}
 	
 	public void paint(float deltaTime) 
 	{
 		
 		if(enabled) {
+			
+			g.drawARGB(190, 100, 59, 15);
 			
 			g.drawImage(topBorder, position);
 						
@@ -182,6 +203,7 @@ public class Popup {
     {
         final String FONT = "FONT/TIMER/";
         final int FONT_WIDTH = Assets.getImage(FONT + "0").getWidth();
+        final int FONT_HEIGHT = Assets.getImage(FONT + "0").getHeight();
 
         String strValue = String.valueOf(value);
         Vector2d numericImagePos = new Vector2d(g.getWidth() / 2 -
@@ -191,6 +213,8 @@ public class Popup {
             images.add(Assets.getImage(FONT + strValue.charAt(n)));
 			imagePositions.add( numericImagePos.add( new Vector2d(FONT_WIDTH * n + n, 0) ) );
         }
+        
+        currentY += FONT_HEIGHT;
 
     }
 

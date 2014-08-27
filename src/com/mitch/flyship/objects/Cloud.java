@@ -14,7 +14,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Cloud extends GameBody {
 	
-	static final int N_CLOUDS = 9;
+	static final int N_CLOUDS = 8;
 	
 	Level level;
 	Image image;

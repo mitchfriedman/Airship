@@ -5,6 +5,7 @@ import android.content.res.XmlResourceParser;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.objects.Enemy;
+import com.mitch.flyship.objects.Ship;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.containers.Vector2d;
@@ -51,6 +52,13 @@ public class MineNode extends EnemyComponent {
 							  enemy.getVelocity().x > 0 && enemy.getPos().x > xDropPos;
 		
 		if(!hasDropped && readyToDrop) {
+			dropMine();
+		}
+	}
+	
+	private void dropMine()
+	{
+		if (!hasDropped) {
 			hasDropped = true;
 			
 			Enemy mine = new Enemy(enemy.getLevel(), "MINE");
@@ -66,9 +74,14 @@ public class MineNode extends EnemyComponent {
 	    	mine.setPos(enemy.getPos().add(minePosition));
 	    	
 	    	enemy.getLevel().getBodyManager().addBodyDuringUpdate(mine);
-			
-			
 		}
+	}
+	
+	@Override
+	public void onHit(Ship ship) {
+		super.onHit(ship);
+		
+		dropMine();
 	}
 	
 	@Override

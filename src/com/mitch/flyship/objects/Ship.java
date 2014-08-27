@@ -1,8 +1,8 @@
 package com.mitch.flyship.objects;
 
-import android.graphics.Color;
-
 import java.util.List;
+
+import android.graphics.Color;
 
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.AnimationImage;
@@ -18,9 +18,11 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Ship extends GameBody {
 	
+	static final double FLASH_TIME = 3.5;
+	static final double FLASH_SPEED = 0.2;
+	
 	Player player;
 	Level level;
-	
 	
 	int waterCollectionRange;
 	int waterAttractionRange;
@@ -39,6 +41,11 @@ public class Ship extends GameBody {
 	Image tilt1;
 	Image tilt2;
 	Image image;
+	
+	double timeSinceFlashBegin = 0;
+	boolean flashing = false;
+	boolean drawing = true;
+	boolean collectingCoins = true;
 	
 	
 	public Ship(Level level, Player player, ShipParams params, Vector2d pos)
@@ -104,19 +111,33 @@ public class Ship extends GameBody {
         attractObjects();
 
 		player.onUpdate(deltaTime);
+		
+		timeSinceFlashBegin += deltaTime;
+		if (flashing && timeSinceFlashBegin < FLASH_TIME) {
+			drawing = (int)(timeSinceFlashBegin / FLASH_SPEED % 2) == 1;
+			player.setInvulnerable(true);
+			
+		} else {
+			player.setInvulnerable(false);
+			flashing = false;
+			drawing = true;
+			collectingCoins = true;
+		}
 	}
 
 	@Override
 	public void onPaint(float deltaTime) {
 		Graphics g = game.getGraphics();
-		g.drawImage(image, getPos(), imageReversed, false);
-		g.drawImage(propellerAnim.getFrame().image, getPos().add(propellerPos), 
-				propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
-		player.onPaint(deltaTime);
+		if (drawing) {
+			g.drawImage(image, getPos(), imageReversed, false);
+			g.drawImage(propellerAnim.getFrame().image, getPos().add(propellerPos), 
+					propellerAnim.getFrame().reverseX, propellerAnim.getFrame().reverseY);
 
-        if (AirshipGame.SHOW_COLLIDER_BOXES) {
-            game.getGraphics().drawRect(this.getCollisionBounds(), Color.BLUE);
-        }
+	        if (AirshipGame.SHOW_COLLIDER_BOXES) {
+	            game.getGraphics().drawRect(this.getCollisionBounds(), Color.BLUE);
+	        }
+		}
+		
 	}
 
 	@Override
@@ -124,6 +145,13 @@ public class Ship extends GameBody {
 
 	@Override
 	public void onResume() {}
+	
+	public void flash()
+	{
+		flashing = true;
+		collectingCoins = false;
+		timeSinceFlashBegin = 0;
+	}
 	
 	
 	void addVelocityWithBoundsCheck(Vector2d velocity)
@@ -171,17 +199,20 @@ public class Ship extends GameBody {
 
     private void attractObjects()
     {
-        attractNearbyObject(Coin.class,
-                coinCollectionRange, coinAttractionRange, coinAttractionSpeed,
-                new AttractionListener() {
-                    @Override
-                    public void onCollection(GameBody body) {
-                        player.addCurrency( ((Coin)body).value );
-                        level.getBodyManager().removeBody(body);
-                    }
-                    @Override
-                    public void onAttraction(GameBody body) {}
-                });
+    	if (collectingCoins) {
+	    		attractNearbyObject(Coin.class,
+	                coinCollectionRange, coinAttractionRange, coinAttractionSpeed,
+	                new AttractionListener() {
+	                    @Override
+	                    public void onCollection(GameBody body) {
+	                        player.addCurrency( ((Coin)body).value );
+	                        level.getBodyManager().removeBody(body);
+	                    }
+	                    @Override
+	                    public void onAttraction(GameBody body) {}
+	                });
+    	}
+       
 
         attractNearbyObject(Water.class,
                 waterCollectionRange, waterAttractionRange, waterAttractionSpeed,
