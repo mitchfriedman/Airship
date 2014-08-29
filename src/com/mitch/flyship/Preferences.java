@@ -37,13 +37,13 @@ public class Preferences {
 		editor.commit();
 	}
 	
-	public static void putSensitivityInPercent(float percent)
+	public static void putSensitivity(float percent)
 	{
 		editor.putFloat(KEYS.SENSITIVITY.toString(), percent);
 		editor.commit();
 	}
 	
-	public static float retrieveSensitivityInPercent()
+	public static float retrieveSensitivity()
 	{
 		return preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY_PERCENT);
 	}

@@ -2,6 +2,8 @@ package com.mitch.framework;
 
 import java.util.List;
 
+import com.mitch.framework.containers.Vector2d;
+
 public interface Input {
     
     public static class TouchEvent {
@@ -21,6 +23,7 @@ public interface Input {
     public int getTouchX(int pointer);
     public int getTouchY(int pointer);
     public List<TouchEvent> getTouchEvents();
+    public Vector2d getTilt();
 	public float GetTiltY();
 	public float GetTiltX();
 	public void onResume();

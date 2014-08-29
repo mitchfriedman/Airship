@@ -14,6 +14,7 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Popup {
 	
+	public static Popup settings;
 	
 	public float marginTop = 0;
 	
@@ -275,5 +276,44 @@ public class Popup {
 	
 	public boolean isEnabled() {
 		return enabled;
+	}
+	
+	public static Popup buildSettingsPopup(final AirshipGame game)
+	{
+		if (settings != null) {
+			return settings;
+		}
+		
+		SliderMoveListener sensitivityListener = new SliderMoveListener() {
+            @Override
+            public void onPositionChanged(float position) {
+            	game.setSensitivity(position);
+            }
+        };
+        ButtonClickListener calibrateListener = new ButtonClickListener() {
+            @Override
+            public void onUp()
+            {
+            	game.centerOrientation();
+            }
+        };
+		
+        settings = new Popup(game);
+        
+        settings.addHeightMargin(settings.topBorder.getHeight() + 4);
+        
+        settings.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
+        settings.addHeightMargin(3);
+        settings.addSlider((float) game.getSensitivity(), sensitivityListener);
+        settings.addHeightMargin(10);
+        
+        settings.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
+        settings.addHeightMargin(3);
+        settings.addButton(calibrateListener, "GUI/Calibrate");
+        settings.addHeightMargin(4);
+        
+        settings.build();
+        
+        return settings;
 	}
 }

@@ -2,8 +2,10 @@ package com.mitch.flyship;
 
 import android.os.Bundle;
 
+import com.mitch.flyship.screens.Level;
 import com.mitch.flyship.screens.Loading;
 import com.mitch.framework.Screen;
+import com.mitch.framework.containers.Vector2d;
 import com.mitch.framework.implementation.AndroidGame;
 
 public class AirshipGame extends AndroidGame {
@@ -15,6 +17,8 @@ public class AirshipGame extends AndroidGame {
     public static final boolean DEBUG = true;
     public static boolean muted = false;
 	
+    private Vector2d centerOrientation = null;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +48,31 @@ public class AirshipGame extends AndroidGame {
 		getCurrentScreen().backButton();
 	}
 	
+	public double getSensitivity()
+	{
+		return Preferences.retrieveSensitivity();
+	}
+	
+	public void setSensitivity(double sensitivity)
+	{
+		Preferences.putSensitivity((float) sensitivity);
+	}
+	
+	public void centerOrientation()
+	{
+		centerOrientation = getInput().getTilt();
+		if (getCurrentScreen().getClass().equals(Level.class)) {
+			Level level = (Level) getCurrentScreen();
+			level.getBodyManager().getShip().getPlayer().centerOrientation();
+		}
+		
+	}
+	
+	public Vector2d getCenterOrientation()
+	{
+		return centerOrientation;
+	}
+	
 	public ShipParams loadMerchantShipParams()
 	{
 		ShipParams params = new ShipParams("Interceptor");
@@ -58,6 +87,11 @@ public class AirshipGame extends AndroidGame {
     public void loadBoard(String leaderboard)
     {
     	apiManager.loadBoard(leaderboard);
+    }
+    
+    public void loadBoards()
+    {
+    	apiManager.loadBoards();
     }
 
 }

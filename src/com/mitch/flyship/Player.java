@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
+import android.graphics.Matrix;
 
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
 import com.mitch.framework.Input;
+import com.mitch.framework.containers.MathHelper;
 import com.mitch.framework.containers.Rect;
 import com.mitch.framework.containers.Vector2d;
 
 public class Player {
+	
+	static final double DEFAULT_PITCH_OFFSET = 35;
 	
 	final double WATER_VALUE_DRAIN_TIME = 10000000;
 	final double WATER_VALUE = 30;
@@ -22,11 +26,11 @@ public class Player {
 	
 	final double MAX_TILT_UP = 35;
 	final double MAX_TILT_DOWN = 35;
-	final double MAX_TILT_HORIZONTAL = 50;
+	final double MAX_TILT_HORIZONTAL = 40;
 	
 	private final double MAX_SPEED_UP = 80;
 	private final double MAX_SPEED_DOWN = 80;
-	private final double MAX_SPEED_HORIZONTAL = 60;
+	private final double MAX_SPEED_HORIZONTAL = 70;
 	
 	final double UP_TILT_LIMITER = 0.2;
 	final double DOWN_TILT_LIMITER = 0.2;
@@ -36,7 +40,11 @@ public class Player {
 	
 	boolean invulnerable = false;
 	double tiltSensitivity = 1;
-	Vector2d orientationOffset = new Vector2d(0, 40);
+	
+    Matrix xMatrix;
+    Matrix yMatrix;
+    
+    
 	AirshipGame game;
     Level level;
 	float elapsedTime = 0;
@@ -93,19 +101,19 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
 		
 		hullArrowImage = hullArrows.get(0);
-		
-		resetTiltSensitivityToPreference();
 
         Graphics g = game.getGraphics();
         hudStart = g.getHeight() - hud.getHeight() - hudBorder.getHeight();
 
         this.hudCoinWorldPos = new Vector2d( 0,hudStart ).add(hudCoinStartPosRelHud);
         this.coinTubeHeight = (int) (hud.getHeight() - hudCoinStartPosRelHud.y);
-	}
-	
-	void resetTiltSensitivityToPreference()
-	{
-		tiltSensitivity = convertPercentToSensitivity( Preferences.retrieveSensitivityInPercent() );
+        
+        if (game.getCenterOrientation() != null) {
+        	setOrientationOffset(game.getCenterOrientation());
+        } else {
+            setOrientationOffset(new Vector2d(180, 90+DEFAULT_PITCH_OFFSET));
+        }
+        
 	}
 	
 	double convertPercentToSensitivity(float percent)
@@ -115,15 +123,24 @@ public class Player {
 		return Math.abs(max-(percent * (max - min) + min))+min;
 	}
 	
+	public void setOrientationOffset(Vector2d offset)
+	{
+		xMatrix = new Matrix();
+		xMatrix.setRotate((float) offset.x);
+		
+		yMatrix = new Matrix();
+		yMatrix.setRotate((float) (360-offset.y));
+	}
+	
 	public void centerOrientation()
 	{
-		orientationOffset = getOrientation();
+		setOrientationOffset(getOrientation());
 	}
 	
 	public Vector2d getOrientation()
 	{
 		Input input = game.getInput();
-		return new Vector2d(-input.GetTiltX(), input.GetTiltY());
+		return new Vector2d(input.GetTiltX(), input.GetTiltY());
 	}
 	
 	public Rect getShipBounds()
@@ -135,13 +152,27 @@ public class Player {
 	public Vector2d getCenteredOrientation()
 	{
 		Vector2d orientation = getOrientation();
-		//Log.d("Phone Orientation", Math.round(orientation.x) + ", " + Math.round(orientation.y));
 		
-		double xDifference = degreeDifference(orientation.x, orientationOffset.x);
-		double yDifference = degreeDifference(orientation.y, orientationOffset.y);
-
-        //Log.d("Player Tilt", Math.round(xDifference) + ", " + Math.round(yDifference));
-		return new Vector2d(xDifference, yDifference);
+		float[] xVector = new float[] {
+			(float) Math.cos(Math.toRadians(orientation.x)),
+			(float) Math.sin(Math.toRadians(orientation.x)),
+		};
+		
+		float[] yVector = new float[] {
+			(float) Math.cos(Math.toRadians(orientation.y)),
+			(float) Math.sin(Math.toRadians(orientation.y)),
+		};
+		
+		xMatrix.mapPoints(xVector);
+		yMatrix.mapPoints(yVector);
+		
+		double degreeX = MathHelper.convertToAngle(xVector[0], xVector[1]);
+		double degreeY = MathHelper.convertToAngle(yVector[0], yVector[1]);
+		
+		Vector2d centeredOrientation = new Vector2d(degreeX, degreeY);
+		//Log.d("Centered Orientation", centeredOrientation.x + ", " + centeredOrientation.y);
+		return centeredOrientation;
+		
 	}
 
     public double getMaxSpeedHorizontal(double deltaTime)
@@ -164,10 +195,7 @@ public class Player {
         return getInput_Speed(deltaTime, false, false);
     }
     
-    private double degreeDifference(double a, double b)
-    {
-    	return (a - b) % 180;
-    }
+    
     
 	public Vector2d getInput_Speed(double deltaTime, boolean invertVertical, boolean invertHorizontal)
 	{
@@ -235,10 +263,10 @@ public class Player {
 	
 	public void applyDamage(int damage)
 	{
-        game.Vibrate(damage*150);
 
 		if (!invulnerable) {
 			health -= damage;
+	        game.Vibrate(damage*150);
 		}
 		
 		if (health <= 1) {
@@ -394,7 +422,7 @@ public class Player {
 	
 	public void onLevelResume()
 	{
-		resetTiltSensitivityToPreference();
+		tiltSensitivity = convertPercentToSensitivity((float) game.getSensitivity());
 	}
 	
 	public void onLevelPause()

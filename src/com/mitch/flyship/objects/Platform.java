@@ -37,8 +37,8 @@ public class Platform extends GameBody {
         
         setPos(new Vector2d(0, g.getHeight() - this.image.getHeight()));
         
-        cargoPos     = new Vector2d(130, 60);
-        shipPos      = new Vector2d(90, 25);
+        cargoPos     = new Vector2d(60, 67);
+        shipPos      = new Vector2d(28, 32);
         propellorPos = new Vector2d(shipPos.x + ship.getWidth()/2 - shipProp.getWidth()/2,
                 shipPos.y + ship.getHeight());
 

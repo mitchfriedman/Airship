@@ -40,7 +40,7 @@
                    endSpawnTime_RangeStart="10"
                    endSpawnTime_RangeEnd="15" >
 
-                <StaticImage image="Enemy/flock_of_gulls" />
+                <StaticImage image="Enemy/flock_of_gulls1" />
                 <VerticalEnemy speed="20"
                                directionDown="true" />
             </enemy>

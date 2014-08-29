@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build.VERSION;
+import android.util.Log;
 import android.view.View;
 
 import com.mitch.framework.Input;
@@ -77,7 +78,13 @@ public class AndroidInput implements Input, SensorEventListener {
 			return;
 		
 		float[] orientation = SensorManager.getOrientation(r, new float[3]);
-		tilt = new Vector2d(-Math.toDegrees(orientation[2]), -Math.toDegrees(orientation[1]));
+		tilt = new Vector2d(Math.toDegrees(orientation[2]), -Math.toDegrees(orientation[1]));
+		
+		tilt.x += 180; // gets x in range 0 - 359
+		if (tilt.x < 90 || tilt.x > 270) {
+    		tilt.y = 180 - tilt.y;
+    	}
+		tilt.y += 90;
 	}
 	
 	public Vector2d getTilt()

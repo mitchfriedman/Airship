@@ -190,7 +190,8 @@ public class Ship extends GameBody {
 	{
 		for ( Enemy enemy : level.getBodyManager().getEnemies() ) {
 			if (Rect.rectCollides(enemy.getCollisionBounds(), getCollisionBounds())
-                    && enemy.isColliding()) {
+                    && enemy.isColliding()
+                    && !flashing) {
 				enemy.onHit(this);
 				player.applyDamage(enemy.getDamage());
 			}

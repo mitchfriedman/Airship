@@ -1,33 +1,31 @@
 package com.mitch.flyship.screens;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import android.util.Log;
 
 import com.mitch.flyship.AirshipGame;
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodySpawner;
 import com.mitch.flyship.ButtonClickListener;
-import com.mitch.flyship.Enemy.EnemyProperties;
 import com.mitch.flyship.GameBody;
 import com.mitch.flyship.LevelProperties;
 import com.mitch.flyship.Player;
 import com.mitch.flyship.Popup;
-import com.mitch.flyship.Preferences;
 import com.mitch.flyship.ShipParams;
-import com.mitch.flyship.SliderMoveListener;
+import com.mitch.flyship.Enemy.EnemyProperties;
 import com.mitch.flyship.levelmanagers.LevelBodyManager;
 import com.mitch.flyship.levelmanagers.LevelSpawnerManager;
 import com.mitch.flyship.objects.Button;
 import com.mitch.flyship.objects.Cloud;
 import com.mitch.flyship.objects.Coin;
-import com.mitch.framework.Music;
 import com.mitch.flyship.objects.Enemy;
 import com.mitch.flyship.objects.Ship;
 import com.mitch.flyship.objects.Water;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
+import com.mitch.framework.Music;
 import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Align.Horizontal;
@@ -45,8 +43,7 @@ public class Level extends Screen {
 	
 	public enum DeathReason {
 		CRASH,
-		LACK_OF_WATER,
-		QUIT
+		LACK_OF_WATER
 	}
 
     public List<EnemyProperties> getEnemyTypes()
@@ -69,10 +66,9 @@ public class Level extends Screen {
 
     private List<Button> buttons = new ArrayList<Button>();
     private List<Button> pauseButtons = new ArrayList<Button>();
-    private ButtonClickListener pauseListener, endGameListener, hangarListener, 
-    							settingsListener, resumeListener, calibrateListener, 
-    							muteListener, leaderboardsListener, restartListener;
-    private SliderMoveListener sensitivityListener;
+    private ButtonClickListener pauseListener, hangarListener, 
+    							settingsListener, resumeListener, muteListener, 
+    							leaderboardsListener, restartListener;
 
     private LevelBodyManager bm;
     private LevelSpawnerManager sm;
@@ -172,27 +168,13 @@ public class Level extends Screen {
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*2 + 15);
-        pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, endGameListener));
+        pauseButtons.add(new Button(game, "GUI/Hangar Button", alignment, position, hangarListener));
 
         alignment = new Align(Align.Vertical.TOP, Align.Horizontal.RIGHT);
         position = new Vector2d(g.getWidth(), settingsButton.getImage().getHeight()*3 + 30);
         pauseButtons.add(new Button(game, "GUI/Resume Button", alignment, position, resumeListener));
 
-        options = new Popup(game);
-        
-        options.addHeightMargin(options.topBorder.getHeight() + 4);
-        
-        options.addImage("GUI/tilt sensitivity", Align.Horizontal.CENTER);
-        options.addHeightMargin(3);
-        options.addSlider(Preferences.retrieveSensitivityInPercent(), sensitivityListener);
-        options.addHeightMargin(10);
-        
-        /*options.addImage("GUI/tilt calibration", Align.Horizontal.CENTER);
-        options.addHeightMargin(3);
-        options.addButton(calibrateListener, "GUI/Calibrate");*/
-        options.addHeightMargin(4);
-        
-        options.build();
+        options = Popup.buildSettingsPopup(game);
     }
 
     private void generateShip(String shipID)
@@ -363,9 +345,6 @@ public class Level extends Screen {
         case LACK_OF_WATER:
         	deathMessageImage = "END/WATER";
         	break;
-        case QUIT:
-        	deathMessageImage = "END/CRASHED";
-        	break;
         }
         
         endPopup.addImage(deathMessageImage, Horizontal.CENTER);
@@ -379,10 +358,6 @@ public class Level extends Screen {
         endPopup.addHeightMargin(3);
         endPopup.addButton(hangarListener, "END/HANGAR");
         endPopup.addHeightMargin(3);
-        
-        if (deathReason != DeathReason.QUIT) {
-            endPopup.setDisableOnClick(false);
-        }
         
         endPopup.build();
         
@@ -515,6 +490,7 @@ public class Level extends Screen {
 	@Override
 	public void update(float deltaTime)
 	{
+		
         // Level handles this as it needs to be precise.
         // It takes too long for the time to get from AndroidFastRenderView
         // to this method. This causes jerky movements and overall a crappy game.
@@ -585,23 +561,10 @@ public class Level extends Screen {
 
     private void generateListeners()
     {
-        calibrateListener = new ButtonClickListener() {
-            @Override
-            public void onUp()
-            {
-                bm.getShip().getPlayer().centerOrientation();
-            }
-        };
         resumeListener = new ButtonClickListener() {
             @Override
             public void onUp() {
                 state = GameState.RUNNING;
-            }
-        };
-        sensitivityListener = new SliderMoveListener() {
-            @Override
-            public void onPositionChanged(float position) {
-                Preferences.putSensitivityInPercent(position);
             }
         };
         settingsListener = new ButtonClickListener() {
@@ -616,15 +579,9 @@ public class Level extends Screen {
                 toggleLevelPauseState();
             }
         };
-        endGameListener = new ButtonClickListener() {
-            @Override
-            public void onUp() {
-                bm.getShip().getPlayer().gameOver(DeathReason.QUIT);
-            }
-        };
         hangarListener = new ButtonClickListener() {
             @Override
-            public void onUp() { game.setScreen(new Menu(game)); }
+            public void onUp() { game.setScreen(new Menu(game, (Level)game.getCurrentScreen())); }
         };
         muteListener = new ButtonClickListener() {
             @Override

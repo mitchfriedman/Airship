@@ -78,6 +78,15 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
         tryPushScores();
     }
     
+    public void loadBoards()
+    {
+    	if (client.isConnected()) {
+    		game.startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(client), REQUEST_LEADERBOARD);
+    	} else {
+    		client.connect();
+    	}
+    }
+    
     public void loadBoard(String leaderboard)
     {
     	if (client.isConnected()) {
