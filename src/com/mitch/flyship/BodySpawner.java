@@ -3,173 +3,135 @@ package com.mitch.flyship;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import android.util.Log;
+
 import com.mitch.flyship.screens.Level;
+import com.mitch.framework.containers.MathHelper;
 
 public class BodySpawner {
 
+	public enum Special {
+		NONE,
+		RESTART_WITH_HEIGHT
+	};
+	
     public String getName() {
         return name;
     }
+    
+    public Special special = Special.NONE;
+    private String[] specialSpawnInfo = new String[1]; // We use an array so we can pass the value by reference
+    
+    private String name;
+	private Method spawnObjectsMethod;
 
-    public int getLevelStart() {
-        return levelStart;
-    }
-
-    public int getLevelEnd() {
-        return levelEnd;
-    }
-
-    public boolean isCappedAtMaxLevel() {
-        return cappedAtMaxLevel;
-    }
-
-    public void setCappedAtMaxLevel(boolean maxLevelRangeCap) {
-        this.cappedAtMaxLevel = maxLevelRangeCap;
-    }
-
-    public boolean isIgnoringLevelRange() {
-        return ignoringLevelRange;
-    }
-
-    public void setIgnoringLevelRange(boolean ignoreLevelRange) {
-        this.ignoringLevelRange = ignoreLevelRange;
-    }
-
-    String name;
-	Method spawnObjects;
-    Class<? extends GameBody> cls;
-
-    final int levelStart;
-    final int levelEnd;
-	final double spawnStart_Range1;
-    final double spawnStart_Range2;
-    final double spawnEnd_Range1;
-    final double spawnEnd_Range2;
-    double spawnRangeStart;
-    double spawnRangeEnd;
-    double spawnRangeProgress;
-
-    boolean cappedAtMaxLevel = true;
-    boolean ignoringLevelRange = false;
+    private int startDistance;
+    private int spawnRange_Start;
+    private int spawnRange_End;
 	
-	double distanceSinceLastSpawn = 0;
-	double randomSpawnDistance = 0;
+    private boolean spawned = false;
+    
+	private double distanceSinceLastSpawn = 0;
+	private double randomSpawnDistance = 0;
 
-    public BodySpawner(Class<? extends GameBody> cls, String name, double spawnStart, double spawnStop)
+    public BodySpawner(Class<? extends GameBody> cls, String name, int spawnRange_Start, int spawnRange_End)
     {
-        this(cls, name, 0, 0, spawnStart, spawnStop, spawnStart, spawnStop);
-        ignoringLevelRange = true;
+        this(cls, name, 0, spawnRange_Start, spawnRange_End);
     }
 
     public BodySpawner(Class<? extends GameBody> cls, String name, List<Integer> spawnInfo)
     {
-        this(cls, name,
-                spawnInfo.get(0), spawnInfo.get(1),
-                spawnInfo.get(2), spawnInfo.get(3),
-                spawnInfo.get(4), spawnInfo.get(5));
+        this(cls, name, spawnInfo.get(0), spawnInfo.get(1), spawnInfo.get(2));
     }
 
 	public BodySpawner(Class<? extends GameBody> cls, String name,
-                       int lvl_start, int lvl_end,
-                       double start_rng1, double start_rng2,
-                       double end_rng1, double end_rng2)
+				int startDistance, int spawnRange_Start, int spawnRange_End)
 	{
 		this.name = name;
-		this.cls = cls;
 
-        spawnRangeProgress = 0;
-        this.levelStart = lvl_start;
-        this.levelEnd = lvl_end;
-        this.spawnStart_Range1 = start_rng1;
-        this.spawnStart_Range2 = start_rng2;
-        this.spawnEnd_Range1 = end_rng1;
-        this.spawnEnd_Range2 = end_rng2;
-
-        updateLevel(1);
-		resetSpawnDistance();
+        this.startDistance = startDistance;
+        this.spawnRange_Start = spawnRange_Start;
+        this.spawnRange_End = spawnRange_End;
 		
 		try {
-			this.spawnObjects = cls.getMethod("spawnObjects", Level.class, String.class);
-		} catch (NoSuchMethodException e) {
+			Method getSpecialMethod = cls.getMethod("getSpecial", (Class[]) null);
+			special = (Special) getSpecialMethod.invoke(null, (Object[]) null);
+			if (special == Special.RESTART_WITH_HEIGHT) {
+				this.spawnObjectsMethod = cls.getMethod("spawnObjects", Level.class, String.class, String[].class);
+			} else {
+				this.spawnObjectsMethod = cls.getMethod("spawnObjects", Level.class, String.class);
+			}
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-    public void updateLevel(int currentLevel)
-    {
-        if (levelStart < levelEnd && !ignoringLevelRange) {
-            double progress = (levelEnd - levelStart) / currentLevel;
-            this.spawnRangeProgress = progress > 1 && cappedAtMaxLevel ? 1 : progress;
-        }
-
-        spawnRangeStart = spawnStart_Range1 +
-                          (spawnEnd_Range1 - spawnStart_Range1) * (spawnRangeProgress+1);
-        spawnRangeEnd = spawnStart_Range2 +
-                (spawnEnd_Range2 - spawnStart_Range2) * (spawnRangeProgress+1);
-    }
-
-	public void updateDistance(int level, double distance)
+	public void updateDistance(double distance)
 	{
-		if (level >= levelStart) {
-	        distanceSinceLastSpawn += distance;
-		}
+		distanceSinceLastSpawn += distance;
 	}
 	
-	public void resetSpawnDistance()
+	public boolean canSpawn()
 	{
-		distanceSinceLastSpawn = 0;
-		randomSpawnDistance = (int) (Math.random() * (spawnRangeEnd - spawnRangeStart));
-	}
-	
-	public boolean canSpawn(int level, double distanceFactor)
-	{
-        return ((level >= levelStart) || ignoringLevelRange) &&
-                (distanceSinceLastSpawn > spawnRangeStart*distanceFactor +
-                randomSpawnDistance*distanceFactor);
+		/*if (special == Special.RESTART_WITH_HEIGHT && !spawned) {
+			Log.d("COIN", "NOT SPAWNING");
+		} else if (special == Special.RESTART_WITH_HEIGHT) {
+			Log.d("COIN", "SPAWNING");
+		}*/
+		
+		return distanceSinceLastSpawn > spawnRange_Start + randomSpawnDistance + 
+				(!spawned ? startDistance : 0);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<GameBody> trySpawnObjects(Level level)
 	{
-		if (spawnObjects == null) {
+		if (spawnObjectsMethod == null) {
 			return null;
 		}
 		
 		try {
-			return (List<GameBody>) spawnObjects.invoke(null, level, name);
+			if (special == Special.RESTART_WITH_HEIGHT) {
+				return (List<GameBody>) spawnObjectsMethod.invoke(null, level, name, specialSpawnInfo);
+			} else {
+				return (List<GameBody>) spawnObjectsMethod.invoke(null, level, name);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+	
+	public void reset() {
+		distanceSinceLastSpawn = 0;
+		randomSpawnDistance = Math.random() * (spawnRange_End - spawnRange_Start);
+
+		if (special.equals(Special.RESTART_WITH_HEIGHT) && specialSpawnInfo[0].length() > 0) {
+			spawned = false;
+			startDistance = Integer.valueOf(specialSpawnInfo[0]);
+			Log.d("COIN", startDistance +"");
+		} else {
+			spawned = true;
+		}
+		
+	}
 
 	/***
 	 * Generates a random number from an array of weights. This
-     * function is used locally for selecting a coin configuration.
+	 * function is used locally for selecting a coin configuration.
 	 * @param weights An ArrayList of numbers. These numbers are the
-     *                probability of its index being returned
+	 *                probability of its index being returned
 	 * @return Random number in the range of 0 to weights.size()-1
-     *         (inclusive). This number is based on the weights given. -1 on error
+	 *         (inclusive). This number is based on the weights given. -1 on error
+	 * @deprecated Use {@link MathHelper#generateRandomValueFromWeights(List<Float>)} instead
 	 */
 	public static int generateRandomValueFromWeights(List<Float> weights)
 	{
-		// adds all configuration weights, gets a random number within range of weights.size
-		// finds corresponding ID.
-		float weightTotal = 0;
-		for (Float v : weights) {
-			weightTotal += v;
-		}
-		
-		float randomWeight = (float) (Math.random() * weightTotal);
-		float weightUsed = 0;
-		for (int i = 0; i < weights.size(); i++) {
-			weightUsed += weights.get(i);
-			if (randomWeight < weightUsed) {
-				return i;
-			}
-		}
-		// Will never happen ... like that girlfriend ):
-		return 0;
+		return MathHelper.generateRandomValueFromWeights(weights);
 	}
+
+	
 	
 }

@@ -132,8 +132,17 @@ public abstract class GameBody {
 	public void onPause() {}
 	public void onResume() {}
 	
+	public static BodySpawner.Special getSpecial()
+	{
+		return BodySpawner.Special.NONE;
+	}
 	
 	public static List<GameBody> spawnObjects(Level level, String type)
+	{
+		return null;
+	}
+	
+	public static List<GameBody> spawnObjects(Level level, String type, String[] specialSpawnInfo)
 	{
 		return null;
 	}

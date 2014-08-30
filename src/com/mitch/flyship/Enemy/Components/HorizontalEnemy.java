@@ -14,9 +14,11 @@ public class HorizontalEnemy extends EnemyComponent {
     double speed;
     boolean directionLeft = false;
     boolean randomDirection = false;
-    boolean includingSpawnFromTop = true;
-    float spawningPositionStart = 0;
-    float spawningPositionEnd = 1;
+    
+    float topOffset = 0;
+    boolean topOffsetIsPercent = false;
+    float bottomOffset = 0;
+    boolean bottomOffsetIsPercent = false;
     
     public HorizontalEnemy() {}
     
@@ -30,18 +32,24 @@ public class HorizontalEnemy extends EnemyComponent {
     {
         speed = Double.valueOf(xrp.getAttributeValue(null, "speed"));
         directionLeft = xrp.getAttributeBooleanValue(null, "directionLeft", false);
-        includingSpawnFromTop = xrp.getAttributeBooleanValue(null, "includingSpawnFromTop", true);
         randomDirection = xrp.getAttributeBooleanValue(null, "randomDirection", false);
         
-        String sps = xrp.getAttributeValue(null, "spawningPositionStart");
-        if (sps != null) {
-            spawningPositionStart = Float.valueOf(sps);
+        String sps = xrp.getAttributeValue(null, "topOffset");
+        if (sps != null && sps.substring(sps.length()-1).equals("%")) {
+        	topOffsetIsPercent = true;
+        	topOffset = Float.valueOf(sps.substring(0, sps.length()-1)) / 100f;
+        } else if (sps != null) {
+        	topOffset = Float.valueOf(sps);
         }
         
-        String spe = xrp.getAttributeValue(null, "spawningPositionEnd");
-        if (spe != null) {
-            spawningPositionEnd = Float.valueOf(spe);
+        String spe = xrp.getAttributeValue(null, "bottomOffset");
+        if (spe != null && spe.substring(spe.length()-1).equals("%")) {
+        	bottomOffsetIsPercent = true;
+        	bottomOffset = Float.valueOf(spe.substring(0, spe.length()-1)) / 100f;
+        } else if (spe != null) {
+        	bottomOffset = Float.valueOf(spe);
         }
+        
     }
 
     @Override
@@ -57,12 +65,20 @@ public class HorizontalEnemy extends EnemyComponent {
 
         Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
         
-        double yModifier = includingSpawnFromTop ? Math.abs(g.getWidth()/enemy.getVelocity().x) : 0;
-        double spawningPositionStartFinal = g.getHeight() * spawningPositionStart - yModifier;
-        double spawningPositionEndFinal = (g.getHeight() - enemy.getSize().y + yModifier) * spawningPositionEnd;
-        double y = Math.random() * spawningPositionEndFinal - spawningPositionStartFinal;
+        double yStartOffset = topOffset * (topOffsetIsPercent ? g.getHeight() : 1);
+        double yEndOffset = bottomOffset * (bottomOffsetIsPercent ? g.getHeight() : 1);
+        
+        double yStart = 0 + yStartOffset;
+        double yEnd = g.getHeight() + yEndOffset;
+        
+        double y = Math.random() * yEnd - yStart;
         double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
         enemy.setPos(new Vector2d(x, y));
+        
+        if (!directionLeft) {
+        	StaticImage staticImage = enemy.getComponent(StaticImage.class);
+        	staticImage.invertHorizontal = !staticImage.invertHorizontal;
+        }
     }
 
     @Override
@@ -82,9 +98,10 @@ public class HorizontalEnemy extends EnemyComponent {
 
         enemy.directionLeft = directionLeft;
         enemy.speed = speed;
-        enemy.includingSpawnFromTop = includingSpawnFromTop;
-        enemy.spawningPositionStart = spawningPositionStart;
-        enemy.spawningPositionEnd = spawningPositionEnd;
+        enemy.topOffset = topOffset;
+        enemy.bottomOffset = bottomOffset;
+        enemy.topOffsetIsPercent = topOffsetIsPercent;
+        enemy.bottomOffsetIsPercent = bottomOffsetIsPercent;
 
         return enemy;
     }

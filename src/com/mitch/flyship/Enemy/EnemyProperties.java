@@ -19,8 +19,8 @@ public class EnemyProperties {
         this.name = name;
         this.damage = damage;
         this.components = new ArrayList<EnemyComponent>();
-        this.spawnRange = new ArrayList<Integer>(6);
-        for (int i=0;i<6;i++) {
+        this.spawnRange = new ArrayList<Integer>(3);
+        for (int i=0;i<3;i++) {
             spawnRange.add(0);
         }
     }
@@ -45,30 +45,19 @@ public class EnemyProperties {
         components.add(component);
     }
 
-    public void setLevelSpawnRange(int startLevel, int endLevel)
+    public void setLevelSpawnRange(int startTime, int spawnRange_Start, int spawnRange_End)
     {
-        spawnRange.set(0, startLevel);
-        spawnRange.set(1, endLevel);
-    }
-
-    public void setStartSpawnTime(int startRange, int endRange)
-    {
-        spawnRange.set(2, startRange);
-        spawnRange.set(3, endRange);
-    }
-
-    public void setEndSpawnTime(int startRange, int endRange)
-    {
-        spawnRange.set(4, startRange);
-        spawnRange.set(5, endRange);
+        spawnRange.set(0, startTime);
+        spawnRange.set(1, spawnRange_Start);
+        spawnRange.set(2, spawnRange_End);
     }
 
     /**
      * Sets the spawning information
      * @param spawnRange the spawn range in this format:
-     *                   Level Spawn Range(0,1)
-     *                   startSpawnTimeRange(2,3)
-     *                   endSpawnTimeRange(4,5)
+     *                   startTime
+     *                   spawnRange_Start
+     *                   spawnRange_End
      */
     public void setSpawnRange(List<Integer> spawnRange)
     {
@@ -78,9 +67,9 @@ public class EnemyProperties {
     /**
      * Returns the spawning information
      * @return the spawn range in this format:
-     *         Level Spawn Range
-     *         startSpawnTimeRange
-     *         endSpawnTimeRange
+     *         startTime
+     *         spawnRange_Start
+     *         spawnRange_End
      */
     public List<Integer> getSpawnRange()
     {

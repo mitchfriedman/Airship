@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- spawn_rate is per 100 seconds -->
 <levels>
-    <level name="demo"
+    <level name="Curving Valley"
            background="Background/riverterrain"
            music="blue"
            ship="interceptor"
-           maxLevel="100"
-           timeToMaxLevel="900"
-           waterSpawn_RangeStart="30"
-           waterSpawn_RangeEnd="40"
-           speedAtStart="45"
-           speedAtEnd="65"
+           startSpeed="45"
+           acceleration="2"
            leaderboard_id="CgkIh_GvyvAKEAIQAQ" >
-
 
         <enemies>
 			
             <enemy name="crimson_fighter"
                    damage="2"
-                   startLevel="0"
-                   endLevel="100"
-                   startSpawnTime_RangeStart="10"
-                   startSpawnTime_RangeEnd="20"
-                   endSpawnTime_RangeStart="10"
-                   endSpawnTime_RangeEnd="20" >
+                   timeOffset="0"
+                   spawnRange_Start="10"
+                   spawnRange_End="20" >
 
                 <StaticImage image="Enemy/crimson_fighter" />
                 <VerticalEnemy speed="20"
@@ -33,12 +25,9 @@
             
             <enemy name="bird"
                    damage="1"
-                   startLevel="0"
-                   endLevel="25"
-                   startSpawnTime_RangeStart="5"
-                   startSpawnTime_RangeEnd="10"
-                   endSpawnTime_RangeStart="10"
-                   endSpawnTime_RangeEnd="15" >
+                   timeOffset="0"
+                   spawnRange_Start="5"
+                   spawnRange_End="10" >
 
                 <StaticImage image="Enemy/flock_of_gulls1" />
                 <VerticalEnemy speed="20"
@@ -47,28 +36,24 @@
 
             <enemy name="gunship"
                    damage="3"
-                   startLevel="0"
-                   endLevel="25"
-                   startSpawnTime_RangeStart="5"
-                   startSpawnTime_RangeEnd="10"
-                   endSpawnTime_RangeStart="10"
-                   endSpawnTime_RangeEnd="15" >
+                   timeOffset="0"
+                   spawnRange_Start="20"
+                   spawnRange_End="30" >
 
                 <StaticImage image="Enemy/gunship" />
                 <HorizontalEnemy speed="15"
-                                 directionLeft="true" />
+                                 randomDirection="true"
+                                 topOffset="0%"
+                                 bottomOffset="-50%" />
                 
                 <Invulnerable />
             </enemy>
             
             <enemy name="Open Air Hauler"
                    damage="2"
-                   startLevel="0"
-                   endLevel="100"
-                   startSpawnTime_RangeStart="10"
-                   startSpawnTime_RangeEnd="15"
-                   endSpawnTime_RangeStart="15"
-                   endSpawnTime_RangeEnd="20" >
+                   timeOffset="0"
+                   spawnRange_Start="20"
+                   spawnRange_End="30" >
 
                 <StaticImage image="Enemy/open_air_hauler" />
                 
@@ -89,18 +74,15 @@
             
             <enemy name="bomber" 
 	               damage="4"
-	               startLevel="1"
-	               endLevel="25"
-	               startSpawnTime_RangeStart="2"
-	               startSpawnTime_RangeEnd="5"
-	               endSpawnTime_RangeStart="5"
-	               endSpawnTime_RangeEnd="15" >
+	               timeOffset="240"
+                   spawnRange_Start="20"
+                   spawnRange_End="30">
             
 	           <StaticImage image="Enemy/saphire_bomber" />
 	           <HorizontalEnemy speed="35"
 	                			directionLeft="true"
-	                			spawningPositionStart="0"
-	                			spawningPositionEnd="0.1" />
+	                			topOffset="0"
+	                			bottomOffset="-90%" />
 	           <MineNode mine="Enemy/mine"
 	                	 x="16"
 	                	 y="1" />
@@ -109,12 +91,9 @@
             
             <enemy name="crate"
                    damage="0"
-                   startLevel="1"
-                   endLevel="25"
-                   startSpawnTime_RangeStart="2"
-	               startSpawnTime_RangeEnd="15"
-	               endSpawnTime_RangeStart="5"
-	               endSpawnTime_RangeEnd="15" >
+                   timeOffset="0"
+                   spawnRange_Start="30"
+                   spawnRange_End="50" >
 	            
                 <StaticImage image="crate" />
                 <VerticalEnemy speed="15"
@@ -124,41 +103,18 @@
                 <ItemContainer />
             </enemy>
             
-            
-            <enemy name="graf zeppelin from right"
+            <enemy name="graf zeppelin"
                    damage="5"
-                   startLevel="13"
-                   endLevel="100"
-                   startSpawnTime_RangeStart="240"
-                   startSpawnTime_RangeEnd="240"
-                   endSpawnTime_RangeStart="240"
-                   endSpawnTime_RangeEnd="240" >
-
-                <StaticImage image="Enemy/graf_zeppelin" />
-                <HorizontalEnemy speed="30"
-                                 directionLeft="true"
-                                 spawningPositionStart="0"
-                                 spawningPositionEnd="0.2" />
-                
-                <Invulnerable />
-            </enemy>
-            
-            <enemy name="graf zeppelin from left"
-                   damage="5"
-                   startLevel="0"
-                   endLevel="100"
-                   startSpawnTime_RangeStart="240"
-                   startSpawnTime_RangeEnd="240"
-                   endSpawnTime_RangeStart="240"
-                   endSpawnTime_RangeEnd="240" >
+                   timeOffset="0"
+                   spawnRange_Start="240"
+                   spawnRange_End="240" >
 
                 <StaticImage image="Enemy/graf_zeppelin"
                     		 invertHorizontal="true" />
                 <HorizontalEnemy speed="30"
-                                 directionLeft="false"
-                                 includingSpawnFromTop="false"
-                                 spawningPositionStart="0"
-                                 spawningPositionEnd="0.2" />
+                    			 randomDirection="true"
+                                 topOffset="-150"
+                                 bottomOffset="-100%" />
                 
                 <Invulnerable />
             </enemy>
@@ -183,8 +139,5 @@
             </enemy>
 
         </enemies>
-
-
 	</level>
-
 </levels>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
@@ -13,6 +14,7 @@ import com.mitch.flyship.GameBody;
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.Graphics;
 import com.mitch.framework.Image;
+import com.mitch.framework.containers.MathHelper;
 import com.mitch.framework.containers.Vector2d;
 
 public class Coin extends GameBody {
@@ -199,15 +201,22 @@ public class Coin extends GameBody {
 		
 	}
 	
-	public static List<GameBody> spawnObjects(Level level, String type)
+	public static BodySpawner.Special getSpecial()
 	{
-		int configID = BodySpawner.generateRandomValueFromWeights(spawnWeights);
+		Log.d("wow", "omg so speical");
+		return BodySpawner.Special.RESTART_WITH_HEIGHT;
+	}
+	
+	public static List<GameBody> spawnObjects(Level level, String type, String[] specialSpawnInfo)
+	{
+		int configID = MathHelper.generateRandomValueFromWeights(spawnWeights);
 		BodyConfiguration config = getBodyConfiguration(configID);
 		
 		Graphics g = level.getAirshipGame().getGraphics();
 		double xPos = Math.random()*(g.getWidth()-config.getConfigurationSize().x);
 		double yPos = -config.getConfigurationSize().y;
 		Vector2d pos = new Vector2d(xPos, yPos);
+		specialSpawnInfo[0] = String.valueOf((int)config.getConfigurationSize().y);
 		return getBodiesFromConfiguration(config, pos, level);
 	}
 	

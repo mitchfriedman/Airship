@@ -78,15 +78,9 @@ public class LevelProperties {
                 levelProperties.ship = xrp.getAttributeValue(null, "ship");
                 levelProperties.leaderboardID = xrp.getAttributeValue(null, "leaderboard_id");
 
-                // Level Speed / Max Level (for water, etc.)
-                levelProperties.maxLevel = Integer.valueOf(xrp.getAttributeValue(null, "maxLevel"));
-                levelProperties.timeToMaxLevel = Double.valueOf(xrp.getAttributeValue(null, "timeToMaxLevel"));
-                levelProperties.startSpeed = Double.valueOf(xrp.getAttributeValue(null, "speedAtStart"));
-                levelProperties.endSpeed = Double.valueOf(xrp.getAttributeValue(null, "speedAtEnd"));
-
-                // Water
-                levelProperties.waterSpawnTimeStart = Integer.valueOf(xrp.getAttributeValue(null, "waterSpawn_RangeStart"));
-                levelProperties.waterSpawnTimeEnd = Integer.valueOf(xrp.getAttributeValue(null, "waterSpawn_RangeEnd"));
+                // Level Speed
+                levelProperties.acceleration = Double.valueOf(xrp.getAttributeValue(null, "acceleration")); // in pixels per second per minute
+                levelProperties.startSpeed = Double.valueOf(xrp.getAttributeValue(null, "startSpeed"));
 
                 levels.add(levelProperties);
                 Log.d("LevelProperties", "Loaded Level: " + levelProperties.getName());
@@ -116,12 +110,9 @@ public class LevelProperties {
         }
 
         List<Integer> spawnRange = new ArrayList<Integer>(6);
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "startLevel")));
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "endLevel")));
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "startSpawnTime_RangeStart")));
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "startSpawnTime_RangeEnd")));
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "endSpawnTime_RangeStart")));
-        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "endSpawnTime_RangeEnd")));
+        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "timeOffset")));
+        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "spawnRange_Start")));
+        spawnRange.add(Integer.valueOf(xrp.getAttributeValue(null, "spawnRange_End")));
         enemyProperties.setSpawnRange(spawnRange);
 
         while (true) {
@@ -199,28 +190,12 @@ public class LevelProperties {
         return ship;
     }
 
-    public int getMaxLevel() {
-        return maxLevel;
-    }
-
-    public double getTimeToMaxLevel() {
-        return timeToMaxLevel;
-    }
-
     public double getStartSpeed() {
         return startSpeed;
     }
-
-    public double getEndSpeed() {
-        return endSpeed;
-    }
-
-    public int getWaterSpawnTimeStart() {
-        return waterSpawnTimeStart;
-    }
-
-    public int getWaterSpawnTimeEnd() {
-        return waterSpawnTimeEnd;
+    
+    public double getAcceleration() {
+        return acceleration;
     }
     
     public String getLeaderboardID()
@@ -231,10 +206,7 @@ public class LevelProperties {
 
     private String name, leaderboardID;
 	private String background, music, ship;
-	private int maxLevel;
-    private double timeToMaxLevel;
-	private double startSpeed, endSpeed;
-	private int waterSpawnTimeStart, waterSpawnTimeEnd;
+	private double startSpeed, acceleration;
     private List<EnemyProperties> enemyTemplates = new ArrayList<EnemyProperties>();
 
 	public LevelProperties() {}

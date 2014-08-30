@@ -30,7 +30,6 @@ import com.mitch.framework.Screen;
 import com.mitch.framework.containers.Align;
 import com.mitch.framework.containers.Align.Horizontal;
 import com.mitch.framework.containers.Vector2d;
-import com.mitch.framework.implementation.AndroidFastRenderView;
 
 
 public class Level extends Screen {
@@ -77,13 +76,9 @@ public class Level extends Screen {
     private double lastUpdate = 0;
     private double elapsedTime = 0;
 	private boolean isSpawning = true;
-
-    private int maxLevel;
-    private double timeToMaxLevel;
+	
+	private double acceleration;
     private double startSpeed;
-    private double endSpeed;
-    private int currentLevel = 0;
-    private boolean maxLevelCap = true;
     private boolean includeCloudAtEnd = true;
 
 	private Popup options;
@@ -101,7 +96,7 @@ public class Level extends Screen {
         super(game);
 
         this.properties = properties;
-
+        
         generateListeners();
         generateButtons();
         generate(properties);
@@ -112,16 +107,14 @@ public class Level extends Screen {
         if (AirshipGame.DEBUG) {
             Log.d("Level", "Generating level " + properties.getName());
         }
-
+        
+        
         bm = new LevelBodyManager();
         sm = new LevelSpawnerManager(this, true);
 
-        this.currentLevel = 1;
         this.startSpeed = properties.getStartSpeed();
-        this.endSpeed = properties.getEndSpeed();
-        this.maxLevel = properties.getMaxLevel();
-        this.timeToMaxLevel = properties.getTimeToMaxLevel();
-        calculateLevelSpeed();
+        this.speed = startSpeed;
+        this.acceleration = properties.getAcceleration();
 
         this.enemyTypes = properties.getEnemyTemplates();
         setBackgroundImage(properties.getBackground());
@@ -190,28 +183,22 @@ public class Level extends Screen {
     {
 
         sm.addSpawner( new BodySpawner(Coin.class, "COIN",
-                timeToDistance(275),
-                timeToDistance(1250)) );
+                timeToDistance(0.275, startSpeed),
+                timeToDistance(1.250, startSpeed)) );
         sm.addSpawner( new BodySpawner(Water.class, "WATER",
-                timeToDistance(props.getWaterSpawnTimeStart()*1000),
-                timeToDistance(props.getWaterSpawnTimeEnd()*1000)) );
+                timeToDistance(30, startSpeed),
+                timeToDistance(40, startSpeed)) );
         sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
-                timeToDistance(250),
-                timeToDistance(2500)) );
+                timeToDistance(0.250, startSpeed),
+                timeToDistance(2.500, startSpeed)) );
 
         for (EnemyProperties property : enemyTypes) {
 
             List<Integer> spawnRange = new ArrayList<Integer>();
-            spawnRange.addAll(property.getSpawnRange());
-            for (int i=2;i<6;i++) {
-                spawnRange.set(i, (int) timeToDistance(spawnRange.get(i) * 1000));
+            for (int i = 0; i < 3; i++) {
+                spawnRange.add(timeToDistance(property.getSpawnRange().get(i), startSpeed));
             }
-
-            if (AirshipGame.DEBUG) {
-                Log.d("Level", "Enemy spawner added to level: " + property.getName());
-
-            }
-
+            
             sm.addSpawner(new BodySpawner(Enemy.class, property.getName(), spawnRange));
         }
 
@@ -225,13 +212,23 @@ public class Level extends Screen {
      * @param time The time in milliseconds
      * @return distance travelled after a certain amount of time.
      */
-    public double timeToDistance(float time)
+    public int timeToDistance(double time, double speed)
     {
         if (getLevelSpeed() == 0) {
-            return Double.POSITIVE_INFINITY;
+            return Integer.MAX_VALUE;
         }
 
-        return time/1000 * (AndroidFastRenderView.UPS * getLevelSpeed());
+        return (int) Math.round(time * speed);
+    }
+    
+    public double calculateDistanceTravelled(double deltaSeconds)
+    {
+    	return deltaSeconds * getLevelSpeed();
+    }
+    
+    public double getElapsedTime()
+    {
+    	return elapsedTime;
     }
     
     public String getLeaderboardID()
@@ -242,13 +239,6 @@ public class Level extends Screen {
     public double getLevelSpeed()
     {
         return speed;
-    }
-
-    private void calculateLevelSpeed()
-    {
-        double progress = (double)currentLevel / (double)maxLevel;
-        progress = progress > 1 && maxLevelCap ? 1 : progress;
-        speed = (endSpeed - startSpeed) * progress + startSpeed;
     }
 
     public void onLevelPause()
@@ -305,27 +295,6 @@ public class Level extends Screen {
         }
     }
 
-    private void checkDifficultyLevel()
-    {
-        // Once you've touch somebody's heart, you'll be as cool as
-        // the rest of the cold hearted murderers out there
-        int level = (int) ((elapsedTime / timeToMaxLevel) * maxLevel);
-        level = level > maxLevel && maxLevelCap ? maxLevel : level;
-        
-        if (level > currentLevel) {
-            currentLevel = level;
-            onDifficultyLevelChange();
-        }
-    }
-
-    private void onDifficultyLevelChange()
-    {
-        calculateLevelSpeed();
-        for (BodySpawner spawner : sm.getSpawners()) {
-            spawner.updateLevel(currentLevel);
-        }
-    }
-
     private void buildEndPopup(int score, DeathReason deathReason)
     {
         endPopup = new Popup(game);
@@ -374,11 +343,29 @@ public class Level extends Screen {
 		backgroundImage = Assets.getImage(image);
 		backgroundHeight = backgroundImage.getHeight();
 	}
-
+	
+	public void pauseMusic()
+	{
+		if (music != null) {
+			music.pause();
+		}
+	}
+	
+	public void restartMusic()
+	{
+		if (music != null) {
+			music.seekBegin();
+			music.play();
+		}
+	}
+	
     public void setMusic(String musicName)
     {
 
     	Music newMusic = Assets.getMusic(musicName);
+    	if (newMusic == this.music)
+    		return;
+    	
     	if (this.music == null || (this.music != newMusic && !this.music.isPlaying())) {
     		this.music = newMusic;
     		this.music.setLooping(true);
@@ -415,22 +402,22 @@ public class Level extends Screen {
 		}
 	}
 
-    private void updateSpawners()
+    private void updateSpawners(double deltaSeconds)
     {
-        // Spawns objects from LevelSpawningManager. Iterates through all spawners,
-        // checks if spawner can spawn, Instantiates however that object spawns and
-        // adds them to LevelBodyManager.
         for (BodySpawner spawner : sm.getSpawners()) {
-            spawner.updateDistance(currentLevel, getLevelSpeed());
-
-            if (spawner.canSpawn( currentLevel, 1.0 ) && isSpawning) {
+            spawner.updateDistance(calculateDistanceTravelled(deltaSeconds));
+            if (spawner.canSpawn() && isSpawning) {
+            	
                 List<GameBody> bodyList = spawner.trySpawnObjects(this);
-
+                if (bodyList == null && AirshipGame.DEBUG) {
+                	Log.d("CRITICAL SPAWNING ERROR:", "INVOKE METHOD FAILED");
+                }
+                
                 for (GameBody body : bodyList) {
                     getBodyManager().addBody(body);
                 }
 
-                spawner.resetSpawnDistance();
+                spawner.reset();
             }
         }
     }
@@ -539,9 +526,7 @@ public class Level extends Screen {
 	private void updateRunning(double deltaSeconds)
 	{
         elapsedTime += deltaSeconds;
-
-        // Checks difficulty level and updates if needed.
-        checkDifficultyLevel();
+        speed += acceleration * deltaSeconds / 60;
 
         //updates all bodies in body manager (ship, enemies, items)
         bm.onUpdate(deltaSeconds);
@@ -556,7 +541,7 @@ public class Level extends Screen {
 		backgroundPos += deltaSeconds * getLevelSpeed();
 		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
 
-        updateSpawners();
+        updateSpawners(deltaSeconds);
 	}
 
     private void generateListeners()
@@ -581,7 +566,14 @@ public class Level extends Screen {
         };
         hangarListener = new ButtonClickListener() {
             @Override
-            public void onUp() { game.setScreen(new Menu(game, (Level)game.getCurrentScreen())); }
+            public void onUp() { 
+            	if (state == GameState.OVER) {
+            		game.setScreen(new Menu(game, null)); 
+            	} else {
+            		game.setScreen(new Menu(game, (Level)game.getCurrentScreen())); 
+            	}
+            	
+            }
         };
         muteListener = new ButtonClickListener() {
             @Override

@@ -6,13 +6,13 @@ import java.util.List;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
-import com.mitch.flyship.BodySpawner;
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.objects.Coin;
 import com.mitch.flyship.objects.Enemy;
 import com.mitch.flyship.objects.Ship;
 import com.mitch.flyship.objects.Water;
 import com.mitch.framework.Image;
+import com.mitch.framework.containers.MathHelper;
 
 public class ItemContainer extends EnemyComponent {
 
@@ -44,7 +44,7 @@ public class ItemContainer extends EnemyComponent {
 	public void onComponentAdded() {
 		super.onComponentAdded();
 		
-		inside = getItemInsideCrate(BodySpawner.generateRandomValueFromWeights(weights));
+		inside = getItemInsideCrate(MathHelper.generateRandomValueFromWeights(weights));
 	}
 	
 	@Override

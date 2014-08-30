@@ -16,7 +16,8 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Player {
 	
-	static final double DEFAULT_PITCH_OFFSET = 35;
+	static final double DEFAULT_PITCH_OFFSET = 25;
+	static final boolean USE_MATRIX = true;
 	
 	final double WATER_VALUE_DRAIN_TIME = 10000000;
 	final double WATER_VALUE = 30;
@@ -41,8 +42,9 @@ public class Player {
 	boolean invulnerable = false;
 	double tiltSensitivity = 1;
 	
-    Matrix xMatrix;
-    Matrix yMatrix;
+	Vector2d orientationOffset = new Vector2d(0,0);
+    Matrix xMatrix; // Two options for input: simple math with degrees
+    Matrix yMatrix; // or convert degrees into vectors and transform them with matrices
     
     
 	AirshipGame game;
@@ -111,7 +113,7 @@ public class Player {
         if (game.getCenterOrientation() != null) {
         	setOrientationOffset(game.getCenterOrientation());
         } else {
-            setOrientationOffset(new Vector2d(180, 90+DEFAULT_PITCH_OFFSET));
+            setOrientationOffset(new Vector2d(180, DEFAULT_PITCH_OFFSET+90));
         }
         
 	}
@@ -125,11 +127,16 @@ public class Player {
 	
 	public void setOrientationOffset(Vector2d offset)
 	{
-		xMatrix = new Matrix();
-		xMatrix.setRotate((float) offset.x);
+		if (USE_MATRIX) {
+			xMatrix = new Matrix();
+			xMatrix.setRotate((float) offset.x);
+			
+			yMatrix = new Matrix();
+			yMatrix.setRotate((float) (360-offset.y));
+		} else {
+			// simple degrees
+		}
 		
-		yMatrix = new Matrix();
-		yMatrix.setRotate((float) (360-offset.y));
 	}
 	
 	public void centerOrientation()
@@ -152,22 +159,28 @@ public class Player {
 	public Vector2d getCenteredOrientation()
 	{
 		Vector2d orientation = getOrientation();
+		double degreeX, degreeY;
 		
-		float[] xVector = new float[] {
-			(float) Math.cos(Math.toRadians(orientation.x)),
-			(float) Math.sin(Math.toRadians(orientation.x)),
-		};
-		
-		float[] yVector = new float[] {
-			(float) Math.cos(Math.toRadians(orientation.y)),
-			(float) Math.sin(Math.toRadians(orientation.y)),
-		};
-		
-		xMatrix.mapPoints(xVector);
-		yMatrix.mapPoints(yVector);
-		
-		double degreeX = MathHelper.convertToAngle(xVector[0], xVector[1]);
-		double degreeY = MathHelper.convertToAngle(yVector[0], yVector[1]);
+		if (USE_MATRIX) {
+			float[] xVector = new float[] {
+				(float) Math.cos(Math.toRadians(orientation.x)),
+				(float) Math.sin(Math.toRadians(orientation.x)),
+			};
+			
+			float[] yVector = new float[] {
+				(float) Math.cos(Math.toRadians(orientation.y)),
+				(float) Math.sin(Math.toRadians(orientation.y)),
+			};
+			
+			xMatrix.mapPoints(xVector);
+			yMatrix.mapPoints(yVector);
+			
+			degreeX = MathHelper.convertToAngle(xVector[0], xVector[1]);
+			degreeY = MathHelper.convertToAngle(yVector[0], yVector[1]);
+		} else {
+			degreeX = 0;
+			degreeY = 0;
+		}
 		
 		Vector2d centeredOrientation = new Vector2d(degreeX, degreeY);
 		//Log.d("Centered Orientation", centeredOrientation.x + ", " + centeredOrientation.y);

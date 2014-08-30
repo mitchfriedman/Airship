@@ -56,13 +56,15 @@ public class Menu extends Screen {
     ButtonClickListener embarkListener = new ButtonClickListener() {
         @Override
         public void onUp() {
-            game.setScreen(new Level(game, LevelProperties.getLevel("demo")));
+            game.setScreen(new Level(game, LevelProperties.getLevel("Curving Valley")));
         }
     };
     ButtonClickListener resumeListener = new ButtonClickListener() {
         @Override
         public void onUp() {
+        	level.pauseMusic();
         	game.setScreen(level);
+        	level.restartMusic();
         }
     };
     

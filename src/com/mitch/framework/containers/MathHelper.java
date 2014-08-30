@@ -1,5 +1,7 @@
 package com.mitch.framework.containers;
 
+import java.util.List;
+
 public class MathHelper {
 	
 	private MathHelper() {}
@@ -54,6 +56,35 @@ public class MathHelper {
 		
 		return null;
 		
+	}
+
+	/***
+	 * Generates a random number from an array of weights. This
+	 * function is used locally for selecting a coin configuration.
+	 * @param weights An ArrayList of numbers. These numbers are the
+	 *                probability of its index being returned
+	 * @return Random number in the range of 0 to weights.size()-1
+	 *         (inclusive). This number is based on the weights given. -1 on error
+	 */
+	public static int generateRandomValueFromWeights(List<Float> weights)
+	{
+		// adds all configuration weights, gets a random number within range of weights.size
+		// finds corresponding ID.
+		float weightTotal = 0;
+		for (Float v : weights) {
+			weightTotal += v;
+		}
+		
+		float randomWeight = (float) (Math.random() * weightTotal);
+		float weightUsed = 0;
+		for (int i = 0; i < weights.size(); i++) {
+			weightUsed += weights.get(i);
+			if (randomWeight < weightUsed) {
+				return i;
+			}
+		}
+		// Will never happen ... like that girlfriend ):
+		return 0;
 	}
 	
 }
