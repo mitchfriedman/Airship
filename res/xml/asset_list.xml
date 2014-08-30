@@ -162,5 +162,6 @@
 	<image key="star_coin_map" path="Items/star_coin_map.png" />
 	<image key="water" path="Items/Water Droplet.png" />
 	<image key="crate" path="Items/Mystery Crate.png" />
+	<image key="repair" path="Items/Repair Platform.png" />
 	
 </assets>

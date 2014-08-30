@@ -253,7 +253,11 @@ public class Player {
 	
 	public void addHealth(int amount)
 	{
-		health += amount;
+		if(health + amount <= MAX_HEALTH) {
+			health += amount;
+		} else {
+			health = MAX_HEALTH;
+		}	
 	}
 	
 	public void setInvulnerable(boolean invulnerable)

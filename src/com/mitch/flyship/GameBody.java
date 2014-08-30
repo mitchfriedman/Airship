@@ -67,6 +67,13 @@ public abstract class GameBody {
 		return rect;
 	}
 	
+	public boolean isCollidingWith(final GameBody body) {
+		if (Rect.rectCollides(getCollisionBounds(), body.getCollisionBounds())) {
+			return true;
+		}
+		return false;
+	}
+	
 	public String getName()
 	{
 		return name;

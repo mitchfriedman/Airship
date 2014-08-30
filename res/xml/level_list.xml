@@ -162,6 +162,25 @@
                 
                 <Invulnerable />
             </enemy>
+            
+            <enemy name="repair platform" 
+                   damage="0"
+                   startLevel="1"
+                   endLevel="25"
+                   startSpawnTime_RangeStart="2"
+                   startSpawnTime_RangeEnd="15"
+                   endSpawnTime_RangeStart="5"
+                   endSpawnTime_RangeEnd="15" >
+                
+                <StaticImage image="repair" />
+                
+                <VerticalEnemy speed="15"
+                               directionDown="true" />
+                
+                <Repair timeToRepair="1"
+                        repairAmount="1" />
+                
+            </enemy>
 
         </enemies>
 
