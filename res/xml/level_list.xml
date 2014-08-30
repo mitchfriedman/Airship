@@ -121,12 +121,9 @@
             
             <enemy name="repair platform" 
                    damage="0"
-                   startLevel="1"
-                   endLevel="25"
-                   startSpawnTime_RangeStart="2"
-                   startSpawnTime_RangeEnd="15"
-                   endSpawnTime_RangeStart="5"
-                   endSpawnTime_RangeEnd="15" >
+				   timeOffset="80"
+                   spawnRange_Start="2"
+                   spawnRange_End="15" >
                 
                 <StaticImage image="repair" />
                 
