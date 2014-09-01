@@ -29,7 +29,9 @@
                    spawnRange_Start="5"
                    spawnRange_End="10" >
 
-                <StaticImage image="Enemy/flock_of_gulls1" />
+                <Animation rootImage="Enemy/flock_of_gulls" 
+                           numberOfFrames="2"
+                           animateOn="BIRTH" />
                 <VerticalEnemy speed="20"
                                directionDown="true" />
             </enemy>

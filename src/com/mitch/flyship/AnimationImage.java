@@ -101,4 +101,7 @@ public class AnimationImage {
 		frames.add(index, frame);
 	}
 	
+	public void resetAnimation() {
+		currentFrame = playingInReverse ? 0 : getAnimationSize()-1;
+	}
 }

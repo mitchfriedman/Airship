@@ -32,7 +32,7 @@ public class Repair extends EnemyComponent {
 	@Override
 	public void onUpdate(final double deltaTime) {
 		super.onUpdate(deltaTime);
-		Log.d("Repair: ","deltaTime: " + deltaTime + "timeToRepair: " + timeToRepair);
+
 		if(enemy.isCollidingWith(enemy.getLevel().getBodyManager().getShip())) {
 			if(timeOnPlatform >= timeToRepair) {
 				enemy.getLevel().getBodyManager().getShip().getPlayer().addHealth(repairAmount);
