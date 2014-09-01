@@ -55,7 +55,7 @@ public class HorizontalEnemy extends EnemyComponent {
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
-        directionLeft = randomDirection ? Math.floor(Math.random() * 2) == 0 : directionLeft;
+        directionLeft = randomDirection ? Math.floor(Math.random() * 2) == 1 : directionLeft;
         enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
     }
 
@@ -96,6 +96,7 @@ public class HorizontalEnemy extends EnemyComponent {
         HorizontalEnemy enemy = new HorizontalEnemy();
 
         enemy.directionLeft = directionLeft;
+        enemy.randomDirection = randomDirection;
         enemy.speed = speed;
         enemy.topOffset = topOffset;
         enemy.bottomOffset = bottomOffset;

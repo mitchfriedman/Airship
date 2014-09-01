@@ -16,7 +16,9 @@ public class MineNode extends EnemyComponent {
 	private static final float UPPER_DROP_BOUNDS_PERCENT = 0.8f;
 	
 	private double xDropPos;
+	private boolean directionLeft = false;
 	private boolean hasDropped = false;
+	private boolean lastHasDropped = false;
 	
 	private Image mine;
 	Vector2d minePosition;
@@ -36,6 +38,11 @@ public class MineNode extends EnemyComponent {
 	public void onObjectCreationCompletion() {
 		super.onObjectCreationCompletion();
 		
+		directionLeft = enemy.getComponent(HorizontalEnemy.class).directionLeft;
+		if (!directionLeft) {
+			minePosition = new Vector2d(enemy.getSize().x - minePosition.x - mine.getWidth(), minePosition.y);
+		}
+		
 		float screenWidth = enemy.getLevel().getAirshipGame().getGraphics().getWidth();
 		float minXPos = screenWidth * LOWER_DROP_BOUNDS_PERCENT;
 		float maxXPos = screenWidth * UPPER_DROP_BOUNDS_PERCENT;
@@ -51,6 +58,7 @@ public class MineNode extends EnemyComponent {
 		boolean readyToDrop = enemy.getVelocity().x < 0 && enemy.getPos().x < xDropPos ||
 							  enemy.getVelocity().x > 0 && enemy.getPos().x > xDropPos;
 		
+		lastHasDropped = hasDropped;
 		if(!hasDropped && readyToDrop) {
 			dropMine();
 		}
@@ -88,7 +96,7 @@ public class MineNode extends EnemyComponent {
 	public void onPaint(float deltaTime) {
 		super.onPaint(deltaTime);
 		
-		if (!hasDropped) {
+		if (!lastHasDropped) {
 			Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
 			g.drawImage(mine, enemy.getPos().add(minePosition));
 		}

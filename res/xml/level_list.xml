@@ -77,15 +77,31 @@
                 <Invulnerable />
             </enemy>
             
+            <enemy name="racyplanes" 
+	               damage="2"
+	               timeOffset="0"
+                   spawnRange_Start="5"
+                   spawnRange_End="10">
+            
+	           <StaticImage image="incoming" />
+	           <HorizontalEnemy speed="75"
+	                			directionLeft="true"
+	                			topOffset="0"
+	                			bottomOffset="-100%" />
+	           <RacyPlaneSpawner />
+	           <ExplosionAnimation x="-20.0"/>
+	           <HitboxModifier right="-45"/>
+            </enemy>
+            
             <enemy name="bomber" 
 	               damage="4"
-	               timeOffset="240"
-                   spawnRange_Start="20"
-                   spawnRange_End="30">
+	               timeOffset="0"
+                   spawnRange_Start="10"
+                   spawnRange_End="25">
             
 	           <StaticImage image="Enemy/saphire_bomber" />
 	           <HorizontalEnemy speed="45"
-	                			directionLeft="true"
+	                			randomDirection="true"
 	                			topOffset="0"
 	                			bottomOffset="-90%" />
 	           <MineNode mine="Enemy/mine"

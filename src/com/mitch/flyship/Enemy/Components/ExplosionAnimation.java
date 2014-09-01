@@ -18,13 +18,18 @@ class ExplosionAnimation extends EnemyComponent {
 	static final int N_EXPLOSIONS = 7;
 	
     private AnimationImage explosion;
+    private Vector2d offset = new Vector2d(0,0);
     private Vector2d explosionPos = new Vector2d(0,0);
 
     public ExplosionAnimation() {}
 
     // DEBUGGING: Did you remember to clone the elements?
     public ExplosionAnimation(XmlResourceParser parser) //xml stuff here
-    { this(); }
+    { 
+    	this(); 
+    	offset.x = parser.getAttributeFloatValue(null, "x", 0);
+    	offset.y = parser.getAttributeFloatValue(null, "y", 0);
+    }
 
     @Override
     public void onComponentAdded() {
@@ -65,7 +70,8 @@ class ExplosionAnimation extends EnemyComponent {
             enemy.setVelocity(enemy.getVelocity().scale(0.7));
             explosionPos = enemy.getPos()
             		.add(enemy.getSize().divide(2)
-            		.subtract(explosion.getFrame().image.getSize().divide(2)));
+            		.subtract(explosion.getFrame().image.getSize().divide(2)))
+            		.add(offset);
         }
 
         if (explosion.getCurrentFrameIndex() == explosion.getAnimationSize()-1) {
@@ -86,7 +92,7 @@ class ExplosionAnimation extends EnemyComponent {
     @Override
     public EnemyComponent clone() {
         ExplosionAnimation component = new ExplosionAnimation();
-
+        component.offset = offset;
         return component;
     }
 }
