@@ -608,7 +608,7 @@ public class Level extends Screen {
             @Override
             public void onUp() { 
             	generate(properties);
-            	setPaused(false);
+            	state = GameState.RUNNING;
             }
         };
     }

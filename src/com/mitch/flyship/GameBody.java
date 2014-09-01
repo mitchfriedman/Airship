@@ -67,6 +67,11 @@ public abstract class GameBody {
 		return rect;
 	}
 	
+	public void setCollisionOffset(Rect offset)
+	{
+		this.collisionOffset = offset;
+	}
+	
 	public boolean isCollidingWith(final GameBody body) {
 		if (Rect.rectCollides(getCollisionBounds(), body.getCollisionBounds())) {
 			return true;

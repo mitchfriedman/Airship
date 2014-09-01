@@ -15,6 +15,12 @@ public class VerticalEnemy extends EnemyComponent {
     boolean directionDown = true;
 
     public VerticalEnemy() {}
+    
+    public VerticalEnemy(double speed, boolean directionDown)
+    {
+    	this.speed = speed;
+    	this.directionDown = directionDown;
+    }
 
     public VerticalEnemy(XmlResourceParser xrp) //xml stuff here
     {

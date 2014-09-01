@@ -1,7 +1,6 @@
 package com.mitch.flyship;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class Preferences {
 	
@@ -46,7 +45,6 @@ public class Preferences {
 	
 	public static float retrieveSensitivity()
 	{
-		Log.d("RETRIEVING SENSITIVITY", "" + preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY));
 		return preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY);
 	}
 }

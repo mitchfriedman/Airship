@@ -18,7 +18,7 @@
                    spawnRange_End="20" >
 
                 <StaticImage image="Enemy/crimson_fighter" />
-                <VerticalEnemy speed="20"
+                <VerticalEnemy speed="45"
                                directionDown="true" />
                 <ExplosionAnimation />
             </enemy>
@@ -46,7 +46,7 @@
                 <HorizontalEnemy speed="15"
                                  randomDirection="true"
                                  topOffset="0%"
-                                 bottomOffset="-50%" />
+                                 bottomOffset="-100%" />
                 
                 <Invulnerable />
             </enemy>
@@ -71,6 +71,9 @@
                     		y="41"
                     		directionLeft="false"
                     		interval="1.6" />
+                <HitboxModifier left="15"
+                    			right="-15"/>
+                
                 <Invulnerable />
             </enemy>
             
@@ -81,7 +84,7 @@
                    spawnRange_End="30">
             
 	           <StaticImage image="Enemy/saphire_bomber" />
-	           <HorizontalEnemy speed="35"
+	           <HorizontalEnemy speed="45"
 	                			directionLeft="true"
 	                			topOffset="0"
 	                			bottomOffset="-90%" />
@@ -108,15 +111,19 @@
             <enemy name="graf zeppelin"
                    damage="5"
                    timeOffset="0"
-                   spawnRange_Start="240"
-                   spawnRange_End="240" >
+                   spawnRange_Start="230"
+                   spawnRange_End="250" >
 
                 <StaticImage image="Enemy/graf_zeppelin"
-                    		 invertHorizontal="true" />
-                <HorizontalEnemy speed="30"
+                    		 invertHorizontal="false" />
+                <HorizontalEnemy speed="40"
                     			 randomDirection="true"
-                                 topOffset="-150"
-                                 bottomOffset="-100%" />
+                                 topOffset="-200"
+                                 bottomOffset="-110%" />
+                <HitboxModifier left="15"
+                    			right="-15"
+                    			top="15"
+                    			bottom="-15"/>
                 
                 <Invulnerable />
             </enemy>

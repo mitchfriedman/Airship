@@ -32,7 +32,7 @@ public class Animation extends EnemyComponent {
 	public Animation() {
 		numberOfFrames = 0;
 		rootImage = "";
-		animation = new AnimationImage(11);
+		animation = new AnimationImage(4);
 	}
 	
 	public Animation(final XmlResourceParser parser) {

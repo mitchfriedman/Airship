@@ -12,12 +12,12 @@ import com.mitch.framework.containers.Vector2d;
 public class HorizontalEnemy extends EnemyComponent {
 
     double speed;
-    boolean directionLeft = false;
+    boolean directionLeft = true;
     boolean randomDirection = false;
     
-    float topOffset = 0;
+    double topOffset = 0;
     boolean topOffsetIsPercent = false;
-    float bottomOffset = 0;
+    double bottomOffset = 0;
     boolean bottomOffsetIsPercent = false;
     
     public HorizontalEnemy() {}
@@ -55,23 +55,22 @@ public class HorizontalEnemy extends EnemyComponent {
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
-        enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
         directionLeft = randomDirection ? Math.floor(Math.random() * 2) == 0 : directionLeft;
+        enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
     }
 
     @Override
     public void onObjectCreationCompletion() {
         super.onObjectCreationCompletion();
-
+        
         Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
+        double yStartOffset = topOffset * (double) (topOffsetIsPercent ? g.getHeight() : 1.0);
+        double yEndOffset = bottomOffset * (double) (bottomOffsetIsPercent ? g.getHeight() : 1.0);
         
-        double yStartOffset = topOffset * (topOffsetIsPercent ? g.getHeight() : 1);
-        double yEndOffset = bottomOffset * (bottomOffsetIsPercent ? g.getHeight() : 1);
-        
-        double yStart = 0 + yStartOffset;
+        double yStart = yStartOffset;
         double yEnd = g.getHeight() + yEndOffset;
-        
-        double y = Math.random() * yEnd - yStart;
+
+        double y = Math.random() * (yEnd - yStart) + yStart;
         double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
         enemy.setPos(new Vector2d(x, y));
         

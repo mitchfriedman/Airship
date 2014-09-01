@@ -316,7 +316,7 @@ public class Player {
 	public void gameOver(Level.DeathReason deathReason)
 	{
         game.getGoogleAPIManager().connect();
-        game.pushScore(level.getLeaderboardID(), (long) elapsedTime);
+        game.pushScore(level.getLeaderboardID(), (long) getCurrency());
         level.end(deathReason);
 	}
 	

@@ -44,7 +44,7 @@ class CannonNode extends EnemyComponent {
     {
     	Enemy cannonBall = new Enemy(enemy.getLevel(), "CANNON BALL");
     	cannonBall.setDamage(1);
-    	cannonBall.setDepth(enemy.getDepth());
+    	cannonBall.setDepth(enemy.getDepth()-1);
     	cannonBall.addComponent(new StaticImage("Enemy/cannon", false, false));
     	cannonBall.addComponent(new HorizontalEnemy(60, directionLeft));
     	
@@ -52,8 +52,10 @@ class CannonNode extends EnemyComponent {
     		comp.onObjectCreationCompletion();
     	}
     	cannonBall.setPos(enemy.getPos().add(position));
+    	cannonBall.setVelocity(cannonBall.getVelocity().add(enemy.getVelocity()));
     	
     	enemy.getLevel().getBodyManager().addBodyDuringUpdate(cannonBall);
+
     }
 
     @Override
