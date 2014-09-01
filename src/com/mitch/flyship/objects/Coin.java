@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.BodyConfiguration;
@@ -203,12 +202,16 @@ public class Coin extends GameBody {
 	
 	public static BodySpawner.Special getSpecial()
 	{
-		Log.d("wow", "omg so speical");
+		// When BodySpawner asks for a special, this method overrides
+		// GameBody and provides special spawning rules.
 		return BodySpawner.Special.RESTART_WITH_HEIGHT;
 	}
 	
 	public static List<GameBody> spawnObjects(Level level, String type, String[] specialSpawnInfo)
 	{
+		// This method is another variation of spawnObjects. It provides a way to
+		// pass on another return parameter to the specific objects BodySpawner.
+		
 		int configID = MathHelper.generateRandomValueFromWeights(spawnWeights);
 		BodyConfiguration config = getBodyConfiguration(configID);
 		

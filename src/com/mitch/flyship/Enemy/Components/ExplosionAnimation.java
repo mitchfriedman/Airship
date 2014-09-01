@@ -30,7 +30,6 @@ class ExplosionAnimation extends EnemyComponent {
     public void onComponentAdded() {
         super.onComponentAdded();
 
-        enemy.setDepth(500);
         enemy.setDestroyingOnHit(false);
         explosion = new AnimationImage(11);
         for (int i = 1; i <= N_EXPLOSIONS; i++) {
@@ -49,6 +48,8 @@ class ExplosionAnimation extends EnemyComponent {
     public void onHit(Ship ship) {
         super.onHit(ship);
         beginAnimation();
+
+        enemy.setDepth(500);
 
         enemy.setColliding(false);
 

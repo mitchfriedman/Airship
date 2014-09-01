@@ -18,6 +18,7 @@ public class Enemy extends GameBody {
     private boolean colliding = true;
     private boolean destroyingOnHit = true;
     private List<EnemyComponent> components;
+    private List<EnemyComponent> removeQueue;
     private int damage = 0;
 	private Level level;
 	
@@ -59,6 +60,7 @@ public class Enemy extends GameBody {
 	{
 		super(level.getAirshipGame(), name);
         components = new ArrayList<EnemyComponent>();
+        removeQueue = new ArrayList<EnemyComponent>();
 		this.level = level;
 	}
 	
@@ -71,6 +73,11 @@ public class Enemy extends GameBody {
 		for (EnemyComponent component : components) {
             component.onUpdate(deltaTime);
         }
+		
+		for (EnemyComponent component : removeQueue) {
+			components.remove(component);
+		}
+		removeQueue.clear();
 	}
 	
 	@Override
@@ -116,8 +123,8 @@ public class Enemy extends GameBody {
     public void removeComponent(Class<? extends EnemyComponent> clazz) {
     	if(componentExists(clazz)) {
 			for(EnemyComponent component : components) {
-				if(component.getClass().equals(clazz.getClass())) {
-					components.remove(component);
+				if(component.getClass().equals(clazz)) {
+					removeQueue.add(component);
 				}
 			}
     	}

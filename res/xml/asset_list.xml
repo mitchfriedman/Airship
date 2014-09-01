@@ -148,6 +148,13 @@
 	<image key="Clouds/cloud 6" path="Clouds/cloud 6.png" />
 	<image key="Clouds/cloud 7" path="Clouds/cloud 7.png" />
 	
+	<!-- Crate -->
+	<image key="crate" path="Items/Mystery Crate.png" />
+	<image key="crate-TL" path="Items/cratebreak/Crate Break TL.png" />
+	<image key="crate-TR" path="Items/cratebreak/Crate Break TR.png" />
+	<image key="crate-BL" path="Items/cratebreak/Crate Break BL.png" />
+	<image key="crate-BR" path="Items/cratebreak/Crate Break BR.png" />
+	
 	<!-- Ships -->
 	<image key="ship/Interceptor-normal" path="Ships/Interceptor/normal.png" />
 	<image key="ship/Interceptor-tilt1" path="Ships/Interceptor/tilt1.png" />
@@ -161,7 +168,6 @@
 	<image key="coin-10" path="Items/coin-10.png" />
 	<image key="star_coin_map" path="Items/star_coin_map.png" />
 	<image key="water" path="Items/Water Droplet.png" />
-	<image key="crate" path="Items/Mystery Crate.png" />
 	<image key="repair" path="Items/Repair Platform.png" />
 	
 </assets>

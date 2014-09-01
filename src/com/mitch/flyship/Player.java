@@ -19,7 +19,7 @@ public class Player {
 	static final double DEFAULT_PITCH_OFFSET = 25;
 	static final boolean USE_MATRIX = true;
 	
-	final double WATER_VALUE_DRAIN_TIME = 10000000;
+	final double WATER_VALUE_DRAIN_TIME = 50;
 	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9; //9
@@ -116,13 +116,15 @@ public class Player {
             setOrientationOffset(new Vector2d(180, DEFAULT_PITCH_OFFSET+90));
         }
         
+        resetSensitivity();
+        
 	}
 	
 	double convertPercentToSensitivity(float percent)
 	{
 		double max = AirshipGame.MAX_SENSITIVITY;
 		double min = AirshipGame.MIN_SENSITIVITY;
-		return Math.abs(max-(percent * (max - min) + min))+min;
+		return max - (max - min) * percent;
 	}
 	
 	public void setOrientationOffset(Vector2d offset)
@@ -208,13 +210,11 @@ public class Player {
         return getInput_Speed(deltaTime, false, false);
     }
     
-    
-    
 	public Vector2d getInput_Speed(double deltaTime, boolean invertVertical, boolean invertHorizontal)
 	{
 		Vector2d orientation = getCenteredOrientation();
 		final double ts = tiltSensitivity;
-
+		
         orientation.y *= invertVertical ? -1 : 1;
         orientation.x *= invertHorizontal ? -1 : 1;
 
@@ -437,16 +437,10 @@ public class Player {
                 .subtract(hullArrowOrigin);     // Center of arrow image relative top left
 	}
 	
-	public void onLevelResume()
+	public void resetSensitivity()
 	{
 		tiltSensitivity = convertPercentToSensitivity((float) game.getSensitivity());
 	}
-	
-	public void onLevelPause()
-	{
-		
-	}
-	
 	public void pause()
 	{
 		

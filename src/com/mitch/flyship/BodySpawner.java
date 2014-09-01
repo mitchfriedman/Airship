@@ -3,8 +3,6 @@ package com.mitch.flyship;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import android.util.Log;
-
 import com.mitch.flyship.screens.Level;
 import com.mitch.framework.containers.MathHelper;
 
@@ -54,6 +52,14 @@ public class BodySpawner {
         this.spawnRange_End = spawnRange_End;
 		
 		try {
+			// The default special for any object is Special.NONE. Objects that 
+			// override the method getSpecial can change this. If an object is special
+			// we can also ask for another parameter. If that object doesn't have the
+			// capabilities of that special it will result in an error. 
+			// Since an array can be passed by reference and we can still maintain
+			// the values, we can use it as an "out" parameter. Currently the
+			// capacity of this out parameter is the size of the array as
+			// declared above. This can be changed to whatever is desired.
 			Method getSpecialMethod = cls.getMethod("getSpecial", (Class[]) null);
 			special = (Special) getSpecialMethod.invoke(null, (Object[]) null);
 			if (special == Special.RESTART_WITH_HEIGHT) {
@@ -74,12 +80,6 @@ public class BodySpawner {
 	
 	public boolean canSpawn()
 	{
-		/*if (special == Special.RESTART_WITH_HEIGHT && !spawned) {
-			Log.d("COIN", "NOT SPAWNING");
-		} else if (special == Special.RESTART_WITH_HEIGHT) {
-			Log.d("COIN", "SPAWNING");
-		}*/
-		
 		return distanceSinceLastSpawn > spawnRange_Start + randomSpawnDistance + 
 				(!spawned ? startDistance : 0);
 	}
@@ -111,7 +111,6 @@ public class BodySpawner {
 		if (special.equals(Special.RESTART_WITH_HEIGHT) && specialSpawnInfo[0].length() > 0) {
 			spawned = false;
 			startDistance = Integer.valueOf(specialSpawnInfo[0]);
-			Log.d("COIN", startDistance +"");
 		} else {
 			spawned = true;
 		}

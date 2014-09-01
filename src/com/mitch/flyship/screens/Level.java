@@ -243,12 +243,12 @@ public class Level extends Screen {
 
     public void onLevelPause()
     {
-        bm.getShip().getPlayer().onLevelPause();
+    	
     }
 
     public void onLevelResume()
     {
-        bm.getShip().getPlayer().onLevelResume();
+        bm.getShip().getPlayer().resetSensitivity();
     }
 
 	@Override
@@ -264,7 +264,7 @@ public class Level extends Screen {
     {
         music.pause();
         if (state != GameState.OVER) {
-            state = GameState.PAUSED;
+        	setPaused(true);
         }
     }
 
@@ -285,11 +285,11 @@ public class Level extends Screen {
     	// What did the guy with diarrhea say to the guy without a home?
     	// "Hey man, at least you have a good, solid stool."
         if (state == GameState.RUNNING) {
-            state = GameState.PAUSED;
+            setPaused(true);
         } else if (state == GameState.PAUSED && options.isEnabled()) {
             options.setEnabled(false);
         } else if (state == GameState.PAUSED) {
-            state = GameState.RUNNING;
+            setPaused(false);
         } else if (state == GameState.OVER) {
         	game.setScreen(new Menu(game));
         }
@@ -389,16 +389,26 @@ public class Level extends Screen {
         state = GameState.OVER;
         endPopup.setEnabled(true);
     }
-
+    
+    public void setPaused(boolean intentToPause)
+    {
+    	boolean paused = state == GameState.PAUSED;
+    	if (intentToPause && !paused) {
+    		state = GameState.PAUSED;
+			onLevelPause();
+    	} else if (!intentToPause && paused) {
+    		state = GameState.RUNNING;
+			onLevelResume();
+    	}
+    }
+    
 	public void toggleLevelPauseState()
 	{
 		if (state == GameState.PAUSED) {
-			state = GameState.RUNNING;
-			onLevelResume();
+			setPaused(false);
 		}
-		else {
-			state = GameState.PAUSED;
-			onLevelPause();
+		else if (state == GameState.RUNNING) {
+			setPaused(true);
 		}
 	}
 
@@ -549,7 +559,7 @@ public class Level extends Screen {
         resumeListener = new ButtonClickListener() {
             @Override
             public void onUp() {
-                state = GameState.RUNNING;
+                setPaused(false);
             }
         };
         settingsListener = new ButtonClickListener() {
@@ -598,7 +608,7 @@ public class Level extends Screen {
             @Override
             public void onUp() { 
             	generate(properties);
-            	state = GameState.RUNNING;
+            	setPaused(false);
             }
         };
     }

@@ -32,7 +32,7 @@ public class Slider extends GameBody {
 		
 		this.listener = listener;
 		
-		sliderPosition = defaultValue; //TODO: Load from preferences
+		sliderPosition = defaultValue;
 	}
 	
 	@Override

@@ -1,10 +1,11 @@
 package com.mitch.flyship;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class Preferences {
 	
-	public static float DEFAULT_SENSITIVITY_PERCENT = 1;
+	public static float DEFAULT_SENSITIVITY = 1;
 	
 	enum KEYS {
 		SENSITIVITY
@@ -25,26 +26,27 @@ public class Preferences {
 		return editor;
 	}
 	
-	public static void loadPreferences(SharedPreferences preferences, SharedPreferences.Editor preferencesEditor)
+	public static void loadPreferences(SharedPreferences preferences)
 	{
 		Preferences.preferences = preferences;
-		Preferences.editor = preferencesEditor;
+		Preferences.editor = preferences.edit();
 	}
 	
 	public static void resetDefaults()
 	{
-		editor.putFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY_PERCENT);
-		editor.commit();
+		editor.putFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY);
+		editor.apply();
 	}
 	
 	public static void putSensitivity(float percent)
 	{
 		editor.putFloat(KEYS.SENSITIVITY.toString(), percent);
-		editor.commit();
+		editor.apply();
 	}
 	
 	public static float retrieveSensitivity()
 	{
-		return preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY_PERCENT);
+		Log.d("RETRIEVING SENSITIVITY", "" + preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY));
+		return preferences.getFloat(KEYS.SENSITIVITY.toString(), DEFAULT_SENSITIVITY);
 	}
 }

@@ -94,15 +94,15 @@
             <enemy name="crate"
                    damage="0"
                    timeOffset="0"
-                   spawnRange_Start="30"
-                   spawnRange_End="50" >
+                   spawnRange_Start="15"
+                   spawnRange_End="30" >
 	            
                 <StaticImage image="crate" />
                 <VerticalEnemy speed="15"
                                directionDown="true" />
                 
-                <TouchDestroyable health="1" />
                 <ItemContainer />
+                <CrateDestroyable />
             </enemy>
             
             <enemy name="graf zeppelin"
@@ -124,8 +124,8 @@
             <enemy name="repair platform" 
                    damage="0"
 				   timeOffset="80"
-                   spawnRange_Start="2"
-                   spawnRange_End="15" >
+                   spawnRange_Start="55"
+                   spawnRange_End="75" >
                 
                 <StaticImage image="repair" />
                 

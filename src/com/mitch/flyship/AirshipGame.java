@@ -1,6 +1,7 @@
 package com.mitch.flyship;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.mitch.flyship.screens.Level;
 import com.mitch.flyship.screens.Loading;
@@ -23,12 +24,9 @@ public class AirshipGame extends AndroidGame {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Preferences.loadPreferences(getPreferences(MODE_PRIVATE), getPreferences(MODE_PRIVATE).edit());
+		Preferences.loadPreferences(PreferenceManager.getDefaultSharedPreferences(this));
 		
-		float max = MAX_SENSITIVITY;
-		float min = MIN_SENSITIVITY;
-        Preferences.DEFAULT_SENSITIVITY_PERCENT = (DEFAULT_SENSITIVITY / (max - min));
-        Preferences.resetDefaults();
+        Preferences.DEFAULT_SENSITIVITY = DEFAULT_SENSITIVITY / (MAX_SENSITIVITY - MIN_SENSITIVITY);
 
 	}
 

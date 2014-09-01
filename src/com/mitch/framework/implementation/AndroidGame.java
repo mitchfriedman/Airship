@@ -73,7 +73,7 @@ public abstract class AndroidGame extends Activity implements Game {
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Airship! At the Helm!");
 
         apiManager = new GoogleAPIManager(this);
-        //apiManager.connect();
+        apiManager.connect();
     }
     
     /*public int validateGooglePlayServices() {
