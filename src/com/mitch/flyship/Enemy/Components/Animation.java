@@ -1,5 +1,11 @@
 package com.mitch.flyship.Enemy.Components;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
@@ -13,13 +19,19 @@ import com.mitch.framework.containers.Vector2d;
 
 public class Animation extends EnemyComponent {
 
-	private int numberOfFrames;
-	private String rootImage;
+	private final static String FRAME = "Frame";
+	
+	private List<String> images;
+	private List<Boolean> reverseX;
+	private List<Boolean> reverseY;
+	
+	private int fps;
 	
 	private AnimateOn animateOn;
 	
 	private AnimationImage animation;
 	private Vector2d animationPosition;
+	
 	
 	/* my little animation children, i grant you life
 	 * and later on, i shall taketh it away.
@@ -30,16 +42,23 @@ public class Animation extends EnemyComponent {
 	}
 	
 	public Animation() {
-		numberOfFrames = 0;
-		rootImage = "";
-		animation = new AnimationImage(4);
+		fps = 0;
+		images = new ArrayList<String>();
+		reverseX = new ArrayList<Boolean>();
+		reverseY = new ArrayList<Boolean>();
 	}
 	
 	public Animation(final XmlResourceParser parser) {
 		this();
-		numberOfFrames = Integer.parseInt(parser.getAttributeValue(null, "numberOfFrames"));
-		rootImage = parser.getAttributeValue(null, "rootImage");
+		fps = Integer.parseInt(parser.getAttributeValue(null, "fps"));
 		animateOn = AnimateOn.valueOf(parser.getAttributeValue(null, "animateOn"));
+		//adding somethign to be parsed that is a part of the Animation XML node
+		//must be put above this function call to parseImages, as it alters the xml
+		parseImages(parser);
+		animation = new AnimationImage(fps);
+		for(int i=0;i<images.size();i++) {
+			animation.addFrame(new Frame(Assets.getImage(images.get(i)), reverseX.get(i), reverseY.get(i)));
+		}
 	}
 	
 	@Override
@@ -49,14 +68,6 @@ public class Animation extends EnemyComponent {
 		if(animateOn.equals(AnimateOn.DEATH)) {
 			enemy.setDestroyingOnHit(false);
 		}
-		
-		for(int i=1; i<numberOfFrames+1; i++) {
-			Log.d("Animation", ""+rootImage+i);
-			animation.addFrame(new Frame(Assets.getImage(rootImage+i)));
-		}
-		
-		animation.pause();
-		
 	}
 	
 	@Override
@@ -65,9 +76,7 @@ public class Animation extends EnemyComponent {
 				
 		if(animateOn.equals(AnimateOn.BIRTH)) {
 			animation.resume();
-			animationPosition = enemy.getPos()
-   					.add(enemy.getSize().divide(2))
-   					.subtract(animation.getFrame().image.getSize().divide(2));
+			setAnimationPosition();
 		}
 	}
 	
@@ -85,20 +94,11 @@ public class Animation extends EnemyComponent {
 		}
 	}
 	
-	private void setAnimationPosition() {
-		animationPosition = enemy.getPos()
-		   		.add(enemy.getSize().divide(2))
-		   		.subtract(animation.getFrame().image.getSize().divide(2));
-	}
-	
 	@Override
 	public void onPaint(final float deltaTime) {
 		super.onPaint(deltaTime);
 		
 		if(!animation.isPaused()) {
-			if(animateOn.equals(AnimateOn.DEATH)) {
-				Log.d("Animation", "Current frame: "+animation.getCurrentFrameIndex());
-			}
 
 			Graphics g = enemy.getLevel().getAirshipGame().getGraphics();
 			g.drawImage(animation.getFrame().image, animationPosition);
@@ -109,28 +109,65 @@ public class Animation extends EnemyComponent {
 	public void onHit(final Ship ship) {
 		super.onHit(ship);
 		
+		/* not working right now, this can only be used for BIRTH animations */
 		
-		if(animateOn.equals(AnimateOn.DEATH) && animation.isPaused()) {
-			Log.d("Animation", "hit frame: "+ animation.getCurrentFrameIndex());
+		/*if(animateOn.equals(AnimateOn.DEATH) && animation.isPaused()) {
 			animation.resetAnimation();
 			setAnimationPosition();
-			animation.resume();
 			
 			enemy.setColliding(false);
 			StaticImage component = enemy.getComponent(StaticImage.class);
 			component.setDrawing(false);
-		}
+		}*/
 	}
 
 	@Override
 	public EnemyComponent clone() {
 		Animation enemy = new Animation();
-		enemy.numberOfFrames = numberOfFrames;
-		enemy.rootImage = rootImage;
+		enemy.fps = fps;
 		enemy.animation = animation;
 		enemy.animateOn = animateOn;
 		enemy.animationPosition = animationPosition;
 		
 		return enemy;
+	}
+	
+	private void parseImages(final XmlResourceParser parser) {
+		while(true) {
+			try {
+                int eventType = parser.next();
+                if (eventType == XmlResourceParser.END_TAG && parser.getName().equals("Animation")) {
+                    break;
+                }
+                
+                if (eventType != XmlResourceParser.START_TAG) {
+                    continue;
+                }
+
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+                Log.d("XmlPullParserException", e.getLocalizedMessage());
+                continue;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("IOException", e.getLocalizedMessage());
+                continue;
+            }
+			
+			String tagName = parser.getName();
+			
+			if(tagName.equals(FRAME)) {
+				String image = parser.getAttributeValue(null, "image");
+				images.add(image);
+				reverseX.add(Boolean.parseBoolean(parser.getAttributeValue(null, "reverseX")));
+				reverseY.add(Boolean.parseBoolean(parser.getAttributeValue(null, "reverseY")));
+			}
+		}
+	}
+	
+	private void setAnimationPosition() {
+		animationPosition = enemy.getPos()
+		   		.add(enemy.getSize().divide(2))
+		   		.subtract(animation.getFrame().image.getSize().divide(2));
 	}
 }
