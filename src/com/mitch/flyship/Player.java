@@ -19,7 +19,7 @@ public class Player {
 	static final double DEFAULT_PITCH_OFFSET = 25;
 	static final boolean USE_MATRIX = true;
 	
-	final double WATER_VALUE_DRAIN_TIME = 50;
+	final double WATER_VALUE_DRAIN_TIME = 40;
 	final double WATER_VALUE = 30;
 	
 	final int MAX_HEALTH = 9; //9
@@ -408,8 +408,10 @@ public class Player {
 		elapsedTime += deltaTime;
 		lastHullFlash += deltaTime;
 		
-		if (WATER_VALUE_DRAIN_TIME > 0) {
-			water -= (WATER_VALUE / WATER_VALUE_DRAIN_TIME) * (double) deltaTime;
+		// Water consumption increases with level speed
+		if (WATER_VALUE_DRAIN_TIME != 0) {
+			double waterValueDrainDistance = Level.calculateDistanceTravelled(WATER_VALUE_DRAIN_TIME, level.getLevelSpeed());
+			water -= (WATER_VALUE / waterValueDrainDistance) * Level.timeToDistance(deltaTime, level.getLevelSpeed());
 		}
 		
 		if (water <= 0) {

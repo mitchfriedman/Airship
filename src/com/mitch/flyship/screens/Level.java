@@ -187,7 +187,7 @@ public class Level extends Screen {
                 timeToDistance(1.250, startSpeed)) );
         sm.addSpawner( new BodySpawner(Water.class, "WATER",
                 timeToDistance(30, startSpeed),
-                timeToDistance(40, startSpeed)) );
+                timeToDistance(30, startSpeed)) );
         sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
                 timeToDistance(0.250, startSpeed),
                 timeToDistance(2.500, startSpeed)) );
@@ -212,18 +212,18 @@ public class Level extends Screen {
      * @param time The time in milliseconds
      * @return distance travelled after a certain amount of time.
      */
-    public int timeToDistance(double time, double speed)
+    public static int timeToDistance(double time, double speed)
     {
-        if (getLevelSpeed() == 0) {
+        if (speed == 0) {
             return Integer.MAX_VALUE;
         }
 
         return (int) Math.round(time * speed);
     }
     
-    public double calculateDistanceTravelled(double deltaSeconds)
+    public static double calculateDistanceTravelled(double deltaSeconds, double speed)
     {
-    	return deltaSeconds * getLevelSpeed();
+    	return deltaSeconds * speed;
     }
     
     public double getElapsedTime()
@@ -415,7 +415,7 @@ public class Level extends Screen {
     private void updateSpawners(double deltaSeconds)
     {
         for (BodySpawner spawner : sm.getSpawners()) {
-            spawner.updateDistance(calculateDistanceTravelled(deltaSeconds));
+            spawner.updateDistance(calculateDistanceTravelled(deltaSeconds, getLevelSpeed()));
             if (spawner.canSpawn() && isSpawning) {
             	
                 List<GameBody> bodyList = spawner.trySpawnObjects(this);

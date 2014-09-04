@@ -18,7 +18,7 @@
                    spawnRange_End="20" >
 
                 <StaticImage image="Enemy/crimson_fighter" />
-                <VerticalEnemy speed="45"
+                <VerticalEnemy speed="50"
                                directionDown="true" />
                 <ExplosionAnimation />
             </enemy>
@@ -100,11 +100,11 @@
             <enemy name="magnet" 
 	               damage="2"
 	               timeOffset="0"
-                   spawnRange_Start="5"
-                   spawnRange_End="10">
+                   spawnRange_Start="30"
+                   spawnRange_End="40">
             
 	           <StaticImage image="magnet" />
-	           <HorizontalEnemy speed="40"
+	           <HorizontalEnemy speed="50"
 	                			directionLeft="true"
 	                			topOffset="0"
 	                			bottomOffset="-100%" />
@@ -120,7 +120,7 @@
                    spawnRange_End="25">
             
 	           <StaticImage image="Enemy/saphire_bomber" />
-	           <HorizontalEnemy speed="45"
+	           <HorizontalEnemy speed="75"
 	                			randomDirection="true"
 	                			topOffset="0"
 	                			bottomOffset="-90%" />
