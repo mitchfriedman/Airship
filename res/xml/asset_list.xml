@@ -130,7 +130,8 @@
 	
 	<image key="Enemy/saphire_bomber" path="Enemies/Saphire Bomber.png" />
 	<image key="Enemy/mine" path="Enemies/Floating Mine.png" />
-
+	
+	<image key="magnet" path="Enemies/coin stealing magnet.png" />
 
     <image key="Explosion/original/1" path="Explosions/explosion 1.png" />
     <image key="Explosion/original/2" path="Explosions/explosion 2.png" />

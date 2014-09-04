@@ -37,6 +37,9 @@ public class Player {
 	final double DOWN_TILT_LIMITER = 0.2;
 	final double HORIZONTAL_TILT_LIMITER = 0.4;
 	
+	final double HULL_FLASH_INTERVAL = 0.5;
+	final int HULL_FLASH_START_HEALTH = 4;
+	
 	final double hudCoinSpeed = 2;
 	
 	boolean invulnerable = false;
@@ -59,7 +62,12 @@ public class Player {
 	Image hudBorder;
 	Image hudCoin;
     double hudStart;
-
+    
+    double lastHullFlash = 0;
+    boolean hullFlashDrawn = false;
+    Image hullFlashImage;
+    Vector2d hullFlashLocationRelHud = new Vector2d(97,33);
+    
 	Rect waterPositionRelHud = new Rect(191,45, 6,32);
     Rect waterPosition = new Rect(0,0,0,0);
 	int waterColor = Color.rgb(67, 173, 195);
@@ -103,7 +111,8 @@ public class Player {
 		hullArrowOrigins.add(new Vector2d(0,1)); // 1 | 9 | true
 		
 		hullArrowImage = hullArrows.get(0);
-
+		hullFlashImage = Assets.getImage("GUI/hull flash");
+		
         Graphics g = game.getGraphics();
         hudStart = g.getHeight() - hud.getHeight() - hudBorder.getHeight();
 
@@ -387,12 +396,17 @@ public class Player {
 		
 		//drawTime( (int)elapsedTime );
 		drawCurrency();
+		if (hullFlashDrawn) {
+			g.drawImage(hullFlashImage, new Vector2d(0, g.getHeight()-hud.getHeight()-2).add(hullFlashLocationRelHud));
+		}
+		
 		drawHullArrow();
 	}
 	
 	public void onUpdate(double deltaTime)
 	{
 		elapsedTime += deltaTime;
+		lastHullFlash += deltaTime;
 		
 		if (WATER_VALUE_DRAIN_TIME > 0) {
 			water -= (WATER_VALUE / WATER_VALUE_DRAIN_TIME) * (double) deltaTime;
@@ -407,7 +421,14 @@ public class Player {
 			health = 0;
 			gameOver(Level.DeathReason.CRASH);
 		}
-
+		
+		if (health <= HULL_FLASH_START_HEALTH && lastHullFlash > HULL_FLASH_INTERVAL) {
+			hullFlashDrawn = !hullFlashDrawn;
+			lastHullFlash = 0;
+		} else if (health > HULL_FLASH_START_HEALTH) {
+			hullFlashDrawn = false;
+		}
+		
         waterPosition = new Rect(waterPositionRelHud);
         double waterPercentage = water/MAX_WATER;
 

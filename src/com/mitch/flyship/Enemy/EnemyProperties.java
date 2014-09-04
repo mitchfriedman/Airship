@@ -45,7 +45,7 @@ public class EnemyProperties {
         components.add(component);
     }
 
-    public void setLevelSpawnRange(int startTime, int spawnRange_Start, int spawnRange_End)
+    public void setSpawnRange(int startTime, int spawnRange_Start, int spawnRange_End)
     {
         spawnRange.set(0, startTime);
         spawnRange.set(1, spawnRange_Start);

@@ -28,9 +28,9 @@ public class Ship extends GameBody {
 	int waterAttractionRange;
 	double waterAttractionSpeed;
 	
-	int coinCollectionRange;
-	int coinAttractionRange;
-	double coinAttractionSpeed;
+	public int coinCollectionRange;
+	public int coinAttractionRange;
+	public double coinAttractionSpeed;
 	
 	boolean imageReversed = false;
     final float maxPropellerFPS;
@@ -228,14 +228,19 @@ public class Ship extends GameBody {
                 });
     }
 
-    private<T extends GameBody> void attractNearbyObject(Class<T> bodyClass, double collectionRange, double attractionRange,
-                             double attractionSpeed, AttractionListener listener)
+    private<T extends GameBody> void attractNearbyObject(Class<T> bodyClass, 
+    						double collectionRange, double attractionRange,
+                            double attractionSpeed, AttractionListener listener)
     {
         List<T> bodies = level.getBodyManager().getBodiesByClass(bodyClass);
         for (T iBody : bodies) {
             Vector2d shipCenter = getPos().add( getSize().scale(0.5) );
             double distance = iBody.getPos().getDistance(shipCenter);
-
+            
+            if (iBody.getClass() == Coin.class && !((Coin)iBody).collectable) {
+            	continue;
+            }
+            
             if ( distance < collectionRange ) {
                 listener.onCollection(iBody);
             }
@@ -248,5 +253,20 @@ public class Ship extends GameBody {
                 listener.onAttraction(iBody);
             }
         }
+    }
+    
+    public void dropCoin(Coin.CoinType type)
+    {
+    	int value = Coin.getCoinValue(type);
+    	if (value <= getPlayer().getCurrency()) {
+    		getPlayer().addCurrency(-value);
+    		Coin coin = new Coin(level, type);
+    		coin.setPos(getPos()
+    				.add(getSize().divide(2))
+    				.subtract(coin.getSize().divide(2)));
+    		coin.collectable = false;
+    		level.getBodyManager().addBodyDuringUpdate(coin);
+    		
+    	}
     }
 }

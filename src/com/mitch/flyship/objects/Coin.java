@@ -24,6 +24,7 @@ public class Coin extends GameBody {
 	private final static String TEN = "TEN";
 	
 	final Image image;
+	public boolean collectable = true;
 	public final int value;
 	public static List<Float> spawnWeights = new ArrayList<Float>();
 	
@@ -35,25 +36,35 @@ public class Coin extends GameBody {
 		TEN
 	}
 	
+	public static int getCoinValue(CoinType type)
+	{
+		switch (type) {
+		default:
+		case ONE:
+			return 1;
+		case FIVE:
+			return 5;
+		case TEN:
+			return 10;
+		}
+	}
 	
 	public Coin(Level level, CoinType type)
 	{
 		super(level.getAirshipGame(), "COIN-" + type.toString());
 		this.level = level;
+		this.value = getCoinValue(type);
 		
 		switch (type) {
 		default:
 		case ONE:
 			this.image = Assets.getImage("coin-1");
-			this.value = 1;
 			break;
 		case FIVE:
 			this.image = Assets.getImage("coin-5");
-			this.value = 5;
 			break;
 		case TEN:
 			this.image = Assets.getImage("coin-10");
-			this.value = 10;
 			break;
 		}
 		

@@ -84,8 +84,8 @@
             <enemy name="racyplanes" 
 	               damage="2"
 	               timeOffset="0"
-                   spawnRange_Start="5"
-                   spawnRange_End="10">
+                   spawnRange_Start="40"
+                   spawnRange_End="70">
             
 	           <StaticImage image="incoming" />
 	           <HorizontalEnemy speed="75"
@@ -95,6 +95,22 @@
 	           <RacyPlaneSpawner />
 	           <ExplosionAnimation x="-20.0"/>
 	           <HitboxModifier right="-45"/>
+            </enemy>
+            
+            <enemy name="magnet" 
+	               damage="2"
+	               timeOffset="0"
+                   spawnRange_Start="5"
+                   spawnRange_End="10">
+            
+	           <StaticImage image="magnet" />
+	           <HorizontalEnemy speed="40"
+	                			directionLeft="true"
+	                			topOffset="0"
+	                			bottomOffset="-100%" />
+	           <CoinStealer offsetX="3.0" offsetY="6.0" />
+	           
+	           <ExplosionAnimation />
             </enemy>
             
             <enemy name="bomber" 
