@@ -56,6 +56,7 @@ public class HorizontalEnemy extends EnemyComponent {
     public void onComponentAdded() {
         super.onComponentAdded();
         directionLeft = randomDirection ? Math.floor(Math.random() * 2) == 1 : directionLeft;
+        speed = Math.abs(speed);
         enemy.setVelocity( new Vector2d(directionLeft ? -speed : speed, 0) );
     }
 
@@ -74,7 +75,7 @@ public class HorizontalEnemy extends EnemyComponent {
         double x = directionLeft ? g.getWidth() : -enemy.getSize().x;
         enemy.setPos(new Vector2d(x, y));
         
-        if (!directionLeft) {
+        if (!directionLeft && randomDirection) {
         	StaticImage staticImage = enemy.getComponent(StaticImage.class);
         	staticImage.invertHorizontal = !staticImage.invertHorizontal;
         }

@@ -101,12 +101,16 @@ public class Menu extends Screen {
 		Graphics g = game.getGraphics();
 		
 		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
-		position = new Vector2d(118, 15).add(platformPos);
+		position = new Vector2d(118, -38).add(platformPos);
 		if (level != null) {
 			buttons.add(new Button(game, "Buttons/resume", alignment, position, resumeListener));
 		} else {
-			buttons.add(new Button(game, "Buttons/embark", alignment, position, embarkListener));
 		}
+		
+		alignment = new Align(Align.Vertical.TOP, Align.Horizontal.LEFT);
+		position = new Vector2d(118, 15).add(platformPos);
+		buttons.add(new Button(game, "Buttons/embark", alignment, position, embarkListener));
+		
 		
 		position = new Vector2d(118, 61).add(platformPos);
 		buttons.add(new Button(game, "Buttons/rankings", alignment, position, rankingsListener));

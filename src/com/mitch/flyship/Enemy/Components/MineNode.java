@@ -71,7 +71,6 @@ public class MineNode extends EnemyComponent {
 			
 			Enemy mine = new Enemy(enemy.getLevel(), "MINE");
 			mine.setDamage(1);
-			enemy.setDamage(enemy.getDamage()-1);
 			mine.setDepth(enemy.getDepth());
 			mine.addComponent(new StaticImage("Enemy/mine", false, false));
 			mine.addComponent(new ExplosionAnimation());

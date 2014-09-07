@@ -1,6 +1,7 @@
 package com.mitch.flyship.Enemy.Components;
 
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 
 import com.mitch.flyship.Assets;
 import com.mitch.flyship.Enemy.EnemyComponent;
@@ -43,6 +44,9 @@ public class StaticImage extends EnemyComponent {
     @Override
     public void onComponentAdded() {
         super.onComponentAdded();
+        if (image == null) {
+        	Log.d("This StaticImage image is null", enemy.getName());
+        }
         enemy.setSize(image.getSize());
     }
 

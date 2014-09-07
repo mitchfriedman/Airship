@@ -87,7 +87,7 @@
                    spawnRange_Start="40"
                    spawnRange_End="70">
             
-	           <StaticImage image="incoming" />
+	           <StaticImage image="incoming-left" />
 	           <HorizontalEnemy speed="75"
 	                			directionLeft="true"
 	                			topOffset="0"
@@ -144,25 +144,29 @@
                 <CrateDestroyable />
             </enemy>
             
-            <enemy name="graf zeppelin"
+            <!--  <enemy name="graf zeppelin"
                    damage="5"
                    timeOffset="0"
-                   spawnRange_Start="230"
-                   spawnRange_End="250" >
+                   spawnRange_Start="5"
+                   spawnRange_End="10" >
 
                 <StaticImage image="Enemy/graf_zeppelin"
                     		 invertHorizontal="false" />
-                <HorizontalEnemy speed="40"
+                <HorizontalEnemy speed="35"
                     			 randomDirection="true"
-                                 topOffset="-200"
-                                 bottomOffset="-110%" />
+                                 topOffset="-60%"
+                                 bottomOffset="-150%" />
                 <HitboxModifier left="15"
                     			right="-15"
                     			top="15"
                     			bottom="-15"/>
+                <LeadPlane lead="150"
+                    	   planeLeft="incoming-left"
+                    	   planeRight="incoming-right"
+                    	   align="BOTTOM" />
                 
                 <Invulnerable />
-            </enemy>
+            </enemy>-->
             
             <enemy name="repair platform" 
                    damage="0"

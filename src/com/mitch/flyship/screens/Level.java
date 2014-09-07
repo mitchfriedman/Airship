@@ -327,6 +327,7 @@ public class Level extends Screen {
         endPopup.addHeightMargin(3);
         endPopup.addButton(hangarListener, "END/HANGAR");
         endPopup.addHeightMargin(3);
+        endPopup.setDisableOnClick(false);
         
         endPopup.build();
         
@@ -373,7 +374,7 @@ public class Level extends Screen {
     	}
 
         if (this.music != null && this.music.isPlaying()) {
-            this.music.stop(); 
+            this.music.pause(); 
         }
         
         if (AirshipGame.muted) {

@@ -126,7 +126,8 @@
 	<image key="Enemy/cannon" path="Enemies/Cannon Shot.png" />
 	
 	<image key="racyplane" path="Enemies/lime speedster.png" />
-	<image key="incoming" path="Enemies/Incoming Plane.png" />
+	<image key="incoming-left" path="Enemies/Incoming Plane.png" />
+	<image key="incoming-right" path="Enemies/Incoming Plane.png" />
 	
 	<image key="Enemy/saphire_bomber" path="Enemies/Saphire Bomber.png" />
 	<image key="Enemy/mine" path="Enemies/Floating Mine.png" />
