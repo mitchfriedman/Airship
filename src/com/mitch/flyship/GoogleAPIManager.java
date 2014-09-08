@@ -97,6 +97,39 @@ public class GoogleAPIManager implements GoogleApiClient.ConnectionCallbacks, Go
     	}
 
     }
+    
+    public void unlockAchievement(String id)
+    {
+    	Games.Achievements.unlock(client, id);
+    }
+    
+    public void incrementAchievement(String id, int value)
+    {
+    	Games.Achievements.increment(client, id, value);
+    }
+    
+    public void unlockAchievement(int id)
+    {
+    	Games.Achievements.unlock(client, game.getString(id));
+    }
+    
+    public void incrementAchievement(int id, int value)
+    {
+    	if (isConnected()) {
+    		/*Games.Achievements.incrementImmediate(client, game.getString(id), value).setResultCallback(new ResultCallback<Achievements.UpdateAchievementResult>() {
+    			
+    			@Override
+    			public void onResult(UpdateAchievementResult arg0) {
+    				Log.d(arg0.getAchievementId(), arg0.getStatus().toString());
+    			}
+    		});*/
+    		Games.Achievements.increment(client, game.getString(id), value);
+    	}
+    	
+    	
+    	/*Games.Achievements.increment(client, game.getString(id), value);
+    	Log.d("ACHIEVEMENT INCREMENTED!", value + ", bam");*/
+    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

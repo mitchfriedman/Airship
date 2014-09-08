@@ -90,6 +90,8 @@ public class CrateDestroyable extends EnemyComponent {
     
     public void activate()
     {
+    	enemy.getLevel().getAirshipGame().getAchievementManager().onCrateBreak();
+    	
     	if (!activated) {
     		images = new Image[] {
     				Assets.getImage(imageLocations[0]),

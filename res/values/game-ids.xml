@@ -5,4 +5,11 @@ Save this file as res/values/games-ids.xml in your project.
 -->
 <resources>
     <string name="app_id">373818128519</string>
+    
+    <string name="achievement_seven_minutes_in_heaven">CgkIh_GvyvAKEAIQBg</string>
+ 	<string name="achievement_box_buster">CgkIh_GvyvAKEAIQBw</string>
+  	<string name="achievement_running_on_vapors">CgkIh_GvyvAKEAIQCA</string>
+  	<string name="achievement_never_satisfied">CgkIh_GvyvAKEAIQCQ</string>
+  	<string name="achievement_laridae_laridead">CgkIh_GvyvAKEAIQCg</string>
+ 	<string name="leaderboard_money_earned">CgkIh_GvyvAKEAIQAQ</string>
 </resources>

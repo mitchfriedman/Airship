@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.res.XmlResourceParser;
-import android.util.Log;
 
 import com.mitch.flyship.Enemy.EnemyComponent;
 import com.mitch.flyship.objects.Coin;
@@ -28,13 +27,15 @@ public class ItemContainer extends EnemyComponent {
 	private enum InsideCrate {
 		WATER,
 		COIN,
-		MINE
+		MINE,
+		NOTHING
 	}
 	
 	public ItemContainer() {
-		weights.add(25f); // water
-		weights.add(50f); // coin
-		weights.add(25f); //mine
+		weights.add(10f); // water
+		weights.add(35f); // coin
+		weights.add(45f); //mine
+		weights.add(10f); // nothing
 	}
 	
 	public ItemContainer(final XmlResourceParser parser) {
@@ -60,15 +61,19 @@ public class ItemContainer extends EnemyComponent {
 	public void generateItem()
 	{
 		if (!generated) {
-			if(inside == InsideCrate.COIN) {
-				Log.d("Breakable", "GENERATING COIN");
+			switch(inside) {
+			case COIN:
 				generateCoin();
-			} else if(inside == InsideCrate.WATER) {
-				Log.d("Breakable", "GENERATING WATER");
+				break;
+			case WATER:
 				generateWater();
-			} else {
-				Log.d("Breakable", "GENERATING MINE");
+				break;
+			case MINE:
 				generateMine();
+				break;
+			case NOTHING:
+			default:
+				break;
 			}
 			
 			generated = true;
@@ -122,15 +127,6 @@ public class ItemContainer extends EnemyComponent {
 	}
 	
 	private InsideCrate getItemInside(int index) {
-		switch(index) {
-			case 1: 
-				return InsideCrate.WATER;
-			case 2: 
-				return InsideCrate.COIN;
-			case 3: 
-				return InsideCrate.MINE;
-			default: 
-				return InsideCrate.MINE;
-		}
+		return InsideCrate.values()[index];
 	}
 }

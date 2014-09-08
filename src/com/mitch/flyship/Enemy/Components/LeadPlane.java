@@ -13,9 +13,9 @@ import com.mitch.framework.containers.Vector2d;
  */
 public class LeadPlane extends EnemyComponent {
 	
-	int lead = 0;
 	String planeLeft, planeRight;
 	Align.Vertical align;
+	Vector2d planeEnemyOffset = new Vector2d(0,0);
 	
     public LeadPlane() {}
     
@@ -23,7 +23,8 @@ public class LeadPlane extends EnemyComponent {
     public LeadPlane(XmlResourceParser parser) //xml stuff here
     { 
     	this(); 
-    	lead = parser.getAttributeIntValue(null, "lead", 0);
+    	planeEnemyOffset.x = parser.getAttributeIntValue(null, "xOffset", 0);
+    	planeEnemyOffset.y = parser.getAttributeIntValue(null, "yOffset", 0);
     	planeLeft = parser.getAttributeValue(null, "planeLeft");
     	planeRight = parser.getAttributeValue(null, "planeRight");
     	align = Align.Vertical.valueOf(parser.getAttributeValue(null, "align"));
@@ -58,11 +59,12 @@ public class LeadPlane extends EnemyComponent {
     	}
     	
     	plane.setPos(enemy.getPos().add(new Vector2d(0, yOffset)));
+    	Log.d("PLANE POS", plane.getPos().x + ", " + plane.getPos().y);
     	enemy.getLevel().getBodyManager().addBodyDuringUpdate(plane);
     	
     	// Modifies enemy position for lead to be in front of the enemy.
-    	enemy.setPos(enemy.getPos().add(new Vector2d(directionLeft ? lead + plane.getSize().x 
-    			: -lead - enemy.getSize().x, 0)));
+    	enemy.setPos(enemy.getPos().add(new Vector2d(directionLeft ? planeEnemyOffset.x + plane.getSize().x 
+    			: -planeEnemyOffset.x - enemy.getSize().x, -planeEnemyOffset.y)));
     	
 
     	Log.d("leadplane", "ZEPPELIN SPAWNED AT: " + enemy.getPos().y);
@@ -74,7 +76,7 @@ public class LeadPlane extends EnemyComponent {
     public EnemyComponent clone() {
         LeadPlane component = new LeadPlane();
         component.align = align;
-        component.lead = lead;
+        component.planeEnemyOffset = planeEnemyOffset;
         component.planeLeft = planeLeft;
         component.planeRight = planeRight;
         

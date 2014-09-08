@@ -108,7 +108,7 @@ public class Level extends Screen {
             Log.d("Level", "Generating level " + properties.getName());
         }
         
-        
+        game.getAchievementManager().resetRun();
         bm = new LevelBodyManager();
         sm = new LevelSpawnerManager(this, true);
 
@@ -186,8 +186,8 @@ public class Level extends Screen {
                 timeToDistance(0.275, startSpeed),
                 timeToDistance(1.250, startSpeed)) );
         sm.addSpawner( new BodySpawner(Water.class, "WATER",
-                timeToDistance(30, startSpeed),
-                timeToDistance(30, startSpeed)) );
+                timeToDistance(50, startSpeed),
+                timeToDistance(50, startSpeed)) );
         sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
                 timeToDistance(0.250, startSpeed),
                 timeToDistance(2.500, startSpeed)) );
@@ -389,6 +389,8 @@ public class Level extends Screen {
         buildEndPopup(bm.getShip().getPlayer().getCurrency(), deathReason);
         state = GameState.OVER;
         endPopup.setEnabled(true);
+        
+        game.getAchievementManager().onDeath();
     }
     
     public void setPaused(boolean intentToPause)
@@ -553,6 +555,10 @@ public class Level extends Screen {
 		backgroundPos = backgroundPos > backgroundHeight ? 0 : backgroundPos;
 
         updateSpawners(deltaSeconds);
+        
+
+        game.getAchievementManager().setElapsedTime(elapsedTime);
+        game.getAchievementManager().setWaterPercent(bm.getShip().getPlayer().getWaterPercent());
 	}
 
     private void generateListeners()

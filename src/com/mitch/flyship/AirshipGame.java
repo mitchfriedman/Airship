@@ -18,6 +18,7 @@ public class AirshipGame extends AndroidGame {
     public static final boolean DEBUG = true;
     public static boolean muted = false;
 	
+    private AchievementManager achieveManager;
     private Vector2d centerOrientation = null;
     
 	@Override
@@ -27,9 +28,16 @@ public class AirshipGame extends AndroidGame {
 		Preferences.loadPreferences(PreferenceManager.getDefaultSharedPreferences(this));
 		
         Preferences.DEFAULT_SENSITIVITY = DEFAULT_SENSITIVITY / (MAX_SENSITIVITY - MIN_SENSITIVITY);
+        
+        achieveManager = new AchievementManager(this);
 
 	}
-
+	
+	public AchievementManager getAchievementManager()
+	{
+		return achieveManager;
+	}
+	
     @Override
 	public Screen getInitScreen() 
 	{

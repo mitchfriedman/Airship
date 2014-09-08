@@ -295,6 +295,7 @@ public class Popup {
             public void onUp()
             {
             	game.centerOrientation();
+            	game.getAchievementManager().onCalibrate();
             }
         };
 		

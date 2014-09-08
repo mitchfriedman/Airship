@@ -150,6 +150,11 @@ public class Player {
 		
 	}
 	
+	public double getWaterPercent()
+	{
+		return water/MAX_WATER;
+	}
+	
 	public void centerOrientation()
 	{
 		setOrientationOffset(getOrientation());

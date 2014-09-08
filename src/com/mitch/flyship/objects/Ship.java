@@ -194,6 +194,7 @@ public class Ship extends GameBody {
                     && !flashing) {
 				enemy.onHit(this);
 				player.applyDamage(enemy.getDamage());
+				game.getAchievementManager().onEnemyHit(enemy.getName());
 			}
 		}
 	}
