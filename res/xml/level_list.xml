@@ -13,12 +13,12 @@
 			
             <enemy name="crimson_fighter"
                    damage="2"
-                   timeOffset="0"
+                   timeOffset="20"
                    spawnRange_Start="10"
-                   spawnRange_End="20" >
+                   spawnRange_End="25" >
 
                 <StaticImage image="Enemy/crimson_fighter" />
-                <VerticalEnemy speed="50"
+                <VerticalEnemy speed="65"
                                directionDown="true" />
                 <ExplosionAnimation />
             </enemy>
@@ -49,7 +49,7 @@
                 <StaticImage image="Enemy/gunship" />
                 <HorizontalEnemy speed="25"
                                  randomDirection="true"
-                                 topOffset="-30%"
+                                 topOffset="-50%"
                                  bottomOffset="-120%" />
                 
                 <Invulnerable />
@@ -57,7 +57,7 @@
             
             <enemy name="Open Air Hauler"
                    damage="2"
-                   timeOffset="0"
+                   timeOffset="25"
                    spawnRange_Start="20"
                    spawnRange_End="30" >
 
@@ -83,9 +83,9 @@
             
             <enemy name="racyplanes" 
 	               damage="2"
-	               timeOffset="0"
-                   spawnRange_Start="40"
-                   spawnRange_End="70">
+	               timeOffset="120"
+                   spawnRange_Start="60"
+                   spawnRange_End="90">
             
 	           <StaticImage image="incoming-left" />
 	           <HorizontalEnemy speed="75"
@@ -99,9 +99,9 @@
             
             <enemy name="magnet" 
 	               damage="2"
-	               timeOffset="0"
-                   spawnRange_Start="30"
-                   spawnRange_End="40">
+	               timeOffset="30"
+                   spawnRange_Start="40"
+                   spawnRange_End="70">
             
 	           <StaticImage image="magnet" />
 	           <HorizontalEnemy speed="50"
@@ -146,38 +146,33 @@
             
             <enemy name="graf zeppelin"
                    damage="5"
-                   timeOffset="0"
-                   spawnRange_Start="220"
-                   spawnRange_End="260" >
+                   timeOffset="100"
+                   spawnRange_Start="200"
+                   spawnRange_End="300" >
 
                 <StaticImage image="Enemy/graf_zeppelin"
                     		 invertHorizontal="false" />
                 <HorizontalEnemy speed="35"
                     			 randomDirection="true"
-                                 topOffset="0"
-                                 bottomOffset="-100%" />
+                                 topOffset="-20%"
+                                 bottomOffset="-120%" />
                 <HitboxModifier left="15"
                     			right="-15"
                     			top="15"
                     			bottom="-15"/>
-                <LeadPlane xOffset="60"
-                    	   yOffset="250"
-                    	   planeLeft="incoming-left"
-                    	   planeRight="incoming-right"
-                    	   align="BOTTOM" />
                 
                 <Invulnerable />
             </enemy>
             
             <enemy name="repair platform" 
                    damage="0"
-				   timeOffset="80"
-                   spawnRange_Start="55"
-                   spawnRange_End="75" >
+				   timeOffset="30"
+                   spawnRange_Start="25"
+                   spawnRange_End="60" >
                 
                 <StaticImage image="repair" />
                 
-                <VerticalEnemy speed="15"
+                <VerticalEnemy speed="0"
                                directionDown="true" />
                 
                 <Repair timeToRepair="1"

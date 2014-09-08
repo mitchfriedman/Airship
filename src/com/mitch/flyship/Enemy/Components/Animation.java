@@ -65,6 +65,7 @@ public class Animation extends EnemyComponent {
 	public void onComponentAdded() {
 		super.onComponentAdded();
 		
+		enemy.setSize(animation.getFrame(0).image.getSize());
 		if(animateOn.equals(AnimateOn.DEATH)) {
 			enemy.setDestroyingOnHit(false);
 		}

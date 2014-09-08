@@ -307,14 +307,14 @@ public class Level extends Screen {
         
         String deathMessageImage = "END/CRASHED";
         
-        switch (deathReason) {
+        /*switch (deathReason) {
         case CRASH:
         	deathMessageImage = "END/CRASHED";
         	break;
         case LACK_OF_WATER:
         	deathMessageImage = "END/WATER";
         	break;
-        }
+        }*/
         
         endPopup.addImage(deathMessageImage, Horizontal.CENTER);
         endPopup.addHeightMargin(5);
