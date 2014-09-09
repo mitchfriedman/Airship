@@ -186,8 +186,8 @@ public class Level extends Screen {
                 timeToDistance(0.275, startSpeed),
                 timeToDistance(1.250, startSpeed)) );
         sm.addSpawner( new BodySpawner(Water.class, "WATER",
-                timeToDistance(50, startSpeed),
-                timeToDistance(50, startSpeed)) );
+                timeToDistance(35, startSpeed),
+                timeToDistance(40, startSpeed)) );
         sm.addSpawner( new BodySpawner(Cloud.class, "CLOUD",
                 timeToDistance(0.250, startSpeed),
                 timeToDistance(2.500, startSpeed)) );
