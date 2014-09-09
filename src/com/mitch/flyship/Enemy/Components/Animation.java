@@ -76,8 +76,8 @@ public class Animation extends EnemyComponent {
 		super.onObjectCreationCompletion();
 				
 		if(animateOn.equals(AnimateOn.BIRTH)) {
-			animation.resume();
 			setAnimationPosition();
+			animation.resume();
 		}
 	}
 	
