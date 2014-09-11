@@ -1,22 +1,21 @@
-package com.mitch.flyship;
+package com.mitch.flyship.levelmanagers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mitch.flyship.AirshipGame;
+import com.mitch.flyship.GoogleAPIManager;
+import com.mitch.flyship.R;
+
 public class AchievementManager {
 	
 	private static final double SEVEN_MINUTES = 60*7;
-	private static final double FIVE_MINUTES = 60*5;
 	
 	private GoogleAPIManager apiManager;
-	private double elapsedTime;
 	private double waterPercent;
 	List<String> enemiesHit;
 	
 	boolean unlockedSevenMinutes = false;
-	boolean unlockedRunningOnVapours = false;
-	boolean runningOnVapours = false;
-	double runningOnVapoursStartTime = 0;
 	
 	public AchievementManager(AirshipGame game)
 	{
@@ -26,47 +25,42 @@ public class AchievementManager {
 	
 	public void resetRun()
 	{
-		elapsedTime = 0;
 		waterPercent = 0;
 		enemiesHit = new ArrayList<String>();
-		runningOnVapours = false;
 	}
 	
 	public void setElapsedTime(double elapsedTime)
 	{
-		this.elapsedTime = elapsedTime;
-		
 		if (!unlockedSevenMinutes && elapsedTime > SEVEN_MINUTES) {
 			apiManager.unlockAchievement(R.string.achievement_seven_minutes_in_heaven);
 			unlockedSevenMinutes = true;
 		}
-		
-		if (!unlockedRunningOnVapours 
-					&& runningOnVapours 
-					&& elapsedTime - runningOnVapoursStartTime > FIVE_MINUTES) {
+	}
+	
+	public void onCollectWater()
+	{
+		if (waterPercent < 0.1) {
 			apiManager.unlockAchievement(R.string.achievement_running_on_vapors);
-			unlockedRunningOnVapours = true;
 		}
 	}
 	
 	public void setWaterPercent(double percent)
 	{
 		this.waterPercent = percent;
-		
-		if (waterPercent < 0.5 && !runningOnVapours) {
-			runningOnVapours = true;
-			runningOnVapoursStartTime = elapsedTime;
-		} 
-		else if (waterPercent >= 0.5 && runningOnVapours) {
-			runningOnVapours = false;
-		}
 	}
 	
 	public void onDeath()
 	{
+		
+	}
+	
+	public void onEnemyHit(String enemy)
+	{
+		enemiesHit.add(enemy);
+		
 		boolean onlyGullsHit = true;
 		for (int i = 0; i < enemiesHit.size(); i++) {
-			if (enemiesHit.get(i) != "bird") {
+			if (enemiesHit.get(i).equals("bird")) {
 				onlyGullsHit = false;
 				break;
 			}
@@ -75,11 +69,6 @@ public class AchievementManager {
 		if (onlyGullsHit && enemiesHit.size() >= 10 ) {
 			apiManager.unlockAchievement(R.string.achievement_laridae_laridead);
 		}
-	}
-	
-	public void onEnemyHit(String enemy)
-	{
-		enemiesHit.add(enemy);
 	}
 	
 	public void onCrateBreak()

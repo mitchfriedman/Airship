@@ -270,6 +270,7 @@ public class Player {
 	public void addWater()
 	{
 		addWater( (int) WATER_VALUE );
+		game.getAchievementManager().onCollectWater();
 	}
 	
 	public void addWater(int waterValue)
